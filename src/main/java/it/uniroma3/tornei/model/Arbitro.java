@@ -21,7 +21,7 @@ public class Arbitro {
 	private String cognome;
 	
 	@Column(unique = true, nullable = false)
-	private Integer codiceArbitrale;
+	private Integer codiceAIA;
 	
 	@OneToMany(mappedBy = "arbitro")
 	private List<Partita> partite;
@@ -54,11 +54,11 @@ public class Arbitro {
 	}
 
 	public Integer getCodiceArbitrale() {
-		return codiceArbitrale;
+		return codiceAIA;
 	}
 
 	public void setCodiceArbitrale(Integer codiceArbitrale) {
-		this.codiceArbitrale = codiceArbitrale;
+		this.codiceAIA = codiceArbitrale;
 	}
 
 	public List<Partita> getPartite() {
@@ -71,7 +71,7 @@ public class Arbitro {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(codiceArbitrale);
+		return Objects.hash(codiceAIA);
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class Arbitro {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Arbitro other = (Arbitro) obj;
-		return Objects.equals(codiceArbitrale, other.codiceArbitrale);
+		return Objects.equals(codiceAIA, other.codiceAIA);
 	}
 	
 	
