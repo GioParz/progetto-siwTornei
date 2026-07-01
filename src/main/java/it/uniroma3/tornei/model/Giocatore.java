@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +21,10 @@ public class Giocatore {
 	private String nome;
 	private String cognome;
 	private LocalDate dataNascita;
-	private String ruolo;
+	
+	@Enumerated(EnumType.STRING)
+	private RuoloGiocatore ruolo;
+	
 	private Integer altezza;
 	
 	@ManyToOne
@@ -60,11 +65,11 @@ public class Giocatore {
 		this.dataNascita = dataNascita;
 	}
 
-	public String getRuolo() {
+	public RuoloGiocatore getRuolo() {
 		return ruolo;
 	}
 
-	public void setRuolo(String ruolo) {
+	public void setRuolo(RuoloGiocatore ruolo) {
 		this.ruolo = ruolo;
 	}
 
