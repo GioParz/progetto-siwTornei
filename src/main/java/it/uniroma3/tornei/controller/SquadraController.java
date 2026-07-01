@@ -1,0 +1,41 @@
+package it.uniroma3.tornei.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import it.uniroma3.tornei.model.Squadra;
+import it.uniroma3.tornei.service.SquadraService;
+
+@Controller
+public class SquadraController {
+	
+	@Autowired
+	private SquadraService squadraService;
+	
+	@GetMapping("/squadre")
+	public String getSquadre(Model model) {
+		
+		List<Squadra> listaSquadre = this.squadraService.getAllSquadre();
+		model.addAttribute("squadre", listaSquadre);
+		
+		return "squadre";
+	}
+	
+	@GetMapping("/squadra/{id}")
+	public String getSquadra(@PathVariable("id") Long id, Model model) {
+		
+		Squadra squadra = this.squadraService.getSquadra(id);
+		
+		if (squadra == null)
+			return "redirect:/squadre";
+		
+		model.addAttribute("squadra", squadra);
+		
+		return "squadra";
+	}
+}
