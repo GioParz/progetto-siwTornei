@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Dettaglio Torneo</title>
+	</head>
+	
+	<body>
+		
+		<h1>Dettagli del Torneo</h1>
+		
+		<p><strong>ID Torneo:</strong> <span th:text="${torneo.id}">ID</span> </p>
+		<p><strong>Nome Torneo:</strong> <span th:text="${torneo.nome}">Nome</span> </p>
+		<p><strong>Anno Edizione:</strong> <span th:text="${torneo.anno}">Anno</span> </p>
+		
+		<hr>
+		
+		<h2>Partite in Programma</h2>
+		
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Id Partita</th>
+					<th>Squadra Casa</th>
+					<th>Squadra Ospite</th>
+					<th>Risultato</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="partita : ${torneo.partite}">
+					<td th:text="${partita.id}">ID</td>
+					<td th:text="${partita.squadraCasa.nome}">SquadraC</td>
+					<td th:text="${partita.squadraOspite.nome}">SquadraO</td>
+					<td>
+						<span th:text="${partita.goalsHome}">0</span>
+						-
+						<span th:text="${partita.goalsAway}">0</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<br>
+		<a th:href="@{/tornei}">Torna alla lista dei tornei</a>
+		
+	</body>
+</html>

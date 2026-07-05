@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Lista Squadre</title>
+	</head>
+	
+	<body>
+		
+		<h1>Elenco Squadre</h1>
+		
+		<table border="1">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Nome</th>
+					<th>Azione</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="squadra : ${squadre}">
+					<td th:text="${squadra.id}">ID fittizio</td>
+					<td th:text="${squadra.nome}">Nome fittizio</td>
+					<td>
+						<a th:href="@{/squadra/{id}(id=${squadra.id})}">Visualizza</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+	</body>
+</html>

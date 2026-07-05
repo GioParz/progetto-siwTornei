@@ -23,7 +23,7 @@ public class TorneoController {
 		List<Torneo> listaTornei = this.torneoService.getAllTornei();
 		model.addAttribute("tornei" ,listaTornei);
 		
-		return "tornei";
+		return "tornei/list";
 	}
 	
 	@GetMapping("/torneo/{id}")
@@ -36,6 +36,6 @@ public class TorneoController {
 		
 		model.addAttribute("torneo", torneo);
 		
-		return "torneo";
+		return "tornei/show";
 	}
 }

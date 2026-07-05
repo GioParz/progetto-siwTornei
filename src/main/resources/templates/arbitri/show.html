@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Dettaglio Arbitro</title>
+	</head>
+	
+	<body>
+		
+		<h1>Dettagli dell'Arbitro</h1>
+		
+		<p><strong>ID Arbitro:</strong> <span th:text="${arbitro.id}">ID</span> </p>
+		<p><strong>Nome Arbitro:</strong> <span th:text="${arbitro.nome}">Nome</span> </p>
+		<p><strong>Cognome Arbitro:</strong> <span th:text="${arbitro.cognome}">Cognome</span> </p>
+		<p><strong>Codice AIA Arbitro:</strong> <span th:text="${arbitro.codiceAIA}">CodiceAIA</span> </p>
+		
+		<hr>
+		
+		<h2>Partite Arbitrate</h2>
+		
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Id Partita</th>
+					<th>Squadra Casa</th>
+					<th>Squadra Ospite</th>
+					<th>Risultato</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="partita : ${arbitro.partite}">
+					<td th:text="${partita.id}">ID</td>
+					<td th:text="${partita.squadraCasa.nome}">SquadraC</td>
+					<td th:text="${partita.squadraOspite.nome}">SquadraO</td>
+					<td>
+						<span th:text="${partita.goalsHome}">0</span>
+						-
+						<span th:text="${partita.goalsAway}">0</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<br>
+		<a th:href="@{/arbitri}">Torna alla lista degli arbitri</a>
+		
+	</body>
+</html>

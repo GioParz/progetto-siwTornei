@@ -23,7 +23,7 @@ public class ArbitroController {
 		List<Arbitro> listaArbitri = this.arbitroService.getAllArbitri();
 		model.addAttribute("arbitri", listaArbitri);
 		
-		return "arbitri";
+		return "arbitri/list";
 	}
 	
 	@GetMapping("/arbitro/{id}")
@@ -36,6 +36,6 @@ public class ArbitroController {
 		
 		model.addAttribute("arbitro", arbitro);
 		
-		return "arbitro";
+		return "arbitri/show";
 	}
 }

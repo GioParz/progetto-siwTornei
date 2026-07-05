@@ -23,7 +23,7 @@ public class SquadraController {
 		List<Squadra> listaSquadre = this.squadraService.getAllSquadre();
 		model.addAttribute("squadre", listaSquadre);
 		
-		return "squadre";
+		return "squadre/list";
 	}
 	
 	@GetMapping("/squadra/{id}")
@@ -36,6 +36,6 @@ public class SquadraController {
 		
 		model.addAttribute("squadra", squadra);
 		
-		return "squadra";
+		return "squadre/show";
 	}
 }

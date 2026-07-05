@@ -21,7 +21,7 @@ public class Arbitro {
 	private String cognome;
 	
 	@Column(unique = true, nullable = false)
-	private Integer codiceAIA;
+	private String codiceAIA;
 	
 	@OneToMany(mappedBy = "arbitro")
 	private List<Partita> partite;
@@ -53,11 +53,11 @@ public class Arbitro {
 		this.cognome = cognome;
 	}
 
-	public Integer getCodiceArbitrale() {
+	public String getCodiceArbitrale() {
 		return codiceAIA;
 	}
 
-	public void setCodiceArbitrale(Integer codiceArbitrale) {
+	public void setCodiceArbitrale(String codiceArbitrale) {
 		this.codiceAIA = codiceArbitrale;
 	}
 

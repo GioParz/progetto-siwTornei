@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Dettaglio Squadra</title>
+	</head>
+	
+	<body>
+		
+		<h1>Dettagli della Squadra</h1>
+		
+		<p><strong>ID Squadra:</strong> <span th:text="${squadra.id}">ID</span> </p>
+		<p><strong>Nome Squadra:</strong> <span th:text="${squadra.nome}">Nome</span> </p>
+		<p><strong>Anno Fondazione:</strong> <span th:text="${squadra.annoFondazione}">AnnoF</span> </p>
+		<p><strong>Città:</strong> <span th:text="${squadra.citta}">Città</span> </p>
+		
+		<hr>
+		
+		<h2>Giocatori della Squadra</h2>
+		
+		<table border="1">
+			<thead>
+				<tr>
+					<th>Id Giocatore</th>
+					<th>Nome</th>
+					<th>Cognome</th>
+					<th>Ruolo</th>
+					<th>Azione</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="giocatore : ${squadra.giocatori}">
+					<td th:text="${giocatore.id}">ID</td>
+					<td th:text="${giocatore.nome}">Nome</td>
+					<td th:text="${giocatore.cognome}">Cognome</td>
+					<td th:text="${giocatore.ruolo}">Ruolo</td>
+					<td>
+						<a th:href="@{/giocatore/{id}(id=${giocatore.id})}">Visualizza</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<br>
+		<a th:href="@{/squadre}">Torna alla lista delle squadre</a>
+		
+	</body>
+</html>

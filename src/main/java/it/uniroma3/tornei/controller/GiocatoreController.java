@@ -1,7 +1,5 @@
 package it.uniroma3.tornei.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +15,6 @@ public class GiocatoreController {
 	@Autowired
 	private GiocatoreService giocatoreService;
 	
-	@GetMapping("/giocatori")
-	public String getGiocatori(Model model) {
-		
-		List<Giocatore> listaGiocatori = this.giocatoreService.getAllGiocatori();
-		model.addAttribute("giocatori", listaGiocatori);
-		
-		return "giocatori";
-	}
-	
 	@GetMapping("giocatore/{id}")
 	public String getGiocatore(@PathVariable("id") Long id, Model model) {
 		
@@ -36,6 +25,6 @@ public class GiocatoreController {
 		
 		model.addAttribute("giocatore", giocatore);
 		
-		return "giocatore";
+		return "giocatori/show";
 	}
 }
