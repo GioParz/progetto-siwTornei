@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Inserisci Arbitro</title>
+	</head>
+	
+	<body>
+		
+		<h1>Inserimento Nuovo Arbitro</h1>
+		
+		<form th:action="@{/arbitri}" th:object="${arbitro}" method="post">
+			
+			<label>Nome Arbitro:</label>
+			<input type="text" th:field="*{nome}" required />
+			<br><br>
+			
+			<label>Cognome Arbitro:</label>
+			<input type="text" th:field="*{cognome}" required />
+			<br><br>
+			
+			<label>CodiceAIA:</label>
+			<input type="text" th:field="*{codiceAIA}" required />
+			<br><br>
+			
+			<button type="submit">Registra Arbitro</button>
+		</form>
+		
+		<br>
+		<a th:href="@{/arbitri}">Annulla e torna all'elenco degli arbitri</a>
+		
+	</body>
+</html>

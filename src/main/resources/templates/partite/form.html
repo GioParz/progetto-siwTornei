@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Inserisci Partita</title>
+	</head>
+	
+	<body>
+		
+		<h1>Programmazione Nuova Partita</h1>
+		
+		<form th:action="@{/partite}" th:object="${partita}" method="post">
+			
+			<input type="hidden" th:field="*{torneo}" />
+			
+			<p><strong>Torneo di riferimento:</strong> <span th:text="${partita.torneo.nome} + ' ' + ${partita.torneo.anno}">Torneo Anno</span> </p>
+			<br>
+			
+			<label>Squadra in Casa:</label>
+			<select th:field="*{squadraCasa}" required>
+				<option value="">-- Seleziona Squadra Casa --</option>
+				<option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Casa</option>
+			</select>
+			<br><br>
+			
+			<label>Squadra Ospite:</label>
+			<select th:field="*{squadraOspite}" required>
+				<option value="">-- Seleziona Squadra Ospite --</option>
+				<option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Ospite</option>
+			</select>
+			<br><br>
+			
+			<label>Arbitro designato:</label>
+			<select th:field="*{arbitro}" required>
+				<option value="">-- Seleziona Arbitro --</option>
+				<option th:each="a : ${arbitri}" th:value="${a.id}" th:text="${a.nome} + ' ' + ${a.cognome}">Arbitro</option>
+			</select>
+			<br><br>
+			
+			<label>Data e Ora dell'incontro:</label>
+			<input type="datetime-local" t:field="*{dataEOra}" required />
+			<br><br>
+			
+			<label>Luogo/Stadio:</label>
+			<input type="text" th:field="*{luogo}" required />
+			<br><br>
+			
+			<button type="submit">Conferma inserimento Partita</button>
+			
+		</form>
+		
+		<br>
+		<a th:href="@{/tornei}">Annulla e torna all'elenco dei tornei</a>
+		
+	</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Nuovo Giocatore</title>
+	</head>
+	
+	<body>
+		
+		<h1>Inserimento Nuovo Giocatore</h1>
+		
+		<form th:action="@{/giocatori}" th:object="${giocatore}" method="post">
+			
+			<input type="hidden" th:field="*{squadra}" />
+			
+			<p><strong>Squadra di destinazione:</strong> <span th:text="${giocatore.squadra.nome}">Nome Squadra</span> </p>
+			<br>
+			
+			<label>Nome:</label>
+			<input type="text" th:field="*{nome}" required />
+			<br><br>
+			
+			<label>Cognome:</label>
+			<input type="text" th:field="*{cognome}" required />
+			<br><br>
+			
+			<label>Ruolo:</label>
+			<select th:field="*{ruolo}" required>
+				<option value="">-- Seleziona un Ruolo --</option>
+				<option th:each="r : ${ruoli}" th:value="${r}" th:text="${r}">RUOLO</option>
+			</select>
+			<br><br>
+			
+			<button type="submit">Salva Giocatore</button>
+
+		</form>
+		
+		<br>
+		<a th:href="@{/squadre}">Annulla e torna alle squadre</a>
+		
+	</body>
+</html>

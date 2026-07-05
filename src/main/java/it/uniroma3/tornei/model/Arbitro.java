@@ -53,11 +53,11 @@ public class Arbitro {
 		this.cognome = cognome;
 	}
 
-	public String getCodiceArbitrale() {
+	public String getCodiceAIA() {
 		return codiceAIA;
 	}
 
-	public void setCodiceArbitrale(String codiceArbitrale) {
+	public void setCodiceAIA(String codiceArbitrale) {
 		this.codiceAIA = codiceArbitrale;
 	}
 

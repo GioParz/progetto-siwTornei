@@ -113,6 +113,14 @@ public class Partita {
 		this.squadraOspite = squadraOspite;
 	}
 
+	public Arbitro getArbitro() {
+		return arbitro;
+	}
+
+	public void setArbitro(Arbitro arbitro) {
+		this.arbitro = arbitro;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(dataEOra, luogo, squadraCasa, squadraOspite);
