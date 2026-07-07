@@ -1,24 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 	<head>
 		<title>Dettaglio Torneo</title>
 	</head>
 	
 	<body>
-		
+	
 		<h1>Dettagli del Torneo</h1>
-		
+	
 		<p><strong>ID Torneo:</strong> <span th:text="${torneo.id}">ID</span> </p>
 		<p><strong>Nome Torneo:</strong> <span th:text="${torneo.nome}">Nome</span> </p>
 		<p><strong>Anno Edizione:</strong> <span th:text="${torneo.anno}">Anno</span> </p>
-		
+	
 		<hr>
-		
+	
+		<h2>Classifica Attuale del Torneo</h2>
+	
+		<p th:if="${classifica.isEmpty()}">Nessun dato disponibile. Gioca la prima partita per sbloccare la classifica!</p>
+	
+		<table border="1" th:if="${!classifica.isEmpty()}">
+			<thead>
+				<tr style="background-color: #f2f2f2;">
+					<th>Posizione</th>
+					<th>Squadra</th>
+					<th>Punti</th>
+					<th>Partite Giocate</th>
+					<th>Gol Fatti</th>
+					<th>Gol Subiti</th>
+					<th>Diff. Reti</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+				<tr th:each="riga, status : ${classifica}" 
+				    th:style="${riga.ritirata ? 'color: #8c8c8c; background-color: #f5f5f5; font-style: italic;' : ''}">
+				    
+				    <td>
+				        <span th:if="${riga.ritirata}" style="font-weight: bold; color: #b30000;">SQU</span>
+				        <span th:if="${!riga.ritirata}" th:text="${status.index + 1}">1</span>
+				    </td>
+				    
+				    <td>
+				        <span th:text="${riga.nomeSquadra}">Nome Squadra</span>
+				        <span th:if="${riga.ritirata}"> (Squadra Ritirata)</span>
+				    </td>
+				    
+				    <td th:text="${riga.punti}" th:style="${!riga.ritirata ? 'font-weight: bold;' : ''}">0</td>
+				    <td th:text="${riga.partiteGiocate}">0</td>
+				    <td th:text="${riga.golFatti}">0</td>
+				    <td th:text="${riga.golSubiti}">0</td>
+				    <td th:text="${riga.golFatti - riga.golSubiti}">0</td>
+				</tr>
+			</tbody>
+		</table>
+	
+		<hr>
+	
 		<h2>Partite in Programma</h2>
-		
+	
 		<a th:href="@{/torneo/{id}/partita/new(id=${torneo.id})}">Aggiungi Nuova Partita al Torneo</a>
 		<br><br>
-		
+	
 		<table border="1">
 			<thead>
 				<tr>
@@ -29,17 +72,21 @@
 					<th>Azione</th>
 				</tr>
 			</thead>
-			
+	
 			<tbody>
 				<tr th:each="partita : ${torneo.partite}">
 					<td th:text="${partita.id}">ID</td>
-					<td th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Squadra Ritirata)'}">SquadraC</td>
-					<td th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + ' (Squadra Ritirata)'}">SquadraO</td>
+					<td
+						th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Squadra Ritirata)'}">
+						SquadraC</td>
+					<td
+						th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + ' (Squadra Ritirata)'}">
+						SquadraO</td>
 					<td>
 						<span th:if="${partita.stato.toString() == 'PROGRAMMATA'}">
 							<a th:href="@{/partita/{id}/risultato(id=${partita.id})}">Inserisci Risultato</a>
 						</span>
-						
+	
 						<span th:if="${partita.stato.toString() == 'TERMINATA'}">
 							<span th:text="${partita.goalsHome}">0</span>
 							-
@@ -48,15 +95,16 @@
 					</td>
 					<td>
 						<a th:href="@{/partita/{id}/delete(id=${partita.id})}"
-						onclick="return confirm('Sei sicuro di voler cancellare definitivamente questa partita dal calendario?')"
-						style="color: red; text-decoration: none;">Elimina</a>
+							onclick="return confirm('Sei sicuro di voler cancellare definitivamente questa partita dal calendario?')"
+							style="color: red; text-decoration: none;">Elimina</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		
+	
 		<br>
 		<a th:href="@{/tornei}">Torna alla lista dei tornei</a>
-		
+	
 	</body>
+
 </html>

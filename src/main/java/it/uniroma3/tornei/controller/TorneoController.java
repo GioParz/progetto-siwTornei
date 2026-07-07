@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import it.uniroma3.tornei.model.RigaClassifica;
 import it.uniroma3.tornei.model.Torneo;
 import it.uniroma3.tornei.service.TorneoService;
 
@@ -37,6 +38,9 @@ public class TorneoController {
 			return "redirect:/tornei";
 		
 		model.addAttribute("torneo", torneo);
+		
+		List<RigaClassifica> classifica = this.torneoService.calcolaClassifica(id);
+		model.addAttribute("classifica", classifica);
 		
 		return "tornei/show";
 	}
