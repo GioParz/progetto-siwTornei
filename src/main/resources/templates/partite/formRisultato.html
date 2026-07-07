@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Inserisci Risultato Partita</title>
+	</head>
+	
+	<body>
+		
+		<h1>Inserimento Risultato Partita</h1>
+		
+		<p>
+			<strong>Incontro:</strong>
+			<span th:text="${partita.squadraCasa.nome}">Casa</span>
+			vs
+			<span th:text="${partita.squadraOspite.nome}">Ospite</span>
+		</p>
+		<p><strong>Stadio:</strong> <span th:text="${partita.luogo}">Luogo</span> </p>
+		<p><strong>Stato attuale:</strong> <span th:text="${partita.stato}">PROGRAMMATA</span> </p>
+		
+		<hr>
+		
+		<form th:action="@{/partita/{id}/risultato(id=${partita.id})}" method="post">
+			
+			<label th:text="'Gol ' + ${partita.squadraCasa.nome} + ':'">Gol Casa</label>
+			<input type="number" name="goalsHome" th:value="${partita.goalsHome}" min="0" required />
+			<br><br>
+			
+			<label th:text="'Gol ' + ${partita.squadraOspite.nome} + ':'">Gol Ospite</label>
+			<input type="number" name="goalsAway" th:value="${partita.goalsAway}" min="0" required />
+			<br><br>
+			
+			<button type="submit">Registra Risultato definitivo</button>
+		</form>
+		
+		<br>
+		<a th:href="@{/torneo/{id}(id=${partita.getTorneo().getId()})}">Annulla e torna al torneo</a>
+		
+	</body>
+</html>

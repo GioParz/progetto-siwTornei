@@ -35,9 +35,15 @@
 					<td th:text="${partita.squadraCasa.nome}">SquadraC</td>
 					<td th:text="${partita.squadraOspite.nome}">SquadraO</td>
 					<td>
-						<span th:text="${partita.goalsHome}">0</span>
-						-
-						<span th:text="${partita.goalsAway}">0</span>
+						<span th:if="${partita.stato.toString() == 'PROGRAMMATA'}">
+							<a th:href="@{/partita/{id}/risultato(id=${partita.id})}">Inserisci Risultato</a>
+						</span>
+						
+						<span th:if="${partita.stato.toString() == 'TERMINATA'}">
+							<span th:text="${partita.goalsHome}">0</span>
+							-
+							<span th:text="${partita.goalsAway}">0</span>
+						</span>
 					</td>
 				</tr>
 			</tbody>

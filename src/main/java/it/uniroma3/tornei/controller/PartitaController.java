@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.model.StatoPartita;
@@ -28,7 +29,9 @@ public class PartitaController {
 	@Autowired
 	private TorneoService torneoService;
 	
-	@GetMapping("torneo/{torneoId}/partita/new")
+	/* PER INSERIMENTO E SALVATAGGIO PARTITA */
+	
+	@GetMapping("/torneo/{torneoId}/partita/new")
 	public String mostraFormPartita(@PathVariable("torneoId") Long torneoId, Model model) {
 		
 		Torneo torneo = this.torneoService.getTorneo(torneoId);
@@ -53,5 +56,38 @@ public class PartitaController {
 		this.partitaService.savePartita(partita);
 		
 		return "redirect:/torneo/" + partita.getTorneo().getId();
+	}
+	
+	/* PER MODIFICA PARTITA */
+	
+	@GetMapping("/partita/{id}/risultato")
+	public String mostraFormRisultato(@PathVariable("id") Long id, Model model) {
+		
+		Partita partita = this.partitaService.getPartita(id);
+		if (partita == null)
+			return "redirect:/tornei";
+		
+		model.addAttribute("partita", partita);
+		
+		return "partite/formRisultato";
+	}
+	
+	@PostMapping("/partita/{id}/risultato")
+	public String salvaRisultato(@PathVariable("id") Long id, 
+			@RequestParam("goalsHome") Integer goalsHome, 
+			@RequestParam("goalsAway") Integer goalsAway) {
+		
+		Partita partita = this.partitaService.getPartita(id);
+		if (partita != null) {
+			partita.setGoalsHome(goalsHome);
+			partita.setGoalsAway(goalsAway);
+			partita.setStato(StatoPartita.TERMINATA);
+			
+			this.partitaService.savePartita(partita);
+			
+			return "redirect:/torneo/" + partita.getTorneo().getId();
+		}
+		
+		return "redirect:/tornei";
 	}
 }
