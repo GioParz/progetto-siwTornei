@@ -38,6 +38,9 @@ public class Partita {
 	@ManyToOne
 	private Arbitro arbitro;
 	
+	private String squadraCasaNomeStorico;
+	private String squadraOspiteNomeStorico;
+	
 	public Partita() {
 	}
 
@@ -119,6 +122,22 @@ public class Partita {
 
 	public void setArbitro(Arbitro arbitro) {
 		this.arbitro = arbitro;
+	}
+
+	public String getSquadraCasaNomeStorico() {
+		return squadraCasaNomeStorico;
+	}
+
+	public void setSquadraCasaNomeStorico(String squadraCasaNomeStorico) {
+		this.squadraCasaNomeStorico = squadraCasaNomeStorico;
+	}
+
+	public String getSquadraOspiteNomeStorico() {
+		return squadraOspiteNomeStorico;
+	}
+
+	public void setSquadraOspiteNomeStorico(String squadraOspiteNomeStorico) {
+		this.squadraOspiteNomeStorico = squadraOspiteNomeStorico;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package it.uniroma3.tornei.model;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class Squadra {
 	@ManyToMany(mappedBy = "squadre")
 	private List<Torneo> tornei;
 	
-	@OneToMany(mappedBy = "squadra")
+	@OneToMany(mappedBy = "squadra", cascade = CascadeType.REMOVE)
 	private List<Giocatore> giocatori;
 	
 	public Squadra() {

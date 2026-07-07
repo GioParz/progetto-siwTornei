@@ -16,7 +16,7 @@
 				<tr>
 					<th>ID</th>
 					<th>Nome</th>
-					<th>Azione</th>
+					<th>Azioni</th>
 				</tr>
 			</thead>
 			
@@ -26,6 +26,12 @@
 					<td th:text="${squadra.nome}">Nome fittizio</td>
 					<td>
 						<a th:href="@{/squadra/{id}(id=${squadra.id})}">Visualizza</a>
+						
+						&nbsp;&nbsp;|&nbsp;&nbsp;
+						
+						<a th:href="@{/squadra/{id}/delete(id=${squadra.id})}"
+						onclick="return confirm('Sei sicuro di voler eliminare questa squadra e tutti i suoi giocatori?');"
+						style="color: red; font-weight: bold;">Elimina</a>
 					</td>
 				</tr>
 			</tbody>

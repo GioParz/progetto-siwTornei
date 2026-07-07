@@ -53,6 +53,8 @@ public class PartitaController {
 		partita.setStato(StatoPartita.PROGRAMMATA);
 		partita.setGoalsHome(0);
 		partita.setGoalsAway(0);
+		partita.setSquadraCasaNomeStorico(partita.getSquadraCasa().getNome());
+		partita.setSquadraOspiteNomeStorico(partita.getSquadraOspite().getNome());
 		this.partitaService.savePartita(partita);
 		
 		return "redirect:/torneo/" + partita.getTorneo().getId();

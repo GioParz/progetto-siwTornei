@@ -32,8 +32,8 @@
 			<tbody>
 				<tr th:each="partita : ${torneo.partite}">
 					<td th:text="${partita.id}">ID</td>
-					<td th:text="${partita.squadraCasa.nome}">SquadraC</td>
-					<td th:text="${partita.squadraOspite.nome}">SquadraO</td>
+					<td th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Squadra Ritirata)'}">SquadraC</td>
+					<td th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + ' (Squadra Ritirata)'}">SquadraO</td>
 					<td>
 						<span th:if="${partita.stato.toString() == 'PROGRAMMATA'}">
 							<a th:href="@{/partita/{id}/risultato(id=${partita.id})}">Inserisci Risultato</a>

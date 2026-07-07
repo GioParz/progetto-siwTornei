@@ -19,6 +19,8 @@ public class SquadraController {
 	@Autowired
 	private SquadraService squadraService;
 	
+	/* VISUALIZZAZIONE LISTA E DETTAGLIO SQUADRE */
+	
 	@GetMapping("/squadre")
 	public String getSquadre(Model model) {
 		
@@ -41,6 +43,8 @@ public class SquadraController {
 		return "squadre/show";
 	}
 	
+	/* INSERIMENTO NUOVA SQUADRA */
+	
 	@GetMapping("/squadra/new")
 	public String mostraFormSquadra(Model model) {
 		
@@ -53,6 +57,16 @@ public class SquadraController {
 	public String saveSquadra(@ModelAttribute("squadra") Squadra squadra) {
 		
 		this.squadraService.saveSquadra(squadra);
+		
+		return "redirect:/squadre";
+	}
+	
+	/* ELIMINAZIONE SQUADRA */
+	
+	@GetMapping("/squadra/{id}/delete")
+	public String eliminaSquadra(@PathVariable("id") Long id) {
+		
+		this.squadraService.deleteSquadra(id);
 		
 		return "redirect:/squadre";
 	}
