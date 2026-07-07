@@ -26,6 +26,7 @@
 					<th>Squadra Casa</th>
 					<th>Squadra Ospite</th>
 					<th>Risultato</th>
+					<th>Azione</th>
 				</tr>
 			</thead>
 			
@@ -44,6 +45,11 @@
 							-
 							<span th:text="${partita.goalsAway}">0</span>
 						</span>
+					</td>
+					<td>
+						<a th:href="@{/partita/{id}/delete(id=${partita.id})}"
+						onclick="return confirm('Sei sicuro di voler cancellare definitivamente questa partita dal calendario?')"
+						style="color: red; text-decoration: none;">Elimina</a>
 					</td>
 				</tr>
 			</tbody>

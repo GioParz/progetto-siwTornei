@@ -60,7 +60,7 @@ public class PartitaController {
 		return "redirect:/torneo/" + partita.getTorneo().getId();
 	}
 	
-	/* PER MODIFICA PARTITA */
+	/* PER INSERIMENTO RISULTATO PARTITA */
 	
 	@GetMapping("/partita/{id}/risultato")
 	public String mostraFormRisultato(@PathVariable("id") Long id, Model model) {
@@ -88,6 +88,24 @@ public class PartitaController {
 			this.partitaService.savePartita(partita);
 			
 			return "redirect:/torneo/" + partita.getTorneo().getId();
+		}
+		
+		return "redirect:/tornei";
+	}
+	
+	/* PER ELIMINAZIONE PARTITA */
+	
+	@GetMapping("/partita/{id}/delete")
+	public String eliminaPartita(@PathVariable("id") Long id) {
+		
+		Partita partita = this.partitaService.getPartita(id);
+		
+		if(partita != null) {
+			Long torneoId = partita.getTorneo().getId();
+			
+			this.partitaService.deletePartita(id);
+			
+			return "redirect:/torneo/" + torneoId;
 		}
 		
 		return "redirect:/tornei";

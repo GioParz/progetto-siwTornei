@@ -27,4 +27,9 @@ public class PartitaService {
 		
 		return this.partitaRepository.save(partita);
 	}
+	
+	public void deletePartita(Long id) {
+		
+		this.partitaRepository.deleteById(id);
+	}
 }
