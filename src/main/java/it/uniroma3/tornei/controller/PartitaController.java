@@ -29,6 +29,20 @@ public class PartitaController {
 	@Autowired
 	private TorneoService torneoService;
 	
+	/* PER VISUALIZZAZIONE PARTITA */
+	
+	@GetMapping("/partita/{id}")
+	public String getPartita(@PathVariable("id") Long id, Model model) {
+		
+		Partita partita = this.partitaService.getPartita(id);
+		if(partita == null)
+			return "redirect:/tornei";
+		
+		model.addAttribute("partita", partita);
+		
+		return "partite/show";
+	}
+	
 	/* PER INSERIMENTO E SALVATAGGIO PARTITA */
 	
 	@GetMapping("/torneo/{torneoId}/partita/new")

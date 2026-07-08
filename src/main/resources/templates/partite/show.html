@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Dettaglio Partita</title>
+	</head>
+	
+	<body>
+	
+		<h1>Dettagli della Partita</h1>
+	
+		<p><strong>ID Partita:</strong> <span th:text="${partita.id}">Id</span> </p>
+		<p><strong>Squadra Casa:</strong>
+			<span
+				th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + '(Squadra Ritirata)'}">SquadraC</span>
+		</p>
+		<p><strong>Squadra Ospite:</strong>
+			<span
+				th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + '(Squadra Ritirata)'}">SquadraO</span>
+		</p>
+		<p><strong>Luogo:</strong> <span th:text="${partita.luogo}">Luogo</span> </p>
+		<p><strong>Stato:</strong> <span th:text="${partita.stato}">Stato</span> </p>
+		<p th:if="${partita.stato.toString() == 'TERMINATA'}">
+			<strong>Risultato finale:</strong>
+			<span th:text="${partita.goalsHome}">0</span> - <span th:text="${partita.goalsAway}">0</span>
+		</p>
+	
+		<hr>
+	
+		<h2>Commenti della Partita</h2>
+	
+		<p th:if="${partita.commenti.isEmpty()}">Nessun commento presente per questa partita</p>
+	
+		<table border="1" th:if="${!partita.commenti.isEmpty()}">
+			<thead>
+				<tr style="background-color: #f2f2f2;">
+					<th>Data e Ora</th>
+					<th>Testo del Commento</th>
+					<th>Azioni</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+				<tr th:each="commento : ${partita.commenti}">
+					<td th:text="${#temporals.format(commento.dataCreazione, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
+					<td th:text="${commento.testo}">Testo del commento</td>
+					<td>
+						<a th:href="@{/commento/{id}/delete(id=${commento.id})}"
+							onclick="return confirm('Sei sicuro di voler cancellare questo commento?')"
+							style="color: red; text-decoration: none;">Elimina</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	
+		<hr>
+	
+		<h2>Aggiungi un nuovo commento</h2>
+	
+		<form th:action="@{/partita/{partitaId}/commento(partitaId=${partita.id})}" method="POST">
+			<div>
+				<textarea name="testo" rows="4" cols="50" placeholder="Scrivi qui il tuo commento..." required></textarea>
+			</div>
+			<br>
+			<div>
+				<button type="submit">Invia Commento</button>
+			</div>
+		</form>
+	
+		<br>
+		<a href="javascript:history.back()">Torna indietro</a>
+		
+	</body>
+</html>

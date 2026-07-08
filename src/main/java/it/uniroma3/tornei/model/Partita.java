@@ -1,8 +1,11 @@
 package it.uniroma3.tornei.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Partita {
@@ -35,11 +39,15 @@ public class Partita {
 	@ManyToOne
 	private Squadra squadraOspite;
 	
+	//in caso di squadra eliminata
+	private String squadraCasaNomeStorico;
+	private String squadraOspiteNomeStorico;
+	
 	@ManyToOne
 	private Arbitro arbitro;
 	
-	private String squadraCasaNomeStorico;
-	private String squadraOspiteNomeStorico;
+	@OneToMany(mappedBy = "partita", cascade = CascadeType.REMOVE)
+	private List<Commento> commenti = new ArrayList<>();
 	
 	public Partita() {
 	}
@@ -138,6 +146,14 @@ public class Partita {
 
 	public void setSquadraOspiteNomeStorico(String squadraOspiteNomeStorico) {
 		this.squadraOspiteNomeStorico = squadraOspiteNomeStorico;
+	}
+
+	public List<Commento> getCommenti() {
+		return commenti;
+	}
+
+	public void setCommenti(List<Commento> commenti) {
+		this.commenti = commenti;
 	}
 
 	@Override

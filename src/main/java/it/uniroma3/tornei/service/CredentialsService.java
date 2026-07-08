@@ -33,7 +33,7 @@ public class CredentialsService {
 	@Transactional
 	public Credentials saveCredentials(Credentials credentials) {
 		
-		credentials.setRuolo(RuoloUtente.REGISTRATO);
+		credentials.setRuolo(RuoloUtente.USER);
 		
 		return this.credentialsRepository.save(credentials);
 	}
