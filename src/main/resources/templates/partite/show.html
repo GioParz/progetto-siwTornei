@@ -34,6 +34,7 @@
 			<thead>
 				<tr style="background-color: #f2f2f2;">
 					<th>Data e Ora</th>
+					<th>Autore</th>
 					<th>Testo del Commento</th>
 					<th>Azioni</th>
 				</tr>
@@ -42,6 +43,7 @@
 			<tbody>
 				<tr th:each="commento : ${partita.commenti}">
 					<td th:text="${#temporals.format(commento.dataCreazione, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
+					<td th:text="${commento.utente != null ? commento.utente.nome + ' ' + commento.utente.cognome : 'Anonimo'}">Nome Cognome</td>
 					<td th:text="${commento.testo}">Testo del commento</td>
 					<td>
 						<a th:href="@{/commento/{id}/delete(id=${commento.id})}"
@@ -67,7 +69,7 @@
 		</form>
 	
 		<br>
-		<a href="javascript:history.back()">Torna indietro</a>
+		<a th:href="@{/torneo/{id}(id=${torneo.id})}">Torna al dettaglio torneo</a>
 		
 	</body>
 </html>

@@ -11,6 +11,7 @@ import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.service.CommentoService;
 import it.uniroma3.tornei.service.PartitaService;
+import it.uniroma3.tornei.service.UtenteService;
 
 @Controller
 public class CommentoController {
@@ -19,6 +20,8 @@ public class CommentoController {
 	private CommentoService commentoService;
 	@Autowired
 	private PartitaService partitaService;
+	@Autowired
+	private UtenteService utenteService;
 	
 	@PostMapping("/partita/{partitaId}/commento")
 	public String aggiungiCommento(@PathVariable("partitaId") Long partitaId, @RequestParam("testo") String testo) {
@@ -30,6 +33,8 @@ public class CommentoController {
 			Commento commento = new Commento();
 			commento.setTesto(testo);
 			commento.setPartita(partita);
+			
+			commento.setUtente(this.utenteService.getAllUtenti().get(0));
 			
 			this.commentoService.saveCommento(commento);
 		}

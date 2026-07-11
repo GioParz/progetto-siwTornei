@@ -74,6 +74,5 @@ public class Commento {
 	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
-	
-	
+
 }

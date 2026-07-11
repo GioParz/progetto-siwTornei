@@ -29,3 +29,6 @@ INSERT INTO giocatore (id, cognome, nome, ruolo, squadra_id) VALUES (nextval('gi
 INSERT INTO partita (id, stato, goals_home, goals_away, arbitro_id, squadra_casa_id, squadra_ospite_id, torneo_id, squadra_casa_nome_storico, squadra_ospite_nome_storico) VALUES (nextval('partita_seq'), 'TERMINATA', 2, 1, (SELECT id FROM arbitro WHERE cognome = 'Collina'), (SELECT id FROM squadra WHERE nome = 'Raptors FC'), (SELECT id FROM squadra WHERE nome = 'Titans Squad'), (SELECT id FROM torneo WHERE nome = 'Champions League'), 'Raptors FC', 'Titans Squad');
 
 INSERT INTO partita (id, stato, goals_home, goals_away, arbitro_id, squadra_casa_id, squadra_ospite_id, torneo_id, squadra_casa_nome_storico, squadra_ospite_nome_storico) VALUES (nextval('partita_seq'), 'PROGRAMMATA', 0, 0, (SELECT id FROM arbitro WHERE cognome = 'Rizzoli'), (SELECT id FROM squadra WHERE nome = 'Titans Squad'), (SELECT id FROM squadra WHERE nome = 'Spartans FC'), (SELECT id FROM torneo WHERE nome = 'Champions League'), 'Titans Squad', 'Spartans FC');
+
+-- 7. INSERIMENTO UTENTI
+INSERT INTO users (id, nome, cognome) VALUES (nextval('users_seq'), 'Lucia', 'Tozzi');

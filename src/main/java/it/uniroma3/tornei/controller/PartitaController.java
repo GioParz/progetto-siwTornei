@@ -39,6 +39,7 @@ public class PartitaController {
 			return "redirect:/tornei";
 		
 		model.addAttribute("partita", partita);
+		model.addAttribute("torneo", partita.getTorneo());
 		
 		return "partite/show";
 	}
