@@ -46,11 +46,14 @@ public class SecurityConfiguration {
 		
 		httpSecurity.authorizeHttpRequests(authorize -> {
 			//rotte pubbliche
-			authorize.requestMatchers(HttpMethod.GET, "/", "/index", "/register", "/tornei", "/torneo/{id}", "/partita/{id}", "/css/**", "/images/**", "/favicon.ico").permitAll();
+			authorize.requestMatchers(HttpMethod.GET, "/", "/index", "/register", "/tornei", "/torneo/{id}", 
+													"/partita/{id}", "/giocatore/{id}", "/squadre", "/squadra/{id}", 
+													"/css/**", "/images/**", "/favicon.ico").permitAll();
 			authorize.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll();
 			//rotte admin
-			authorize.requestMatchers(HttpMethod.GET, "/admin/**", "/torneo/new", "/torneo/{id}/partita/new", "/partita/{id}/risultato", "/partita/{id}/delete").hasAnyAuthority("ADMIN");
-			authorize.requestMatchers(HttpMethod.POST, "/admin/**", "/tornei", "/partite", "/partita/{id}/risultato").hasAnyAuthority("ADMIN");
+			authorize.requestMatchers(HttpMethod.GET, "/admin/**", "/torneo/{id}/partita/new",
+													"/squadra/{squadraId}/giocatore/new").hasAnyAuthority("ADMIN");
+			authorize.requestMatchers(HttpMethod.POST, "/admin/**", "/partite", "/giocatori").hasAnyAuthority("ADMIN");
 			//tutte le altre rotte
 			authorize.anyRequest().authenticated();
 		});

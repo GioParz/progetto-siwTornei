@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <title>Accesso Negato - 403</title>
+	    <style>
+	        body { text-align: center; font-family: sans-serif; padding-top: 50px; background-color: #f8d7da; color: #721c24; }
+	        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+	        h1 { font-size: 48px; margin-bottom: 10px; }
+	        a { display: inline-block; margin-top: 20px; color: #155724; text-decoration: none; font-weight: bold; }
+	    </style>
+	</head>
+	
+	<body>
+	
+	    <div class="container">
+	        <h1>403</h1>
+	        <h2>Accesso Negato</h2>
+	        <p>Non hai l'autorizzazione per modificare o accedere a questa risorsa. Questa azione è riservata unicamente al proprietario del contenuto.</p>
+	        <hr>
+	        <a th:href="@{/}">Torna alla Home Page</a>
+	    </div>
+	
+	</body>
+</html>

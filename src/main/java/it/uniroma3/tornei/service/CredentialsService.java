@@ -27,7 +27,7 @@ public class CredentialsService {
 		return result.orElse(null);
 	}
 	
-	public Credentials getcCredentials(String username) {
+	public Credentials getCredentials(String username) {
 		
 		Optional<Credentials> result = this.credentialsRepository.findByUsername(username);
 		

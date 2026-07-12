@@ -22,7 +22,7 @@ public class SquadraService {
 	@Autowired
 	private PartitaRepository partitaRepository;
 	
-	public Squadra getSquadra(long id) {
+	public Squadra getSquadra(Long id) {
 		
 		Optional<Squadra> result = this.squadraRepository.findById(id);
 		

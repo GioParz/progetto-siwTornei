@@ -1,6 +1,5 @@
 package it.uniroma3.tornei.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,17 +19,21 @@ import it.uniroma3.tornei.service.TorneoService;
 @Controller
 public class PartitaController {
 	
-	@Autowired
-	private PartitaService partitaService;
-	@Autowired
-	private SquadraService squadraService;
-	@Autowired
-	private ArbitroService arbitroService;
-	@Autowired
-	private TorneoService torneoService;
+	private final PartitaService partitaService;
+	private final SquadraService squadraService;
+	private final ArbitroService arbitroService;
+	private final TorneoService torneoService;
+	
+	public PartitaController(PartitaService partitaService, SquadraService squadraService,
+			ArbitroService arbitroService, TorneoService torneoService) {
+		this.partitaService = partitaService;
+		this.squadraService = squadraService;
+		this.arbitroService = arbitroService;
+		this.torneoService = torneoService;
+	}
 	
 	/* PER VISUALIZZAZIONE PARTITA */
-	
+
 	@GetMapping("/partita/{id}")
 	public String getPartita(@PathVariable("id") Long id, Model model) {
 		
@@ -59,7 +62,7 @@ public class PartitaController {
 		model.addAttribute("squadre", this.squadraService.getAllSquadre());
 		model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
 		
-		return "/partite/form";
+		return "partite/form";
 	}
 	
 	@PostMapping("/partite")
@@ -77,7 +80,7 @@ public class PartitaController {
 	
 	/* PER INSERIMENTO RISULTATO PARTITA */
 	
-	@GetMapping("/partita/{id}/risultato")
+	@GetMapping("/admin/partita/{id}/risultato")
 	public String mostraFormRisultato(@PathVariable("id") Long id, Model model) {
 		
 		Partita partita = this.partitaService.getPartita(id);
@@ -86,10 +89,10 @@ public class PartitaController {
 		
 		model.addAttribute("partita", partita);
 		
-		return "partite/formRisultato";
+		return "admin/partite/formRisultato";
 	}
 	
-	@PostMapping("/partita/{id}/risultato")
+	@PostMapping("/admin/partita/{id}/risultato")
 	public String salvaRisultato(@PathVariable("id") Long id, 
 			@RequestParam("goalsHome") Integer goalsHome, 
 			@RequestParam("goalsAway") Integer goalsAway) {
@@ -110,7 +113,7 @@ public class PartitaController {
 	
 	/* PER ELIMINAZIONE PARTITA */
 	
-	@GetMapping("/partita/{id}/delete")
+	@GetMapping("/admin/partita/{id}/delete")
 	public String eliminaPartita(@PathVariable("id") Long id) {
 		
 		Partita partita = this.partitaService.getPartita(id);

@@ -2,7 +2,6 @@ package it.uniroma3.tornei.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +16,13 @@ import it.uniroma3.tornei.service.TorneoService;
 @Controller
 public class TorneoController {
 	
-	@Autowired
-	private TorneoService torneoService;
+	private final TorneoService torneoService;
+	
+	public TorneoController(TorneoService torneoService) {
+		this.torneoService = torneoService;
+	}
+	
+	/* VISUALIZZAZIONE TORNEI E DETTAGLIO */
 	
 	@GetMapping("/tornei")
 	public String getTornei(Model model) {
@@ -45,19 +49,52 @@ public class TorneoController {
 		return "tornei/show";
 	}
 	
-	@GetMapping("/torneo/new")
+	/* CREAZIONE NUOVO TORNEO */
+	
+	@GetMapping("/admin/torneo/new")
 	public String mostraFormTorneo(Model model) {
 		
 		model.addAttribute("torneo", new Torneo());
 		
-		return "tornei/form";
+		return "admin/tornei/form";
 	}
 	
-	@PostMapping("/tornei")
+	@PostMapping("/admin/tornei")
 	public String saveTorneo(@ModelAttribute("torneo") Torneo torneo) {
 		
 		this.torneoService.saveTorneo(torneo);
 		
 		return "redirect:/tornei";
+	}
+	
+	/* MODIFICA TORNEO */
+	
+	@GetMapping("/admin/torneo/{id}/edit")
+	public String mostraFormModifica(@PathVariable("id") Long id, Model model) {
+		
+		Torneo torneo = this.torneoService.getTorneo(id);
+		if(torneo == null)
+			return "redirect:/";
+		
+		model.addAttribute("torneo", torneo);
+		
+		return "admin/tornei/form";
+	}
+	
+	@PostMapping("/admin/torneo/{id}/edit")
+	public String modificaTorneo(@PathVariable("id") Long id, 
+			@ModelAttribute("torneo") Torneo torneoModificato) {
+		
+		Torneo torneoOriginale = this.torneoService.getTorneo(id);
+		if(torneoOriginale == null)
+			return "redirect:/";
+		
+		torneoOriginale.setNome(torneoModificato.getNome());
+		torneoOriginale.setAnno(torneoModificato.getAnno());
+		torneoOriginale.setDescrizione(torneoModificato.getDescrizione());
+		
+		this.torneoService.saveTorneo(torneoOriginale);
+		
+		return "redirect:/torneo/" + torneoOriginale.getId();
 	}
 }

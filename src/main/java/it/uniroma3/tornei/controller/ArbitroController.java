@@ -2,7 +2,6 @@ package it.uniroma3.tornei.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +15,14 @@ import it.uniroma3.tornei.service.ArbitroService;
 @Controller
 public class ArbitroController {
 	
-	@Autowired
-	private ArbitroService arbitroService;
+	private final ArbitroService arbitroService;
 	
+	public ArbitroController(ArbitroService arbitroService) {
+		this.arbitroService = arbitroService;
+	}
+	
+	/* CONSULTA ARBITRI */
+
 	@GetMapping("/arbitri")
 	public String getArbitri(Model model) {
 		
@@ -40,6 +44,8 @@ public class ArbitroController {
 		
 		return "arbitri/show";
 	}
+	
+	/* INSERIMENTO NUOVI ARBITRI */
 	
 	@GetMapping("/arbitro/new")
 	public String mostraFormArbitro(Model model) {

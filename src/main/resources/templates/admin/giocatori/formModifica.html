@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifica Giocatore</title>
+</head>
+<body>
+
+    <h1>Modifica Anagrafica Giocatore</h1>
+
+    <form th:action="@{/admin/giocatore/{id}/edit(id=${giocatore.id})}" th:object="${giocatore}" method="post">
+        
+        <div>
+            <label>Nome:</label><br>
+            <input type="text" th:field="*{nome}" required />
+        </div>
+        <br>
+        <div>
+            <label>Cognome:</label><br>
+            <input type="text" th:field="*{cognome}" required />
+        </div>
+        <br>
+        <div>
+            <label>Data di Nascita:</label><br>
+            <input type="text" th:field="*{dataNascita}" required />
+        </div>
+        <br>
+		<div>
+			<label>Ruolo:</label><br>
+			<input type="text" th:field="*{ruolo}" required />
+		</div>
+		<br>
+		<div>
+			<label>Altezza:</label><br>
+			<input type="text" th:field="*{altezza}" required />
+		</div>
+		<br>
+		<div>
+			<label>Squadra:</label><br>
+			<input type="text" th:field="*{squadra}" required />
+		</div>
+		<br>
+        
+        <button type="submit">Salva Modifiche</button>
+        
+        <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}">Annulla</a>
+    </form>
+
+</body>
+</html>

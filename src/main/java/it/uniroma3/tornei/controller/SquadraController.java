@@ -2,7 +2,6 @@ package it.uniroma3.tornei.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,14 @@ import it.uniroma3.tornei.service.SquadraService;
 @Controller
 public class SquadraController {
 	
-	@Autowired
-	private SquadraService squadraService;
+	private final SquadraService squadraService;
+	
+	public SquadraController(SquadraService squadraService) {
+		this.squadraService = squadraService;
+	}
 	
 	/* VISUALIZZAZIONE LISTA E DETTAGLIO SQUADRE */
-	
+
 	@GetMapping("/squadre")
 	public String getSquadre(Model model) {
 		
@@ -45,15 +47,15 @@ public class SquadraController {
 	
 	/* INSERIMENTO NUOVA SQUADRA */
 	
-	@GetMapping("/squadra/new")
+	@GetMapping("/admin/squadra/new")
 	public String mostraFormSquadra(Model model) {
 		
 		model.addAttribute("squadra", new Squadra());
 		
-		return "squadre/form";
+		return "admin/squadre/form";
 	}
 	
-	@PostMapping("/squadre")
+	@PostMapping("/admin/squadre")
 	public String saveSquadra(@ModelAttribute("squadra") Squadra squadra) {
 		
 		this.squadraService.saveSquadra(squadra);
@@ -63,11 +65,42 @@ public class SquadraController {
 	
 	/* ELIMINAZIONE SQUADRA */
 	
-	@GetMapping("/squadra/{id}/delete")
+	@GetMapping("/admin/squadra/{id}/delete")
 	public String eliminaSquadra(@PathVariable("id") Long id) {
 		
 		this.squadraService.deleteSquadra(id);
 		
 		return "redirect:/squadre";
+	}
+	
+	/* MODIFICA SQUADRA */
+	
+	@GetMapping("/admin/squadra/{id}/edit")
+	public String mostraFormModifica(@PathVariable("id") Long id, Model model) {
+		
+		Squadra squadra = this.squadraService.getSquadra(id);
+		if(squadra == null)
+			return "redirect:/";
+		
+		model.addAttribute("squadra", squadra);
+		
+		return "admin/squadre/form";
+	}
+	
+	@PostMapping("/admin/squadra/{id}/edit")
+	public String modificaSquadra(@PathVariable("id") Long id, 
+			@ModelAttribute("squadra") Squadra squadraModificata) {
+		
+		Squadra squadraOriginale = this.squadraService.getSquadra(id);
+		if(squadraOriginale == null)
+			return "redirect:/";
+		
+		squadraOriginale.setNome(squadraModificata.getNome());
+		squadraOriginale.setAnnoFondazione(squadraModificata.getAnnoFondazione());
+		squadraOriginale.setCitta(squadraModificata.getCitta());
+		
+		this.squadraService.saveSquadra(squadraOriginale);
+		
+		return "redirect:/squadra/" + squadraOriginale.getId();
 	}
 }
