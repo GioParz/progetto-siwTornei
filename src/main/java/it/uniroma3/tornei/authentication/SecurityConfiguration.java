@@ -57,13 +57,13 @@ public class SecurityConfiguration {
 		
 		httpSecurity.formLogin(form -> {
 			form.loginPage("/login").permitAll();
-			form.defaultSuccessUrl("/tornei", true);
+			form.defaultSuccessUrl("/", true);
 			form.failureUrl("/login?error=true");
 		});
 		
 		httpSecurity.logout(logout -> {
 			logout.logoutUrl("/logout").permitAll();
-			logout.logoutSuccessUrl("/tornei");
+			logout.logoutSuccessUrl("/");
 			logout.invalidateHttpSession(true);
 			logout.deleteCookies("JSESSIONID");
 			logout.clearAuthentication(true);

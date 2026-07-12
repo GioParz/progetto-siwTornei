@@ -21,10 +21,14 @@ public class AuthenticationController {
 		this.credentialsService = credentialsService;
 	}
 	
+	/* LOGIN */
+	
 	@GetMapping("/login")
 	public String mostraFormLogin(Model model) {
 		return "authentication/login";
 	}
+	
+	/* REGISTRAZIONE */
 	
 	@GetMapping("/register")
 	public String mostraFormRegistrazione(Model model) {
@@ -52,5 +56,12 @@ public class AuthenticationController {
 		}
 		
 		return "authentication/register";
+	}
+	
+	/* ADMIN */
+	
+	@GetMapping("/admin/index")
+	public String indexAdmin() {
+		return "admin/index";
 	}
 }

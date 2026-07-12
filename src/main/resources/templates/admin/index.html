@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<title>Pannello Amministratore</title>
+	</head>
+	
+	<body>
+		
+		<header>
+			<h1>Pannello di Controllo Amministrativo</h1>
+			<p>Benvenuto, <strong sec:authentication="name">Admin</strong> (Ruolo: ADMIN) </p>
+			
+			<nav>
+				<a th:href="@{/}">Torna alla Home</a> |
+				<a th:href="@{/tornei}">Visualizza i Tornei</a> |
+				
+				<form th:action="@{/logout}" method="post" style="display: inline;">
+					<button type="submit">Esci (Logout)</button>
+				</form>
+			</nav>
+		</header>
+		
+		<hr>
+		
+		<main>
+			<h3>Operazioni di Gestione</h3>	
+			<ul>
+				<li>
+					<a th:href="@{/torneo/new}"><strong>Crea un Nuovo Torneo</strong></a>
+				</li>
+				<li>
+					<p>Usa la lista dei tornei per inserire nuove partite, modificare i risultati o eliminare eventi</p>
+				</li>
+			</ul>
+		</main>
+		
+	</body>
+</html>

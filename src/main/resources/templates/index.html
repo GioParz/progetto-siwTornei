@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<title>Home - SIWTornei</title>
+	</head>
+	
+	<body>
+		
+		<header>
+			<h1>Benvenuto/a nel Sistema di Gestione Tornei di Calcio Amatoriale</h1>
+			
+			<nav>
+				<!-- Link visibili a chiunque -->
+				<a th:href="@{/tornei}">Visualizza i Tornei</a> |
+				
+				<!-- Link visibili solo ai visitatori anonimi -->
+				<span sec:authorize="isAnonymous()">
+					<a th:href="@{/login}">Accedi</a> |
+					<a th:href="@{/register}">Registrati</a>
+				</span>
+				
+				<!-- Link visibili solo agli utenti loggati -->
+				<span sec:authorize="isAuthenticated()">
+					Ciao, <strong sec:authentication="name">Utente</strong>! |
+					
+					<form th:action="@{/logout}" method="post" style="display: inline;">
+						<button type="submit">Esci (Logout)</button>
+					</form>
+				</span>
+				
+				<!-- Link visibili solo agli admin -->
+				<span sec:authorize="hasAuthority('ADMIN')">
+					| <a th:href="@{/admin/index}" style="color: red; font-weight: bold;">Pannello Amministratore</a>
+				</span>
+			</nav>
+		</header>
+		
+		<hr>
+		
+		<main>
+			<h3>Esplora le funzionalità</h3>
+			<p>Usa la barra di navigazione in alto per accedere al tuo profilo o consultare i tornei attivi</p>
+		</main>
+		
+	</body>
+</html>
