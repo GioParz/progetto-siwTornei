@@ -1,114 +1,135 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	
 	<head>
-		<title>Dettaglio Torneo</title>
+	    <title th:text="${torneo.nome} + ' - SIWTornei'">Dettaglio Torneo</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
 	
-		<h1>Dettagli del Torneo</h1>
+	    <div class="top-bar">
+	        <div class="top-bar-right">
+	            <span sec:authorize="isAnonymous()">
+	                <a th:href="@{/login}" class="login-link">Accedi</a>
+	            </span>
+	            <span sec:authorize="isAuthenticated()" class="user-menu">
+	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+	                <form th:action="@{/logout}" method="post">
+	                    <button type="submit" class="logout-btn">Logout</button>
+	                </form>
+	            </span>
+	        </div>
+	    </div>
 	
-		<p><strong>ID Torneo:</strong> <span th:text="${torneo.id}">ID</span> </p>
-		<p><strong>Nome Torneo:</strong> <span th:text="${torneo.nome}">Nome</span> </p>
-		<p><strong>Anno Edizione:</strong> <span th:text="${torneo.anno}">Anno</span> </p>
+	    <main class="main-content">
+	        
+	        <div class="logo-container">
+	            <div class="logo-placeholder" th:text="${torneo.nome}">Nome Torneo</div>
+	        </div>
+	        
+	        <div class="info-box">
+				<div sec:authorize="hasAuthority('ADMIN')" style="text-align: right; margin-bottom: 10px;">
+					<a th:href="@{/admin/torneo/{id}/edit(id=${torneo.id})}" class="action-link-edit" style="font-size: 14px;">Modifica Dettagli Torneo</a>
+				</div>
+				
+	            <p><strong>Anno Edizione:</strong> <span th:text="${torneo.anno}">Anno</span></p>
+	            <p><strong>Descrizione:</strong> <span th:text="${torneo.descrizione}">Descrizione</span></p>
+	        </div>
 	
-		<hr>
+	        <!-- SEZIONE CLASSIFICA -->
+	        <h2 class="section-title">Classifica Attuale</h2>
+	        
+	        <p th:if="${classifica.isEmpty()}" class="no-data-msg">Nessun dato disponibile. Attendi la prima partita per sbloccare la classifica!</p>
+	        
+	        <table class="stadium-table" th:if="${!classifica.isEmpty()}">
+	            <thead>
+	                <tr>
+	                    <th>Pos</th>
+	                    <th>Squadra</th>
+	                    <th>Punti</th>
+	                    <th>PG</th>
+	                    <th>GF</th>
+	                    <th>GS</th>
+	                    <th>DR</th>
+	                </tr>
+	            </thead>
+				
+	            <tbody>
+	                <tr th:each="riga, status : ${classifica}" 
+	                    th:classappend="${riga.ritirata} ? 'team-retired' : ''">
+	                    <td>
+	                        <span th:if="${riga.ritirata}" class="badge-retired">SQU</span>
+	                        <span th:if="${!riga.ritirata}" th:text="${status.index + 1}">1</span>
+	                    </td>
+	                    <td>
+	                        <span th:text="${riga.nomeSquadra}">Nome Squadra</span>
+	                        <span th:if="${riga.ritirata}" style="font-size: 11px;"> (Ritirata)</span>
+	                    </td>
+	                    <td th:text="${riga.punti}" th:style="${!riga.ritirata ? 'font-weight: 700; color: #ccff00;' : ''}">0</td>
+	                    <td th:text="${riga.partiteGiocate}">0</td>
+	                    <td th:text="${riga.golFatti}">0</td>
+	                    <td th:text="${riga.golSubiti}">0</td>
+	                    <td th:text="${riga.golFatti - riga.golSubiti}">0</td>
+	                </tr>
+	            </tbody>
+	        </table>
 	
-		<h2>Classifica Attuale del Torneo</h2>
+	        <!-- SEZIONE CALENDARIO PARTITE -->
+	        <h2 class="section-title" style="margin-top: 50px;">Calendario Partite</h2>
 	
-		<p th:if="${classifica.isEmpty()}">Nessun dato disponibile. Gioca la prima partita per sbloccare la classifica!</p>
+	        <div sec:authorize="hasAuthority('ADMIN')" style="margin-bottom: 20px;">
+	            <a th:href="@{/torneo/{id}/partita/new(id=${torneo.id})}" class="main-link" style="font-size: 12px; padding: 10px 20px;">+ Aggiungi Nuova Partita</a>
+	        </div>
 	
-		<table border="1" th:if="${!classifica.isEmpty()}">
-			<thead>
-				<tr style="background-color: #f2f2f2;">
-					<th>Posizione</th>
-					<th>Squadra</th>
-					<th>Punti</th>
-					<th>Partite Giocate</th>
-					<th>Gol Fatti</th>
-					<th>Gol Subiti</th>
-					<th>Diff. Reti</th>
-				</tr>
-			</thead>
+	        <table class="stadium-table">
+	            <thead>
+	                <tr>
+	                    <th>Squadra Casa</th>
+	                    <th>Squadra Ospite</th>
+	                    <th>Risultato</th>
+	                    <th>Azioni</th>
+	                </tr>
+	            </thead>
+				
+	            <tbody>
+	                <tr th:each="partita : ${torneo.partite}">
+	                    <td th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Ritirata)'}">Casa</td>
+	                    <td th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + ' (Ritirata)'}">Ospite</td>
+	                    <td>
+	                        <!-- Se PROGRAMMATA, mostriamo inserimento solo all'ADMIN -->
+	                        <span th:if="${partita.stato.toString() == 'PROGRAMMATA'}">
+	                            <span sec:authorize="hasAuthority('ADMIN')">
+	                                <a th:href="@{/admin/partita/{id}/risultato(id=${partita.id})}" class="action-link-edit">Inserisci Risultato</a>
+	                            </span>
+	                            <span sec:authorize="!hasAuthority('ADMIN')" class="badge-scheduled">Da Giocare</span>
+	                        </span>
 	
-			<tbody>
-				<tr th:each="riga, status : ${classifica}" 
-				    th:style="${riga.ritirata ? 'color: #8c8c8c; background-color: #f5f5f5; font-style: italic;' : ''}">
-				    
-				    <td>
-				        <span th:if="${riga.ritirata}" style="font-weight: bold; color: #b30000;">SQU</span>
-				        <span th:if="${!riga.ritirata}" th:text="${status.index + 1}">1</span>
-				    </td>
-				    
-				    <td>
-				        <span th:text="${riga.nomeSquadra}">Nome Squadra</span>
-				        <span th:if="${riga.ritirata}"> (Squadra Ritirata)</span>
-				    </td>
-				    
-				    <td th:text="${riga.punti}" th:style="${!riga.ritirata ? 'font-weight: bold;' : ''}">0</td>
-				    <td th:text="${riga.partiteGiocate}">0</td>
-				    <td th:text="${riga.golFatti}">0</td>
-				    <td th:text="${riga.golSubiti}">0</td>
-				    <td th:text="${riga.golFatti - riga.golSubiti}">0</td>
-				</tr>
-			</tbody>
-		</table>
+	                        <!-- Se TERMINATA, mostriamo il risultato finale -->
+	                        <span th:if="${partita.stato.toString() == 'TERMINATA'}" class="match-score">
+	                            <span th:text="${partita.goalsHome}">0</span> - <span th:text="${partita.goalsAway}">0</span>
+	                        </span>
+	                    </td>
+	                    <td>
+	                        <div class="action-buttons-cell">
+	                            <a th:href="@{/partita/{id}(id=${partita.id})}" class="action-link-view">Dettagli</a>
+	                            
+	                            <!-- Elimina visibile solo all'ADMIN -->
+	                            <a sec:authorize="hasAuthority('ADMIN')" 
+	                               th:href="@{/admin/partita/{id}/delete(id=${partita.id})}"
+	                               onclick="return confirm('Cancellare definitivamente la partita?')"
+	                               class="action-link-delete">Elimina</a>
+	                        </div>
+	                    </td>
+	                </tr>
+	            </tbody>
+	        </table>
 	
-		<hr>
-	
-		<h2>Partite in Programma</h2>
-	
-		<a th:href="@{/torneo/{id}/partita/new(id=${torneo.id})}">Aggiungi Nuova Partita al Torneo</a>
-		<br><br>
-	
-		<table border="1">
-			<thead>
-				<tr>
-					<th>Id Partita</th>
-					<th>Squadra Casa</th>
-					<th>Squadra Ospite</th>
-					<th>Risultato</th>
-					<th>Azioni</th>
-				</tr>
-			</thead>
-	
-			<tbody>
-				<tr th:each="partita : ${torneo.partite}">
-					<td th:text="${partita.id}">ID</td>
-					<td
-						th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Squadra Ritirata)'}">
-						SquadraC</td>
-					<td
-						th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + ' (Squadra Ritirata)'}">
-						SquadraO</td>
-					<td>
-						<span th:if="${partita.stato.toString() == 'PROGRAMMATA'}">
-							<a th:href="@{/partita/{id}/risultato(id=${partita.id})}">Inserisci Risultato</a>
-						</span>
-	
-						<span th:if="${partita.stato.toString() == 'TERMINATA'}">
-							<span th:text="${partita.goalsHome}">0</span>
-							-
-							<span th:text="${partita.goalsAway}">0</span>
-						</span>
-					</td>
-					<td>
-						<a th:href="@{/partita/{id}/delete(id=${partita.id})}"
-							onclick="return confirm('Sei sicuro di voler cancellare definitivamente questa partita dal calendario?')"
-							style="color: red; text-decoration: none;">Elimina</a>
-							
-						&nbsp;&nbsp;|&nbsp;&nbsp;
-							
-						<a th:href="@{/partita/{id}(id=${partita.id})}">Vedi Dettaglio e Commenti</a>	
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	
-		<br>
-		<a th:href="@{/tornei}">Torna alla lista dei tornei</a>
+	        <div style="margin-top: 40px;">
+	            <a th:href="@{/tornei}" class="back-link">← Torna alla lista dei tornei</a>
+	        </div>
+	    </main>
 	
 	</body>
-
 </html>

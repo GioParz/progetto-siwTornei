@@ -1,33 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+	
 	<head>
-		<title th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'">Gestione Torneo</title>
+	    <title th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'">Gestione Torneo</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1 th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Crea Nuovo Torneo'">Gestione Torneo</h1>
-		
-		<form th:action="${torneo.id != null} ? @{/admin/torneo/{id}/edit(id=${torneo.id})} : @{/admin/torneo/new}" 
-			  th:object="${torneo}" method="post">
-			
-			<label>Nome Torneo:</label>
-			<input type="text" th:field="*{nome}" required />
-			<br><br>
-			
-			<label>Edizione Torneo:</label>
-			<input type="number" th:field="*{anno}" required />
-			<br><br>
-			
-			<label>Descrizione Torneo:</label>
-			<input type="text" th:field="*{descrizione}" required />
-			<br><br>
-			
-			<button type="submit" th:text="${torneo.id != null} ? 'Salva Modifiche' : 'Crea Torneo'">Invia</button>
-		</form>
-		
-		<br>
-		<a th:href="@{/tornei}">Annulla e torna alla lista dei tornei</a>
-		
+	
+	    <!-- Barra fittizia Admin per coerenza estetica -->
+	    <div class="top-bar" style="background-color: #111827; border-bottom: 2px solid #ef4444; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);">
+	        <div class="top-bar-right">
+	            <span class="welcome-user" style="color: #ef4444; font-weight: 700;">PANNELLO AMMINISTRATORE</span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder" 
+	                 th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Crea Nuovo Torneo'"
+	                 th:style="${torneo.id != null} ? 'border-color: #ef4444;' : 'border-color: #ccff00;'">
+	                 Gestione Torneo
+	            </div>
+	        </div>
+	
+	        <!-- Form strutturato a card sportiva -->
+	        <form th:action="${torneo.id != null} ? @{/admin/torneo/{id}/edit(id=${torneo.id})} : @{/admin/tornei}" 
+	              th:object="${torneo}" method="post" class="stadium-form">
+	            
+	            <div class="form-group">
+	                <label>Nome del Torneo</label>
+	                <input type="text" th:field="*{nome}" placeholder="Es: Champions League Amatoriale" required />
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Edizione (Anno)</label>
+	                <input type="number" th:field="*{anno}" placeholder="Es: 2026" required />
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Descrizione Breve</label>
+	                <input type="text" th:field="*{descrizione}" placeholder="Es: Torneo estivo di Calcio a 5" required />
+	            </div>
+	            
+	            <div style="margin-top: 30px;">
+	                <button type="submit" class="main-link" 
+	                        th:text="${torneo.id != null} ? 'Salva Modifiche' : 'Crea Torneo'"
+	                        th:style="${torneo.id != null} ? 'background-color: #ef4444;' : ''">
+	                        Invia
+	                </button>
+	            </div>
+	        </form>
+	        
+	        <div style="margin-top: 40px;">
+	            <a th:href="@{/tornei}" class="back-link">Annulla e torna alla lista</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>
