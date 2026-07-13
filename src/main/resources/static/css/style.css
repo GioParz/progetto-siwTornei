@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap');
+
+body {
+    margin: 0; /* via ogni spazio di default del browser per attaccare la barra blu ai bordi */
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #0f172a;
+    color: #f8fafc; 
+}
+
+.top-bar {
+    background-color: #1e3a8a;
+    padding: 10px 20px; /* spazio interno sopra/sotto 10px e destra/sinistra 20px */
+    height: 50px;
+    display: flex; /* trasforma la barra in un binario flessibile */
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 2px solid #ccff00; /* sottile linea verde lime sotto la barra */
+    box-shadow: 0 4px 15px rgba(204, 255, 0, 0.1); /* effetto leggera ombra neon sotto la barra */
+}
+
+.top-bar-right a.login-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase; /* forza il testo a diventare maiuscolo */
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s; /* il cambio di colore avviene sfumato in 0.2s */
+}
+
+.top-bar-right a.login-link:hover {
+    color: #ccff00; /* al passaggio del mouse si accende di verde neon */
+}
+
+.user-menu {
+    display: flex;
+    flex-direction: column; /* mette le scritte in colonna */
+    align-items: flex-end;
+}
+
+.welcome-user {
+    color: white;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.welcome-user strong {
+    color: #ccff00; /* il nome utente loggato si illumina in neon */
+    font-weight: 700;
+}
+
+.logout-btn {
+    background: none; /* annulla lo stile natio dei bottoni HTML */
+    border: none;
+    color: #94a3b8;
+    font-size: 11px;
+    cursor: pointer; /* fa apparire la manina del mouse */
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.logout-btn:hover {
+    color: #ff3333; /* il tasto logout si accende di rosso quando ci passi sopra */
+}
+
+.main-content {
+    max-width: 800px;
+    margin: 60px auto; /* 60px sopra/sotto e automatico a destra/sinistra */
+    text-align: center;
+    padding: 0 20px;
+}
+
+.logo-container {
+    margin-bottom: 35px;
+}
+
+.logo-placeholder {
+    font-size: 38px;
+    font-weight: 900; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+    background-color: #1e3a8a; 
+    border: 3px solid #ccff00; /* DETTAGLIO NEON: Cornice verde evidenziatore */
+    display: inline-block; /* il rettangolo si estende per la lunghezza del suo contenuto */
+    padding: 12px 35px; /* spazio interno tra la scritta e il bordo */
+    box-shadow: 0 0 20px rgba(204, 255, 0, 0.2); /* effetto bagliore */
+}
+
+.welcome-text {
+    font-size: 22px;
+    font-weight: 300;
+    color: #cbd5e1;
+    margin-bottom: 40px;
+    line-height: 1.4;
+}
+
+.main-link {
+    display: inline-block;
+    background-color: #2563eb; 
+    color: white;
+    text-decoration: none;
+    padding: 14px 30px;
+    border-radius: 4px; /* angoli leggermente smussati */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
+    border: 1px solid transparent; /* bordo invisibile che apparirà passandoci il mouse sopra */
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+.main-link:hover {
+    background-color: #1d4ed8;
+    border-color: #ccff00; /* DETTAGLIO NEON: Quando passi sul pulsante compare il bordo neon */
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+    transform: translateY(-2px); /* effetto movimento: si alza di 2 pixel */
+}
+
+.admin-section {
+    margin-top: 60px;
+    border-top: 1px dashed #334155;
+    padding-top: 30px;
+}
+
+.admin-section p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.admin-link {
+    display: inline-block;
+    background-color: #ef4444; /* Rosso admin */
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s;
+}
+
+.admin-link:hover {
+    background-color: #b91c1c;
+}

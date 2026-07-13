@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Giocatore;
 import it.uniroma3.tornei.repository.GiocatoreRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class GiocatoreService {
 	
-	@Autowired
-	private GiocatoreRepository giocatoreRepository;
+	private final GiocatoreRepository giocatoreRepository;
 	
+	public GiocatoreService(GiocatoreRepository giocatoreRepository) {
+		this.giocatoreRepository = giocatoreRepository;
+	}
+
 	public Giocatore getGiocatore(Long id) {
 		
 		Optional<Giocatore> result = this.giocatoreRepository.findById(id);
@@ -32,9 +36,8 @@ public class GiocatoreService {
 		return giocatori;
 	}
 	
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Giocatore saveGiocatore(Giocatore giocatore) {
-		
 		return this.giocatoreRepository.save(giocatore);
 	}
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Partita;
@@ -15,13 +15,17 @@ import it.uniroma3.tornei.repository.PartitaRepository;
 import it.uniroma3.tornei.repository.SquadraRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class SquadraService {
 	
-	@Autowired
-	private SquadraRepository squadraRepository;
-	@Autowired
-	private PartitaRepository partitaRepository;
+	private final SquadraRepository squadraRepository;
+	private final PartitaRepository partitaRepository;
 	
+	public SquadraService(SquadraRepository squadraRepository, PartitaRepository partitaRepository) {
+		this.squadraRepository = squadraRepository;
+		this.partitaRepository = partitaRepository;
+	}
+
 	public Squadra getSquadra(Long id) {
 		
 		Optional<Squadra> result = this.squadraRepository.findById(id);
@@ -37,13 +41,12 @@ public class SquadraService {
 		return squadre;
 	}
 	
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Squadra saveSquadra(Squadra squadra) {
-		
 		return this.squadraRepository.save(squadra);
 	}
 	
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public void deleteSquadra(Long id) {
 		
 		Squadra squadra = this.squadraRepository.findById(id).orElse(null);

@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Arbitro;
 import it.uniroma3.tornei.repository.ArbitroRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class ArbitroService {
 	
-	@Autowired
-	private ArbitroRepository arbitroRepository;
+	private final ArbitroRepository arbitroRepository;
 	
+	public ArbitroService(ArbitroRepository arbitroRepository) {
+		this.arbitroRepository = arbitroRepository;
+	}
+
 	public Arbitro getArbitroById(Long id) {
 		
 		Optional<Arbitro> result = this.arbitroRepository.findById(id);
@@ -25,7 +29,6 @@ public class ArbitroService {
 	}
 	
 	public Arbitro getArbitroByCodiceAIA(String codiceAIA) {
-		
 		return this.arbitroRepository.findByCodiceAIA(codiceAIA);
 	}
 	
@@ -37,9 +40,8 @@ public class ArbitroService {
 		return arbitri;
 	}
 	
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Arbitro saveArbitro(Arbitro arbitro) {
-		
 		return this.arbitroRepository.save(arbitro);
 	}
 }

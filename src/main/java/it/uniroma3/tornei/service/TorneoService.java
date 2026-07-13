@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Partita;
@@ -17,10 +17,14 @@ import it.uniroma3.tornei.model.Torneo;
 import it.uniroma3.tornei.repository.TorneoRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class TorneoService {
 	
-	@Autowired
-	private TorneoRepository torneoRepository;
+	private final TorneoRepository torneoRepository;
+	
+	public TorneoService(TorneoRepository torneoRepository) {
+		this.torneoRepository = torneoRepository;
+	}
 	
 	public Torneo getTorneo(Long id) {
 		
@@ -38,18 +42,18 @@ public class TorneoService {
 		return tornei;
 	}
 	
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Torneo saveTorneo(Torneo torneo) {
-		
 		return this.torneoRepository.save(torneo);
 	}
 	
-	@Transactional
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public void deleteTorneo(Long id) {
 		//la cancellazione per id è più efficiente in quanto non carica tutto l'oggetto in memoria prima di cancellarlo
 		this.torneoRepository.deleteById(id);
 	}
 	
+	//non ha bisogno di un transactional più specifico perchè non modifica lo stato ma fa solo tante letture
 	public List<RigaClassifica> calcolaClassifica(Long torneoId) {
 		
 		Torneo torneo = this.torneoRepository.findById(torneoId).orElse(null);
@@ -66,7 +70,7 @@ public class TorneoService {
 				String casa = (p.getSquadraCasa() != null) ? p.getSquadraCasa().getNome() : p.getSquadraCasaNomeStorico();
 				String ospite = (p.getSquadraOspite() != null) ? p.getSquadraOspite().getNome() : p.getSquadraOspiteNomeStorico();
 				
-				//metto le squadre nella mappa dele classifiche (solo se non sono già presenti)
+				//metto le squadre nella mappa delle classifiche (solo se non sono già presenti)
 				mappaClassifica.putIfAbsent(casa, new RigaClassifica(casa));
 				mappaClassifica.putIfAbsent(ospite, new RigaClassifica(ospite));
 				

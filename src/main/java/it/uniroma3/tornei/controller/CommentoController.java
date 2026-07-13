@@ -23,14 +23,12 @@ public class CommentoController {
 	
 	private final CommentoService commentoService;
 	private final PartitaService partitaService;
-	private final UtenteService utenteService;
 	private final CredentialsService credentialsService;
 	
 	public CommentoController(CommentoService commentoService, PartitaService partitaService,
 			UtenteService utenteService, CredentialsService credentialsService) {
 		this.commentoService = commentoService;
 		this.partitaService = partitaService;
-		this.utenteService = utenteService;
 		this.credentialsService = credentialsService;
 	}
 	
@@ -38,7 +36,8 @@ public class CommentoController {
 	
 	@PostMapping("/partita/{partitaId}/commento")
 	public String aggiungiCommento(@PathVariable("partitaId") Long partitaId, 
-			@RequestParam("testo") String testo) {
+			@RequestParam("testo") String testo,
+			@AuthenticationPrincipal UserDetails userDetails) {
 		
 		Partita partita = this.partitaService.getPartita(partitaId);
 		
@@ -47,7 +46,8 @@ public class CommentoController {
 			Commento commento = new Commento();
 			commento.setTesto(testo);
 			commento.setPartita(partita);
-			commento.setUtente(this.utenteService.getAllUtenti().get(0));
+			Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
+			commento.setUtente(credentialsLoggato.getUtente());
 			
 			this.commentoService.saveCommento(commento);
 		}
@@ -82,7 +82,7 @@ public class CommentoController {
 		if (commento == null)
 			return "redirect:/";
 		
-		Credentials credentialsLoggato = this.credentialsService.getCredentials(userDetails.getUsername());
+		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
 		if(!commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId()))
 			return "error/403";
 		
@@ -100,7 +100,7 @@ public class CommentoController {
 		if(commentoOriginale == null)
 			return "redirect:/";
 		
-		Credentials credentialsLoggato = this.credentialsService.getCredentials(userDetails.getUsername());
+		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
 		//gli utenti possono modificare solo i propri commenti
 		if(!commentoOriginale.getUtente().getId().equals(credentialsLoggato.getUtente().getId()))
 			return "error/403";

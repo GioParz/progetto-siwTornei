@@ -47,15 +47,15 @@ public class ArbitroController {
 	
 	/* INSERIMENTO NUOVI ARBITRI */
 	
-	@GetMapping("/arbitro/new")
+	@GetMapping("/admin/arbitro/new")
 	public String mostraFormArbitro(Model model) {
 		
 		model.addAttribute("arbitro", new Arbitro());
 		
-		return "arbitri/form";
+		return "admin/arbitri/form";
 	}
 	
-	@PostMapping("/arbitri")
+	@PostMapping("/admin/arbitri")
 	public String saveArbitro(@ModelAttribute("arbitro") Arbitro arbitro) {
 		
 		this.arbitroService.saveArbitro(arbitro);

@@ -1,5 +1,7 @@
 package it.uniroma3.tornei.model;
 
+import java.util.Objects;
+
 public class RigaClassifica {
 	
 	private String nomeSquadra;
@@ -7,7 +9,7 @@ public class RigaClassifica {
 	private Integer punti;
 	private Integer golFatti;
 	private Integer golSubiti;
-	private Boolean ritirata = false;
+	private Boolean ritirata;
 	
 	public RigaClassifica(String nomeSquadra) {
         this.nomeSquadra = nomeSquadra;
@@ -15,6 +17,7 @@ public class RigaClassifica {
         this.punti = 0;
         this.golFatti = 0;
         this.golSubiti = 0;
+        this.ritirata = false;
     }
 
     public void aggiungiPartita(int golFattiPartita, int golSubitiPartita, int puntiGuadagnati) {
@@ -71,6 +74,20 @@ public class RigaClassifica {
 	public void setRitirata(Boolean ritirata) {
 		this.ritirata = ritirata;
 	}
-    
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nomeSquadra);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		RigaClassifica other = (RigaClassifica) obj;
+		return Objects.equals(nomeSquadra, other.nomeSquadra);
+	}
+ 
 }

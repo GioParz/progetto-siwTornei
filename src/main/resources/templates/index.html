@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
 	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 	<head>
 		<title>Home - SIWTornei</title>
+		<link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<header>
-			<h1>Benvenuto/a nel Sistema di Gestione Tornei di Calcio Amatoriale</h1>
-			
-			<nav>
-				<!-- Link visibili a chiunque -->
-				<a th:href="@{/tornei}">Visualizza i Tornei</a> |
-				
-				<!-- Link visibili solo ai visitatori anonimi -->
+	
+		<div class="top-bar">
+			<div class="top-bar-right">
 				<span sec:authorize="isAnonymous()">
-					<a th:href="@{/login}">Accedi</a> |
-					<a th:href="@{/register}">Registrati</a>
+					<a th:href="@{/login}" class="login-link">Accedi</a>
 				</span>
-				
-				<!-- Link visibili solo agli utenti loggati -->
-				<span sec:authorize="isAuthenticated()">
-					Ciao, <strong sec:authentication="name">Utente</strong>! |
-					
-					<form th:action="@{/logout}" method="post" style="display: inline;">
-						<button type="submit">Esci (Logout)</button>
+	
+				<span sec:authorize="isAuthenticated()" class="user-menu">
+					<span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+					<form th:action="@{/logout}" method="post">
+						<button type="submit" class="logout-btn">Logout</button>
 					</form>
 				</span>
-				
-				<!-- Link visibili solo agli admin -->
-				<span sec:authorize="hasAuthority('ADMIN')">
-					| <a th:href="@{/admin/index}" style="color: red; font-weight: bold;">Pannello Amministratore</a>
-				</span>
-			</nav>
-		</header>
-		
-		<hr>
-		
-		<main>
-			<h3>Esplora le funzionalità</h3>
-			<p>Usa la barra di navigazione in alto per accedere al tuo profilo o consultare i tornei attivi</p>
+			</div>
+		</div>
+	
+		<main class="main-content">
+			<!-- Spazio per il Logo centrale -->
+			<div class="logo-container">
+				<!-- Quando avrai l'immagine potrai usare: <img th:src="@{/images/logo.png}" alt="SIW Tornei Logo"> -->
+				<div class="logo-placeholder">SIW Tornei</div>
+			</div>
+	
+			<h1 class="welcome-text">Benvenuto nel Sistema di Gestione Tornei di Calcio Amatoriale</h1>
+	
+			<div class="navigation-links">
+				<a th:href="@{/tornei}" class="main-link">Visualizza l'elenco dei Tornei</a>
+			</div>
+	
+			<div sec:authorize="hasAuthority('ADMIN')" class="admin-section">
+				<hr>
+				<p>Sei loggato come Amministratore:</p>
+				<a th:href="@{/admin/index}" class="admin-link">Pannello Amministratore</a>
+			</div>
 		</main>
-		
+	
 	</body>
+
 </html>
