@@ -55,6 +55,7 @@
 	                    <th>DR</th>
 	                </tr>
 	            </thead>
+				
 	            <tbody>
 	                <tr th:each="riga, status : ${classifica}" 
 	                    th:classappend="${riga.ritirata} ? 'team-retired' : ''">
@@ -91,6 +92,7 @@
 	                    <th>Azioni</th>
 	                </tr>
 	            </thead>
+				
 	            <tbody>
 	                <tr th:each="partita : ${torneo.partite}">
 	                    <td th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Ritirata)'}">Casa</td>

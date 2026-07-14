@@ -35,6 +35,8 @@
 	
 			<div class="navigation-links">
 				<a th:href="@{/tornei}" class="main-link">Visualizza l'elenco dei Tornei</a>
+				<a th:href="@{/squadre}" class="main-link">Visualizza l'elenco delle Squadre</a>
+				<a th:href="@{/arbitri}" class="main-link">Visualizza l'elenco degli Arbitri</a>
 			</div>
 	
 			<div sec:authorize="hasAuthority('ADMIN')" class="admin-section">

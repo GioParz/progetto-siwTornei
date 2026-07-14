@@ -8,7 +8,6 @@
 	
 	<body>
 	
-	    <!-- Barra Amministratore -->
 	    <div class="top-bar top-bar-admin">
 	        <div class="top-bar-right">
 	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
@@ -23,6 +22,12 @@
 	        <form th:action="@{/partite}" th:object="${partita}" method="post" class="stadium-form">
 	            
 	            <input type="hidden" th:field="*{torneo}" />
+				
+				<div th:if="${#fields.hasGlobalErrors()}" style="color: red">
+					<ul>
+						<li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore di logica del match</li>
+					</ul>
+				</div>
 	            
 	            <div class="info-box info-box-admin padding-md margin-bottom-md">
 	                <p class="text-center text-uppercase font-size-sm letter-spacing-sm no-margin">
@@ -33,36 +38,41 @@
 	            
 	            <div class="form-group">
 	                <label>Squadra Ospitante (In Casa)</label>
-	                <select th:field="*{squadraCasa}" required>
+	                <select th:field="*{squadraCasa}">
 	                    <option value="">Seleziona Club Casa</option>
 	                    <option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Casa</option>
 	                </select>
+					<span th:if="${#fields.hasErrors('squadraCasa')}" th:errors="*{squadraCasa}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Squadra Sfidante (Ospite)</label>
-	                <select th:field="*{squadraOspite}" required>
+	                <select th:field="*{squadraOspite}">
 	                    <option value="">Seleziona Club Ospite</option>
 	                    <option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Ospite</option>
 	                </select>
+					<span th:if="${#fields.hasErrors('squadraOspite')}" th:errors="*{squadraOspite}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Direttore di Gara (Arbitro)</label>
-	                <select th:field="*{arbitro}" required>
+	                <select th:field="*{arbitro}">
 	                    <option value="">Seleziona Arbitro</option>
 	                    <option th:each="a : ${arbitri}" th:value="${a.id}" th:text="${a.nome} + ' ' + ${a.cognome}">Arbitro</option>
 	                </select>
+					<span th:if="${#fields.hasErrors('arbitro')}" th:errors="*{arbitro}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Data e Ora d'Incontro</label>
 	                <input type="datetime-local" th:field="*{dataEOra}" required />
+					<span th:if="${#fields.hasErrors('dataEOra')}" th:errors="*{dataEOra}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Stadio / Sede del Match</label>
-	                <input type="text" th:field="*{luogo}" placeholder="Es: Stadio Comunale" required />
+	                <input type="text" th:field="*{luogo}" placeholder="Es: Stadio Comunale" />
+					<span th:if="${#fields.hasErrors('luogo')}" th:errors="*{luogo}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="margin-top-lg">

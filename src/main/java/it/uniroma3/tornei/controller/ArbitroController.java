@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import it.uniroma3.tornei.model.Arbitro;
 import it.uniroma3.tornei.service.ArbitroService;
+import jakarta.validation.Valid;
 
 @Controller
 public class ArbitroController {
@@ -56,7 +58,16 @@ public class ArbitroController {
 	}
 	
 	@PostMapping("/admin/arbitri")
-	public String saveArbitro(@ModelAttribute("arbitro") Arbitro arbitro) {
+	public String saveArbitro(@Valid @ModelAttribute("arbitro") Arbitro arbitro, 
+			BindingResult bindingResult) {
+		
+		if(bindingResult.hasErrors())
+			return "admin/arbitri/form"; //torna al form mostrando gli errori
+		
+		if(this.arbitroService.existsByCodiceAIA(arbitro.getCodiceAIA())) {
+			bindingResult.rejectValue("codiceAIA", "arbitro.duplicate");
+			return "admin/arbitri/form";
+		}
 		
 		this.arbitroService.saveArbitro(arbitro);
 		

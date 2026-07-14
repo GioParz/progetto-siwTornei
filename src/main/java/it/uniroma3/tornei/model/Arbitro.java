@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Arbitro {
@@ -17,9 +18,19 @@ public class Arbitro {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private String nome;
+	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private String cognome;
 	
+	@NotBlank
+	@NotNull
+	@Size(min = 5, max = 20)
 	@Column(unique = true, nullable = false)
 	private String codiceAIA;
 	
@@ -83,6 +94,4 @@ public class Arbitro {
 		Arbitro other = (Arbitro) obj;
 		return Objects.equals(codiceAIA, other.codiceAIA);
 	}
-	
-	
 }

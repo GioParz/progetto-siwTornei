@@ -32,17 +32,19 @@
 	        </div>
 	
 	        <!-- Form Risultato -->
-	        <form th:action="@{/admin/partita/{id}/risultato(id=${partita.id})}" method="post" class="stadium-form">
+	        <form th:action="@{/admin/partita/{id}/risultato(id=${partita.id})}" th:object="${partita}" method="post" class="stadium-form">
 	            
 	            <div class="form-group margin-bottom-md">
 	                <label th:text="'Gol per ' + ${partita.squadraCasa.nome}">Gol Casa</label>
-	                <input type="number" name="goalsHome" th:value="${partita.goalsHome}" min="0" placeholder="0" required class="input-score-number" />
+	                <input type="number" name="goalsHome" th:value="${partita.goalsHome}" placeholder="0" class="input-score-number" />
+					<span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group margin-bottom-lg">
 	                <label th:text="'Gol per ' + ${partita.squadraOspite.nome}">Gol Ospite</label>
-	                <input type="number" name="goalsAway" th:value="${partita.goalsAway}" min="0" placeholder="0" required class="input-score-number" />
-	            </div>
+	                <input type="number" name="goalsAway" th:value="${partita.goalsAway}" placeholder="0" class="input-score-number" />
+					<span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" style="color: red;"></span>
+				</div>
 	            
 	            <div>
 	                <button type="submit" class="main-link btn-admin">Registra Risultato Definitivo</button>

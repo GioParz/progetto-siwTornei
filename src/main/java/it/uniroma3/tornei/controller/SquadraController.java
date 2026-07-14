@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import it.uniroma3.tornei.model.Squadra;
 import it.uniroma3.tornei.service.SquadraService;
+import jakarta.validation.Valid;
 
 @Controller
 public class SquadraController {
@@ -56,10 +58,14 @@ public class SquadraController {
 	}
 	
 	@PostMapping("/admin/squadre")
-	public String saveSquadra(@ModelAttribute("squadra") Squadra squadra) {
+	public String saveSquadra(@Valid @ModelAttribute("squadra") Squadra squadra,
+			BindingResult bindingResult) {
+		
+		if (bindingResult.hasErrors()) {
+			return "admin/squadre/form";
+		}
 		
 		this.squadraService.saveSquadra(squadra);
-		
 		return "redirect:/squadre";
 	}
 	
@@ -89,18 +95,22 @@ public class SquadraController {
 	
 	@PostMapping("/admin/squadra/{id}/edit")
 	public String modificaSquadra(@PathVariable("id") Long id, 
-			@ModelAttribute("squadra") Squadra squadraModificata) {
+			@Valid @ModelAttribute("squadra") Squadra squadraModificata,
+			BindingResult bindingResult) {
 		
 		Squadra squadraOriginale = this.squadraService.getSquadra(id);
 		if(squadraOriginale == null)
 			return "redirect:/";
+		
+		if (bindingResult.hasErrors()) {
+			return "admin/squadre/form";
+		}
 		
 		squadraOriginale.setNome(squadraModificata.getNome());
 		squadraOriginale.setAnnoFondazione(squadraModificata.getAnnoFondazione());
 		squadraOriginale.setCitta(squadraModificata.getCitta());
 		
 		this.squadraService.saveSquadra(squadraOriginale);
-		
 		return "redirect:/squadra/" + squadraOriginale.getId();
 	}
 }

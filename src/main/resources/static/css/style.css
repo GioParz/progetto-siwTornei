@@ -328,9 +328,9 @@ body {
 }
 
 
-/* --- SEZIONE AGGIUNTIVA PER CLASSI PULITE ED EVITARE STILI INLINE --- */
+/* --- SEZIONE AGGIUNTIVA --- */
 
-/* Nuovi stili dedicati all'Admin per rassicurare visivamente la sessione */
+/* Nuovi stili dedicati all'Admin */
 .top-bar-admin {
     background-color: #111827;
     border-bottom: 2px solid #ef4444;
@@ -458,4 +458,11 @@ body {
     font-weight: 700;
     letter-spacing: 1px;
     margin-bottom: 20px;
+}
+
+/* Rimuove le freccette di incremento/decremento dai campi di tipo number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

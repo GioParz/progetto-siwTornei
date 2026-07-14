@@ -9,16 +9,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Credentials;
 import it.uniroma3.tornei.repository.CredentialsRepository;
+import it.uniroma3.tornei.repository.UtenteRepository;
 
 @Service
 @Transactional(readOnly = true)
 public class CredentialsService {
 	
 	private final CredentialsRepository credentialsRepository;
+	private final UtenteRepository utenteRepository;
 	private final PasswordEncoder passwordEncoder;
 	
-	public CredentialsService(CredentialsRepository credentialsRepository, PasswordEncoder passwordEncoder) {
+	public CredentialsService(CredentialsRepository credentialsRepository,
+			UtenteRepository utenteRepository,
+			PasswordEncoder passwordEncoder) {
 		this.credentialsRepository = credentialsRepository;
+		this.utenteRepository = utenteRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 	
@@ -34,6 +39,14 @@ public class CredentialsService {
 		Optional<Credentials> result = this.credentialsRepository.findByUsername(username);
 		
 		return result.orElse(null);
+	}
+	
+	public boolean existsByUsername(String username) {
+		return this.credentialsRepository.existsByUsername(username);
+	}
+	
+	public boolean existsByUtenteEmail(String email) {
+		return this.utenteRepository.existsByEmail(email);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

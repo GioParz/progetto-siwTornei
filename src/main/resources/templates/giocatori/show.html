@@ -42,7 +42,8 @@
 	
 	            <div class="match-meta-details" style="max-width: 400px; margin: 0 auto;">
 	                <p><strong>Club di Appartenenza:</strong> 
-	                    <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="admin-text-highlight" style="text-decoration: underline;" th:text="${giocatore.squadra.nome}">Squadra</a>
+	                    <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="admin-text-highlight" style="text-decoration: underline;" 
+						   th:text="${giocatore.squadra.nome != null ? giocatore.squadra.nome : 'Attualmente non assegnato a nessuna squadra'}">Squadra</a>
 	                </p>
 	                <p><strong>Data di Nascita:</strong> 
 	                    <span th:text="${giocatore.dataNascita != null ? #temporals.format(giocatore.dataNascita, 'dd/MM/yyyy') : 'Non specificata'}">01/01/2000</span>

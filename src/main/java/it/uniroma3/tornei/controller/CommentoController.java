@@ -4,18 +4,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Credentials;
 import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.service.CommentoService;
 import it.uniroma3.tornei.service.CredentialsService;
 import it.uniroma3.tornei.service.PartitaService;
+import jakarta.validation.Valid;
 
 @Controller
 public class CommentoController {
@@ -35,22 +35,24 @@ public class CommentoController {
 	
 	@PostMapping("/partita/{partitaId}/commento")
 	public String aggiungiCommento(@PathVariable("partitaId") Long partitaId, 
-			@RequestParam("testo") String testo,
+			@Valid @ModelAttribute("nuovoCommento") Commento commento,
+			BindingResult bindingResult, Model model,
 			@AuthenticationPrincipal UserDetails userDetails) {
 		
 		Partita partita = this.partitaService.getPartita(partitaId);
+		if(partita == null)
+			return "redirect:/";
 		
-		if(partita != null && testo != null && !testo.trim().isEmpty()) {
-			
-			Commento commento = new Commento();
-			commento.setTesto(testo);
-			commento.setPartita(partita);
-			
-			Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
-			commento.setUtente(credentialsLoggato.getUtente());
-			
-			this.commentoService.saveCommento(commento);
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("partita", partita);
+			model.addAttribute("torneo", partita.getTorneo());
+			return "partite/show";
 		}
+		
+		commento.setPartita(partita);
+		commento.setUtente(this.credentialsService.getCredentialsByUsername(userDetails.getUsername()).getUtente());
+		
+		this.commentoService.saveCommento(commento);
 		
 		return "redirect:/partita/" + partitaId;
 	}
@@ -100,7 +102,8 @@ public class CommentoController {
 	
 	@PostMapping("/commento/{id}/edit")
 	public String modificaCommento(@PathVariable("id") Long id,
-			@ModelAttribute("commento") Commento commentoModificato,
+			@Valid @ModelAttribute("commento") Commento commentoModificato,
+			BindingResult bindingResult,
 			@AuthenticationPrincipal UserDetails userDetails) {
 		
 		Commento commentoOriginale = this.commentoService.getCommento(id);
@@ -108,13 +111,12 @@ public class CommentoController {
 			return "redirect:/";
 		
 		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
-		//gli utenti possono modificare solo i propri commenti
 		if(!commentoOriginale.getUtente().getId().equals(credentialsLoggato.getUtente().getId()))
 			return "error/403";
 		
-		//se nulla è stato modificato non c'è bisogno di salvare il commento
-		if(commentoOriginale.getTesto().trim().equals(commentoModificato.getTesto().trim()))
-			return "redirect:/partita/" + commentoOriginale.getPartita().getId();
+		if (bindingResult.hasErrors()) {
+			return "commenti/formModifica"; // Torna alla pagina di modifica mostrando l'errore
+		}
 		
 		commentoOriginale.setTesto(commentoModificato.getTesto());
 		this.commentoService.saveCommento(commentoOriginale);

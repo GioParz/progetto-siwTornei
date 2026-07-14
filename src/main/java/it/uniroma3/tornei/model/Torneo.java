@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Torneo {
@@ -18,14 +20,24 @@ public class Torneo {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private String nome;
+	
+	@NotBlank
+	@NotNull
 	private Integer anno;
+	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private String descrizione;
 	
 	@ManyToMany
 	private List<Squadra> squadre;
 	
-	@OneToMany(mappedBy = "torneo", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "torneo", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Partita> partite;
 	
 	public Torneo() {

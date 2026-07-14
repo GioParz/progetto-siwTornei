@@ -1,5 +1,6 @@
 package it.uniroma3.tornei.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Giocatore;
+import it.uniroma3.tornei.model.RuoloGiocatore;
 import it.uniroma3.tornei.repository.GiocatoreRepository;
 
 @Service
@@ -34,6 +36,10 @@ public class GiocatoreService {
 		this.giocatoreRepository.findAll().forEach(giocatori::add);
 		
 		return giocatori;
+	}
+	
+	public boolean existsByCognomeAndDataNascitaAndRuolo(String cognome, LocalDate dataNascita, RuoloGiocatore ruolo) {
+		return this.giocatoreRepository.existsByCognomeAndDataNascitaAndRuolo(cognome, dataNascita, ruolo);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

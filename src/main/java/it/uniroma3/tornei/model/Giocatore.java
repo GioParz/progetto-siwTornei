@@ -3,6 +3,9 @@ package it.uniroma3.tornei.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Giocatore {
@@ -18,16 +22,33 @@ public class Giocatore {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private String nome;
+	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private String cognome;
+	
+	@NotBlank
+	@NotNull
+	@Past
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataNascita;
 	
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private RuoloGiocatore ruolo;
 	
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
 	private Integer altezza;
 	
 	@ManyToOne
+	@Column(nullable = true)
 	private Squadra squadra;
 	
 	public Giocatore() {
@@ -105,6 +126,4 @@ public class Giocatore {
 				&& Objects.equals(dataNascita, other.dataNascita)
 				&& Objects.equals(ruolo, other.ruolo);
 	}
-	
-	
 }

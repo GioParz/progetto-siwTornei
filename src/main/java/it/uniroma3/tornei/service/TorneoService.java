@@ -42,6 +42,10 @@ public class TorneoService {
 		return tornei;
 	}
 	
+	public boolean existsByNomeAndAnno(String nome, Integer anno) {
+		return this.torneoRepository.existsByNomeAndAnno(nome, anno);
+	}
+	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Torneo saveTorneo(Torneo torneo) {
 		return this.torneoRepository.save(torneo);

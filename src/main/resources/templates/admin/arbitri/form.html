@@ -25,17 +25,20 @@
 	            
 	            <div class="form-group">
 	                <label>Nome</label>
-	                <input type="text" th:field="*{nome}" placeholder="Inserisci il nome" required />
+	                <input type="text" th:field="*{nome}" placeholder="Inserisci il nome" />
+					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Cognome</label>
-	                <input type="text" th:field="*{cognome}" placeholder="Inserisci il cognome" required />
+	                <input type="text" th:field="*{cognome}" placeholder="Inserisci il cognome" />
+					<span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Codice AIA</label>
-	                <input type="text" th:field="*{codiceAIA}" placeholder="Es: AIA-54321" required />
+	                <input type="text" th:field="*{codiceAIA}" placeholder="Es: AIA-54321" />
+					<span th:if="${#fields.hasErrors('codiceAIA')}" th:errors="*{codiceAIA}" style="color: red;"></span>
 	            </div>
 	
 	            <div class="margin-top-lg">

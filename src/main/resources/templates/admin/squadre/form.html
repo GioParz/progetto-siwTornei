@@ -8,7 +8,6 @@
 	
 	<body>
 	
-	    <!-- Barra Admin -->
 	    <div class="top-bar top-bar-admin">
 	        <div class="top-bar-right">
 	            <span class="welcome-user" style="color: #ef4444; font-weight: 700;">PANNELLO AMMINISTRATORE</span>
@@ -29,17 +28,20 @@
 	            
 	            <div class="form-group">
 	                <label>Nome del Club</label>
-	                <input type="text" th:field="*{nome}" placeholder="Es: Raptors FC" required />
+	                <input type="text" th:field="*{nome}" placeholder="Es: Raptors FC" />
+					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Anno di Fondazione</label>
-	                <input type="number" th:field="*{annoFondazione}" placeholder="Es: 2018" required />
+	                <input type="number" th:field="*{annoFondazione}" placeholder="Es: 2018" />
+					<span th:if="${#fields.hasErrors('annoFondazione')}" th:errors="*{annoFondazione}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Città</label>
-	                <input type="text" th:field="*{citta}" placeholder="Es: Roma" required />
+	                <input type="text" th:field="*{citta}" placeholder="Es: Roma" />
+					<span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="margin-top-lg">

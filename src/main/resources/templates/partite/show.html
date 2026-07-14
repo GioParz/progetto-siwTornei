@@ -117,18 +117,25 @@
 			        </tbody>
 			    </table>
 
-			    <!-- Modulo di Inserimento Commento -->
-			    <div class="margin-top-lg">
-			        <h3 class="section-title font-size-md margin-bottom-md">Lascia un commento</h3>
-			        <form th:action="@{/partita/{partitaId}/commento(partitaId=${partita.id})}" method="post" class="stadium-form">
-			            <div class="form-group">
-			                <textarea name="testo" rows="4" placeholder="Scrivi qui la tua opinione sull'incontro..." required></textarea>
-			            </div>
-			            <div class="margin-top-sm">
-			                <button type="submit" class="main-link padding-btn-sm font-size-sm">Pubblica Commento</button>
-			            </div>
-			        </form>
-			    </div>
+				<!-- Modulo di Inserimento Commento -->
+				<div class="margin-top-lg">
+				    <h3 class="section-title font-size-md margin-bottom-md">Lascia un commento</h3>
+				    
+				    <form th:action="@{/partita/{partitaId}/commento(partitaId=${partita.id})}" 
+				          th:object="${nuovoCommento}" 
+				          method="post" 
+				          class="stadium-form">
+				        
+				        <div class="form-group">
+				            <textarea th:field="*{testo}" rows="4" placeholder="Scrivi qui la tua opinione sull'incontro..."></textarea>
+				            <span th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}" style="color: red;"></span>
+				        </div>
+				        
+				        <div class="margin-top-sm">
+				            <button type="submit" class="main-link padding-btn-sm font-size-sm">Pubblica Commento</button>
+				        </div>
+				    </form>
+				</div>
 			</div>
 	
 	        <!-- Messaggio alternativo: visibile SOLO agli utenti NON registrati -->

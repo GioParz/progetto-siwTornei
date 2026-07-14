@@ -2,11 +2,13 @@ package it.uniroma3.tornei.model;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "users") //per una migliore manutenibilità futura
@@ -16,8 +18,17 @@ public class Utente {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank
+	@Column(nullable = false)
 	private String nome;
+	
+	@NotBlank
+	@Column(nullable = false)
 	private String cognome;
+	
+	@NotBlank
+	@Email
+	@Column(unique = true, nullable = false)
 	private String email;
 	
 	public Utente() {

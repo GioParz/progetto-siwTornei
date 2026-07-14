@@ -14,4 +14,6 @@ public interface CredentialsRepository extends CrudRepository<Credentials, Long>
 	 * perciò ha bisogno di Optional<> per gestire correttamente gli errori di login
 	 */
 	public Optional<Credentials> findByUsername(String username);
+	
+	public boolean existsByUsername(String username);
 }

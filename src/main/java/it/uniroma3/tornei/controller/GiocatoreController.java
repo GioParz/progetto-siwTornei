@@ -2,6 +2,7 @@ package it.uniroma3.tornei.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import it.uniroma3.tornei.model.RuoloGiocatore;
 import it.uniroma3.tornei.model.Squadra;
 import it.uniroma3.tornei.service.GiocatoreService;
 import it.uniroma3.tornei.service.SquadraService;
+import jakarta.validation.Valid;
 
 @Controller
 public class GiocatoreController {
@@ -58,10 +60,23 @@ public class GiocatoreController {
 	}
 	
 	@PostMapping("/giocatori")
-	public String saveGiocatore(@ModelAttribute("giocatore") Giocatore giocatore) {
+	public String saveGiocatore(@Valid @ModelAttribute("giocatore") Giocatore giocatore,
+			BindingResult bindingResult, Model model) {
+		
+		if (!bindingResult.hasErrors()) {
+			if (this.giocatoreService.existsByCognomeAndDataNascitaAndRuolo(
+					giocatore.getCognome(), giocatore.getDataNascita(), giocatore.getRuolo())) {
+				bindingResult.reject("giocatore.duplicato"); // Errore globale (non associato a un singolo campo)
+			}
+		}
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("ruoli", RuoloGiocatore.values());
+			
+			return "giocatori/form";
+		}
 		
 		this.giocatoreService.saveGiocatore(giocatore);
-		
 		return "redirect:/squadra/" + giocatore.getSquadra().getId();
 	}
 	
@@ -82,11 +97,18 @@ public class GiocatoreController {
 	
 	@PostMapping("/admin/giocatore/{id}/edit")
 	public String modificaGiocatore(@PathVariable("id") Long id,
-			@ModelAttribute("giocatore") Giocatore giocatoreModificato) {
+			@Valid @ModelAttribute("giocatore") Giocatore giocatoreModificato,
+			BindingResult bindingResult, Model model) {
 		
 		Giocatore giocatoreOriginale = this.giocatoreService.getGiocatore(id);
 		if(giocatoreOriginale == null)
 			return "redirect:/";
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("squadre", this.squadraService.getAllSquadre());
+			model.addAttribute("ruoli", RuoloGiocatore.values());
+			return "admin/giocatori/formModifica";
+		}
 		
 		giocatoreOriginale.setNome(giocatoreModificato.getNome());
 		giocatoreOriginale.setCognome(giocatoreModificato.getCognome());

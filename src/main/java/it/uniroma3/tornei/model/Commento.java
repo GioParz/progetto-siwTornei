@@ -10,6 +10,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Commento {
@@ -19,6 +22,9 @@ public class Commento {
 	@SequenceGenerator(name = "commento_seq", sequenceName = "commento_seq", allocationSize = 1)
 	private Long id;
 	
+	@NotBlank
+	@NotNull
+	@Size(max = 1000) //per assicurarci che spring blocchi l'input prima del crash
 	@Column(nullable = false, length = 1000)
 	private String testo;
 	

@@ -28,22 +28,26 @@
 	
 	            <div class="form-group">
 	                <label>Nome</label>
-	                <input type="text" th:field="*{nome}" required />
+	                <input type="text" th:field="*{nome}" />
+					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Cognome</label>
-	                <input type="text" th:field="*{cognome}" required />
+	                <input type="text" th:field="*{cognome}" />
+					<span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Data di Nascita</label>
-	                <input type="date" th:field="*{dataNascita}" required />
+	                <input type="date" th:field="*{dataNascita}" />
+					<span th:if="${#fields.hasErrors('dataNascita')}" th:errors="*{dataNascita}" style="color: red;"></span>
 	            </div>
 	
 	            <div class="form-group">
 	                <label>Altezza (cm)</label>
-	                <input type="number" th:field="*{altezza}" min="100" max="250" required />
+	                <input type="number" th:field="*{altezza}" />
+					<span th:if="${#fields.hasErrors('altezza')}" th:errors="*{altezza}" style="color: red;"></span>
 	            </div>
 				
 				<div class="form-group">
@@ -64,6 +68,7 @@
 	                            th:value="${r}" 
 	                            th:text="${r}">RUOLO</option>
 	                </select>
+					<span th:if="${#fields.hasErrors('ruolo')}" th:errors="*{ruolo}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="margin-top-lg">

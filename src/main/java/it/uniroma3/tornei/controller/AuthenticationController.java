@@ -11,6 +11,7 @@ import it.uniroma3.tornei.model.Credentials;
 import it.uniroma3.tornei.model.RuoloUtente;
 import it.uniroma3.tornei.model.Utente;
 import it.uniroma3.tornei.service.CredentialsService;
+import jakarta.validation.Valid;
 
 @Controller
 public class AuthenticationController {
@@ -40,22 +41,33 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/register")
-	public String registraUtente(@ModelAttribute("utente") Utente utente,
+	public String registraUtente(@Valid @ModelAttribute("utente") Utente utente,
 			BindingResult utenteBindingResult,
-			@ModelAttribute("credentials") Credentials credentials,
+			@Valid @ModelAttribute("credentials") Credentials credentials,
 			BindingResult credentialsBindingResult) {
 		
-		if(!utenteBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
-			
-			credentials.setUtente(utente);
-			credentials.setRuolo(RuoloUtente.USER);
-			
-			this.credentialsService.saveCredentials(credentials);
-			
-			return "redirect:/login";
+		if (!utenteBindingResult.hasFieldErrors("email")) {
+			if (this.credentialsService.existsByUtenteEmail(utente.getEmail())) {
+				utenteBindingResult.rejectValue("email", "utente.duplicateEmail");
+			}
 		}
-		
-		return "authentication/register";
+
+		if (!credentialsBindingResult.hasFieldErrors("username")) {
+			if (this.credentialsService.existsByUsername(credentials.getUsername())) {
+				credentialsBindingResult.rejectValue("username", "credentials.duplicateUsername");
+			}
+		}
+
+		if (utenteBindingResult.hasErrors() || credentialsBindingResult.hasErrors()) {
+			return "authentication/register";
+		}
+
+		credentials.setUtente(utente);
+		credentials.setRuolo(RuoloUtente.USER);
+
+		this.credentialsService.saveCredentials(credentials);
+
+		return "redirect:/login";
 	}
 	
 	/* ADMIN */

@@ -2,12 +2,12 @@ package it.uniroma3.tornei.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.model.StatoPartita;
 import it.uniroma3.tornei.model.Torneo;
@@ -15,6 +15,7 @@ import it.uniroma3.tornei.service.ArbitroService;
 import it.uniroma3.tornei.service.PartitaService;
 import it.uniroma3.tornei.service.SquadraService;
 import it.uniroma3.tornei.service.TorneoService;
+import jakarta.validation.Valid;
 
 @Controller
 public class PartitaController {
@@ -43,6 +44,7 @@ public class PartitaController {
 		
 		model.addAttribute("partita", partita);
 		model.addAttribute("torneo", partita.getTorneo());
+		model.addAttribute("nuovoCommento", new Commento());
 		
 		return "partite/show";
 	}
@@ -55,6 +57,7 @@ public class PartitaController {
 		Torneo torneo = this.torneoService.getTorneo(torneoId);
 		if (torneo == null)
 			return "redirect:/tornei";
+		
 		Partita partita = new Partita();
 		partita.setTorneo(torneo);
 		
@@ -66,15 +69,28 @@ public class PartitaController {
 	}
 	
 	@PostMapping("/partite")
-	public String savePartita(@ModelAttribute("partita") Partita partita) {
+	public String savePartita(@Valid @ModelAttribute("partita") Partita partita,
+			BindingResult bindingResult, Model model) {
+		
+		if (partita.getSquadraCasa() != null && partita.getSquadraOspite() != null) {
+			if (partita.getSquadraCasa().equals(partita.getSquadraOspite())) {
+				bindingResult.reject("partita.stessaSquadra");
+			}
+		}
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("squadre", this.squadraService.getAllSquadre());
+			model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
+			return "partite/form";
+		}
 		
 		partita.setStato(StatoPartita.PROGRAMMATA);
 		partita.setGoalsHome(0);
 		partita.setGoalsAway(0);
 		partita.setSquadraCasaNomeStorico(partita.getSquadraCasa().getNome());
 		partita.setSquadraOspiteNomeStorico(partita.getSquadraOspite().getNome());
-		this.partitaService.savePartita(partita);
 		
+		this.partitaService.savePartita(partita);
 		return "redirect:/torneo/" + partita.getTorneo().getId();
 	}
 	
@@ -94,21 +110,26 @@ public class PartitaController {
 	
 	@PostMapping("/admin/partita/{id}/risultato")
 	public String salvaRisultato(@PathVariable("id") Long id, 
-			@RequestParam("goalsHome") Integer goalsHome, 
-			@RequestParam("goalsAway") Integer goalsAway) {
+			@Valid @ModelAttribute("partita") Partita partitaModificata,
+			BindingResult bindingResult, Model model) {
 		
-		Partita partita = this.partitaService.getPartita(id);
-		if (partita != null) {
-			partita.setGoalsHome(goalsHome);
-			partita.setGoalsAway(goalsAway);
-			partita.setStato(StatoPartita.TERMINATA);
-			
-			this.partitaService.savePartita(partita);
-			
-			return "redirect:/torneo/" + partita.getTorneo().getId();
+		Partita partitaOriginale = this.partitaService.getPartita(id);
+		if (partitaOriginale == null) {
+			return "redirect:/tornei";
 		}
 		
-		return "redirect:/tornei";
+		if (bindingResult.hasErrors()) {
+			partitaModificata.setSquadraCasa(partitaOriginale.getSquadraCasa());
+			partitaModificata.setSquadraOspite(partitaOriginale.getSquadraOspite());
+			return "admin/partite/formRisultato";
+		}
+		
+		partitaOriginale.setGoalsHome(partitaModificata.getGoalsHome());
+		partitaOriginale.setGoalsAway(partitaModificata.getGoalsAway());
+		partitaOriginale.setStato(StatoPartita.TERMINATA);
+		
+		this.partitaService.savePartita(partitaOriginale);
+		return "redirect:/torneo/" + partitaOriginale.getTorneo().getId();
 	}
 	
 	/* PER ELIMINAZIONE PARTITA */

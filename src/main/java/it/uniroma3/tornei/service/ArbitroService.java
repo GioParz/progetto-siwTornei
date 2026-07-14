@@ -40,6 +40,10 @@ public class ArbitroService {
 		return arbitri;
 	}
 	
+	public boolean existsByCodiceAIA(String codiceAIA) {
+		return this.arbitroRepository.existsByCodiceAIA(codiceAIA);
+	}
+	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Arbitro saveArbitro(Arbitro arbitro) {
 		return this.arbitroRepository.save(arbitro);

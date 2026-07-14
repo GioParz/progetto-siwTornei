@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	
-<head>
+	<head>
 	    <title th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'">Gestione Torneo</title>
 	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
@@ -28,19 +28,28 @@
 	        <form th:action="${torneo.id != null} ? @{/admin/torneo/{id}/edit(id=${torneo.id})} : @{/admin/tornei}" 
 	              th:object="${torneo}" method="post" class="stadium-form">
 	            
-	            <div class="form-group">
+				<div th:if="${#fields.hasGlobalErrors()}" style="color: red;">
+					<ul>
+						<li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore competizione</li>
+					</ul>
+				</div>
+				  
+				<div class="form-group">
 	                <label>Nome del Torneo</label>
-	                <input type="text" th:field="*{nome}" placeholder="Es: Champions League Amatoriale" required />
+	                <input type="text" th:field="*{nome}" placeholder="Es: Champions League Amatoriale" />
+					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Edizione (Anno)</label>
-	                <input type="number" th:field="*{anno}" placeholder="Es: 2026" required />
+	                <input type="number" th:field="*{anno}" placeholder="Es: 2026" />
+					<span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="form-group">
 	                <label>Descrizione Breve</label>
-	                <input type="text" th:field="*{descrizione}" placeholder="Es: Torneo estivo di Calcio a 5" required />
+	                <input type="text" th:field="*{descrizione}" placeholder="Es: Torneo estivo di Calcio a 5" />
+					<span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}" style="color: red;"></span>
 	            </div>
 	            
 	            <div class="margin-top-lg">
