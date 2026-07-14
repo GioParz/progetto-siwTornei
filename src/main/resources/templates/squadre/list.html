@@ -1,41 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	
 	<head>
-		<title>Lista Squadre</title>
+	    <title>Lista Squadre - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1>Elenco Squadre</h1>
-		
-		<a th:href="@{/squadra/new}">Registra Nuova Squadra</a>
-		<br><br>
-		
-		<table border="1">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Nome</th>
-					<th>Azioni</th>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<tr th:each="squadra : ${squadre}">
-					<td th:text="${squadra.id}">ID fittizio</td>
-					<td th:text="${squadra.nome}">Nome fittizio</td>
-					<td>
-						<a th:href="@{/squadra/{id}(id=${squadra.id})}">Visualizza</a>
-						
-						&nbsp;&nbsp;|&nbsp;&nbsp;
-						
-						<a th:href="@{/squadra/{id}/delete(id=${squadra.id})}"
-						onclick="return confirm('Sei sicuro di voler eliminare questa squadra e tutti i suoi giocatori?');"
-						style="color: red; font-weight: bold;">Elimina</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		
+	
+	    <div class="top-bar">
+	        <div class="top-bar-right">
+	            <span sec:authorize="isAnonymous()">
+	                <a th:href="@{/login}" class="login-link">Accedi</a>
+	            </span>
+	            <span sec:authorize="isAuthenticated()" class="user-menu">
+	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+	                <form th:action="@{/logout}" method="post">
+	                    <button type="submit" class="logout-btn">Logout</button>
+	                </form>
+	            </span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder">Club Partecipanti</div>
+	        </div>
+	
+	        <!-- Solo l'ADMIN può registrare un nuovo Club -->
+	        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
+	            <a th:href="@{/admin/squadra/new}" class="main-link btn-admin">Registra Nuova Squadra</a>
+	        </div>
+	
+	        <table class="stadium-table">
+	            <thead>
+	                <tr>
+	                    <th>Nome Squadra</th>
+	                    <th>Azioni</th>
+	                </tr>
+	            </thead>
+				
+	            <tbody>
+	                <tr th:each="squadra : ${squadre}">
+	                    <td th:text="${squadra.nome}" style="font-weight: 700;">Nome Squadra</td>
+	                    <td>
+	                        <div class="action-buttons-cell">
+	                            <a th:href="@{/squadra/{id}(id=${squadra.id})}" class="action-link-view">Visualizza</a>
+	                            
+	                            <!-- Modifica ed Elimina visibili solo all'ADMIN -->
+	                            <a sec:authorize="hasAuthority('ADMIN')" 
+	                               th:href="@{/admin/squadra/{id}/edit(id=${squadra.id})}" 
+	                               class="action-link-edit">Modifica</a>
+	                               
+	                            <a sec:authorize="hasAuthority('ADMIN')" 
+	                               th:href="@{/admin/squadra/{id}/delete(id=${squadra.id})}"
+	                               onclick="return confirm('Sei sicuro di voler eliminare questa squadra e tutti i suoi giocatori?');"
+	                               class="action-link-delete">Elimina</a>
+	                        </div>
+	                    </td>
+	                </tr>
+	            </tbody>
+	        </table>
+	
+	        <div class="margin-top-lg">
+	            <a th:href="@{/}" class="back-link">← Torna alla Home</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

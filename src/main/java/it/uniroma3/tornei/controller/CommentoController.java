@@ -16,7 +16,6 @@ import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.service.CommentoService;
 import it.uniroma3.tornei.service.CredentialsService;
 import it.uniroma3.tornei.service.PartitaService;
-import it.uniroma3.tornei.service.UtenteService;
 
 @Controller
 public class CommentoController {
@@ -26,7 +25,7 @@ public class CommentoController {
 	private final CredentialsService credentialsService;
 	
 	public CommentoController(CommentoService commentoService, PartitaService partitaService,
-			UtenteService utenteService, CredentialsService credentialsService) {
+			CredentialsService credentialsService) {
 		this.commentoService = commentoService;
 		this.partitaService = partitaService;
 		this.credentialsService = credentialsService;
@@ -46,6 +45,7 @@ public class CommentoController {
 			Commento commento = new Commento();
 			commento.setTesto(testo);
 			commento.setPartita(partita);
+			
 			Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
 			commento.setUtente(credentialsLoggato.getUtente());
 			
@@ -58,17 +58,25 @@ public class CommentoController {
 	/* CANCELLAZIONE COMMENTO */
 	
 	@GetMapping("/commento/{id}/delete")
-	public String eliminaCommento(@PathVariable("id") Long id) {
+	public String eliminaCommento(@PathVariable("id") Long id,
+			@AuthenticationPrincipal UserDetails userDetails) {
 			
 		Commento commento = this.commentoService.getCommento(id);
-		Long partitaId = null;
+		if(commento == null)
+			return "redirect:/";
 		
-		if(commento != null) {
-			partitaId = commento.getPartita().getId();
+		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
+		
+		boolean isAdmin = userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"));
+		boolean isAutore = commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId());
+		
+		if(isAdmin || isAutore) {
 			this.commentoService.deleteCommento(id);
+			
+			return "redirect:/partita/" + commento.getPartita().getId();
 		}
 		
-		return partitaId != null ? "redirect:/partita/" + partitaId : "redirect:/tornei";
+		return "error/403";
 	}
 	
 	/* MODIFICA COMMENTO */
@@ -78,7 +86,6 @@ public class CommentoController {
 			@AuthenticationPrincipal UserDetails userDetails, Model model) {
 		
 		Commento commento = this.commentoService.getCommento(id);
-		
 		if (commento == null)
 			return "redirect:/";
 		

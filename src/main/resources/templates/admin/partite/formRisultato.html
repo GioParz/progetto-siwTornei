@@ -1,39 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+	
 	<head>
-		<title>Inserisci Risultato Partita</title>
+	    <title>Inserisci Risultato Partita - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1>Inserimento Risultato Partita</h1>
-		
-		<p>
-			<strong>Incontro:</strong>
-			<span th:text="${partita.squadraCasa.nome}">Casa</span>
-			vs
-			<span th:text="${partita.squadraOspite.nome}">Ospite</span>
-		</p>
-		<p><strong>Stadio:</strong> <span th:text="${partita.luogo}">Luogo</span> </p>
-		<p><strong>Stato attuale:</strong> <span th:text="${partita.stato}">PROGRAMMATA</span> </p>
-		
-		<hr>
-		
-		<form th:action="@{/partita/{id}/risultato(id=${partita.id})}" method="post">
-			
-			<label th:text="'Gol ' + ${partita.squadraCasa.nome} + ':'">Gol Casa</label>
-			<input type="number" name="goalsHome" th:value="${partita.goalsHome}" min="0" required />
-			<br><br>
-			
-			<label th:text="'Gol ' + ${partita.squadraOspite.nome} + ':'">Gol Ospite</label>
-			<input type="number" name="goalsAway" th:value="${partita.goalsAway}" min="0" required />
-			<br><br>
-			
-			<button type="submit">Registra Risultato definitivo</button>
-		</form>
-		
-		<br>
-		<a th:href="@{/torneo/{id}(id=${partita.getTorneo().getId()})}">Annulla e torna al torneo</a>
-		
+	
+	    <div class="top-bar top-bar-admin">
+	        <div class="top-bar-right">
+	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder logo-admin">Modifica Punteggio</div>
+	        </div>
+	
+	        <div class="info-box text-center padding-md margin-bottom-md">
+	            <h2 class="font-size-lg no-margin margin-bottom-sm">
+	                <span th:text="${partita.squadraCasa.nome}">Squadra A</span> 
+	                vs 
+	                <span th:text="${partita.squadraOspite.nome}">Squadra B</span>
+	            </h2>
+	            <p class="no-margin font-size-sm text-muted">
+	                Stadio: <span th:text="${partita.luogo}">Stadio</span> | 
+	                Stato Incontro: <span th:text="${partita.stato}" class="admin-text-highlight">PROGRAMMATA</span>
+	            </p>
+	        </div>
+	
+	        <!-- Form Risultato -->
+	        <form th:action="@{/admin/partita/{id}/risultato(id=${partita.id})}" method="post" class="stadium-form">
+	            
+	            <div class="form-group margin-bottom-md">
+	                <label th:text="'Gol per ' + ${partita.squadraCasa.nome}">Gol Casa</label>
+	                <input type="number" name="goalsHome" th:value="${partita.goalsHome}" min="0" placeholder="0" required class="input-score-number" />
+	            </div>
+	            
+	            <div class="form-group margin-bottom-lg">
+	                <label th:text="'Gol per ' + ${partita.squadraOspite.nome}">Gol Ospite</label>
+	                <input type="number" name="goalsAway" th:value="${partita.goalsAway}" min="0" placeholder="0" required class="input-score-number" />
+	            </div>
+	            
+	            <div>
+	                <button type="submit" class="main-link btn-admin">Registra Risultato Definitivo</button>
+	            </div>
+	        </form>
+	        
+	        <div class="margin-top-lg">
+	            <a th:href="@{/torneo/{id}(id=${partita.getTorneo().getId()})}" class="back-link">Annulla e torna al torneo</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

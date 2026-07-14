@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	
-	<head>
+<head>
 	    <title th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'">Gestione Torneo</title>
 	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
@@ -9,7 +9,7 @@
 	<body>
 	
 	    <!-- Barra fittizia Admin per coerenza estetica -->
-	    <div class="top-bar" style="background-color: #111827; border-bottom: 2px solid #ef4444; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);">
+	    <div class="top-bar top-bar-admin">
 	        <div class="top-bar-right">
 	            <span class="welcome-user" style="color: #ef4444; font-weight: 700;">PANNELLO AMMINISTRATORE</span>
 	        </div>
@@ -17,14 +17,14 @@
 	
 	    <main class="main-content">
 	        <div class="logo-container">
+	            <!-- Il bordo cambia colore in rosso se siamo in modifica (id presente), altrimenti mantiene il classico verde neon -->
 	            <div class="logo-placeholder" 
 	                 th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Crea Nuovo Torneo'"
-	                 th:style="${torneo.id != null} ? 'border-color: #ef4444;' : 'border-color: #ccff00;'">
+	                 th:classappend="${torneo.id != null} ? 'logo-admin' : ''">
 	                 Gestione Torneo
 	            </div>
 	        </div>
 	
-	        <!-- Form strutturato a card sportiva -->
 	        <form th:action="${torneo.id != null} ? @{/admin/torneo/{id}/edit(id=${torneo.id})} : @{/admin/tornei}" 
 	              th:object="${torneo}" method="post" class="stadium-form">
 	            
@@ -43,16 +43,17 @@
 	                <input type="text" th:field="*{descrizione}" placeholder="Es: Torneo estivo di Calcio a 5" required />
 	            </div>
 	            
-	            <div style="margin-top: 30px;">
+	            <div class="margin-top-lg">
+	                <!-- Il pulsante diventa rosso in caso di modifica -->
 	                <button type="submit" class="main-link" 
 	                        th:text="${torneo.id != null} ? 'Salva Modifiche' : 'Crea Torneo'"
-	                        th:style="${torneo.id != null} ? 'background-color: #ef4444;' : ''">
+	                        th:classappend="${torneo.id != null} ? 'btn-admin' : ''">
 	                        Invia
 	                </button>
 	            </div>
 	        </form>
 	        
-	        <div style="margin-top: 40px;">
+	        <div class="margin-top-lg">
 	            <a th:href="@{/tornei}" class="back-link">Annulla e torna alla lista</a>
 	        </div>
 	    </main>

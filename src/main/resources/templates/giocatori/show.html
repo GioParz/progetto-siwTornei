@@ -1,22 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	
 	<head>
-		<title>Dettaglio Giocatore</title>
+	    <title th:text="${giocatore.nome} + ' ' + ${giocatore.cognome} + ' - SIWTornei'">Dettaglio Giocatore</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1>Dettagli del Giocatore</h1>
-		
-		<p><strong>ID Giocatore:</strong> <span th:text="${giocatore.id}">ID</span> </p>
-		<p><strong>Nome Giocatore:</strong> <span th:text="${giocatore.nome}">Nome</span> </p>
-		<p><strong>Cognome Giocatore:</strong> <span th:text="${giocatore.cognome}">Cognome</span> </p>
-		<p><strong>Data di nascita:</strong> <span th:text="${giocatore.dataNascita}">Data/di/nascita</span> </p>
-		<p><strong>Ruolo Giocatore:</strong> <span th:text="${giocatore.ruolo}">Ruolo</span> </p>
-		<p><strong>Altezza Giocatore:</strong> <span th:text="${giocatore.altezza}">Altezza</span> cm </p>
-		
-		<br>
-		<a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}">Torna alla squadra</a>
-		
+	
+	    <div class="top-bar">
+	        <div class="top-bar-right">
+	            <span sec:authorize="isAnonymous()">
+	                <a th:href="@{/login}" class="login-link">Accedi</a>
+	            </span>
+	            <span sec:authorize="isAuthenticated()" class="user-menu">
+	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+	                <form th:action="@{/logout}" method="post">
+	                    <button type="submit" class="logout-btn">Logout</button>
+	                </form>
+	            </span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder">Profilo Atleta</div>
+	        </div>
+	
+	        <div class="info-box padding-lg">
+	            <!-- Solo l'ADMIN vede il tasto rapido di modifica -->
+	            <div sec:authorize="hasAuthority('ADMIN')" class="text-right margin-bottom-sm">
+	                <a th:href="@{/admin/giocatore/{id}/edit(id=${giocatore.id})}" class="action-link-edit font-size-md">Modifica Anagrafica</a>
+	            </div>
+	
+	            <!-- Nome e Cognome in grande risalto -->
+	            <h2 class="text-center font-size-lg no-margin margin-bottom-lg" 
+	                th:text="${giocatore.nome} + ' ' + ${giocatore.cognome}">
+	                Nome Cognome
+	            </h2>
+	
+	            <div class="match-meta-details" style="max-width: 400px; margin: 0 auto;">
+	                <p><strong>Club di Appartenenza:</strong> 
+	                    <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="admin-text-highlight" style="text-decoration: underline;" th:text="${giocatore.squadra.nome}">Squadra</a>
+	                </p>
+	                <p><strong>Data di Nascita:</strong> 
+	                    <span th:text="${giocatore.dataNascita != null ? #temporals.format(giocatore.dataNascita, 'dd/MM/yyyy') : 'Non specificata'}">01/01/2000</span>
+	                </p>
+	                <p><strong>Ruolo:</strong> 
+	                    <span class="badge-scheduled" th:text="${giocatore.ruolo}">RUOLO</span>
+	                </p>
+	                <p><strong>Altezza:</strong> 
+	                    <span th:text="${giocatore.altezza != null ? giocatore.altezza + ' cm' : 'Non specificata'}">180 cm</span>
+	                </p>
+	            </div>
+	        </div>
+	
+	        <div class="margin-top-lg">
+	            <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="back-link">← Torna alla squadra</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

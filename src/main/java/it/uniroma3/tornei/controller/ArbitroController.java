@@ -62,4 +62,14 @@ public class ArbitroController {
 		
 		return "redirect:/arbitri";
 	}
+	
+	/* ELIMINAZIONE ARBITRO */
+	
+	@GetMapping("admin/arbitro/{id}/delete")
+	public String deleteArbitro(@PathVariable("id") Long id) {
+		
+		this.arbitroService.deleteArbitroById(id);;
+		
+		return "redirect:/arbitri";
+	}
 }

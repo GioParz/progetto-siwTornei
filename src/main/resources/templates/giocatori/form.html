@@ -1,41 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+	
 	<head>
-		<title>Nuovo Giocatore</title>
+	    <title>Nuovo Giocatore - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1>Inserimento Nuovo Giocatore</h1>
-		
-		<form th:action="@{/giocatori}" th:object="${giocatore}" method="post">
-			
-			<input type="hidden" th:field="*{squadra}" />
-			
-			<p><strong>Squadra di destinazione:</strong> <span th:text="${giocatore.squadra.nome}">Nome Squadra</span> </p>
-			<br>
-			
-			<label>Nome:</label>
-			<input type="text" th:field="*{nome}" required />
-			<br><br>
-			
-			<label>Cognome:</label>
-			<input type="text" th:field="*{cognome}" required />
-			<br><br>
-			
-			<label>Ruolo:</label>
-			<select th:field="*{ruolo}" required>
-				<option value="">-- Seleziona un Ruolo --</option>
-				<option th:each="r : ${ruoli}" th:value="${r}" th:text="${r}">RUOLO</option>
-			</select>
-			<br><br>
-			
-			<button type="submit">Salva Giocatore</button>
-
-		</form>
-		
-		<br>
-		<a th:href="@{/squadre}">Annulla e torna alle squadre</a>
-		
+	
+	    <!-- Barra Amministratore -->
+	    <div class="top-bar top-bar-admin">
+	        <div class="top-bar-right">
+	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder logo-admin">Nuovo Giocatore</div>
+	        </div>
+	
+	        <!-- Box informativa sulla squadra di destinazione -->
+	        <div class="info-box text-center padding-md margin-bottom-md">
+	            <p class="no-margin font-size-sm text-uppercase letter-spacing-sm">
+	                <strong>Squadra di destinazione:</strong> 
+	                <span th:text="${giocatore.squadra.nome}" class="admin-text-highlight">Nome Squadra</span>
+	            </p>
+	        </div>
+	
+	        <form th:action="@{/giocatori}" th:object="${giocatore}" method="post" class="stadium-form">
+	            
+	            <!-- Associazione automatica alla squadra -->
+	            <input type="hidden" th:field="*{squadra}" />
+	            
+	            <div class="form-group">
+	                <label>Nome</label>
+	                <input type="text" th:field="*{nome}" placeholder="Es: Mario" required />
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Cognome</label>
+	                <input type="text" th:field="*{cognome}" placeholder="Es: Rossi" required />
+	            </div>
+	
+	            <div class="form-group">
+	                <label>Data di Nascita</label>
+	                <input type="date" th:field="*{dataNascita}" required />
+	            </div>
+	
+	            <div class="form-group">
+	                <label>Altezza (cm)</label>
+	                <input type="number" th:field="*{altezza}" min="100" max="250" placeholder="Es: 180" required />
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Ruolo</label>
+	                <select th:field="*{ruolo}" required>
+	                    <option value="">-- Seleziona un Ruolo --</option>
+	                    <option th:each="r : ${ruoli}" th:value="${r}" th:text="${r}">RUOLO</option>
+	                </select>
+	            </div>
+	            
+	            <div class="margin-top-lg">
+	                <button type="submit" class="main-link btn-admin">Salva Giocatore</button>
+	            </div>
+	        </form>
+	        
+	        <div class="margin-top-lg">
+	            <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="back-link">Annulla e torna alla squadra</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

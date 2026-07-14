@@ -44,4 +44,9 @@ public class ArbitroService {
 	public Arbitro saveArbitro(Arbitro arbitro) {
 		return this.arbitroRepository.save(arbitro);
 	}
+	
+	@Transactional(isolation = Isolation.READ_COMMITTED)
+	public void deleteArbitroById(Long id) {
+		this.arbitroRepository.deleteById(id);
+	}
 }

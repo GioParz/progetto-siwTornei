@@ -308,3 +308,154 @@ body {
     outline: none;
     border-color: #ccff00; 
 }
+
+/* Estensione per le caselle di testo grandi (Textarea) */
+.form-group textarea {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    padding: 12px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    resize: vertical; /* permette solo l'allungamento verticale */
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ccff00; 
+}
+
+
+/* --- SEZIONE AGGIUNTIVA PER CLASSI PULITE ED EVITARE STILI INLINE --- */
+
+/* Nuovi stili dedicati all'Admin per rassicurare visivamente la sessione */
+.top-bar-admin {
+    background-color: #111827;
+    border-bottom: 2px solid #ef4444;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+}
+
+.logo-admin {
+    border-color: #ef4444 !important;
+}
+
+.btn-admin {
+    background-color: #ef4444 !important;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3) !important;
+}
+.btn-admin:hover {
+    background-color: #b91c1c !important;
+    border-color: #ccff00 !important;
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.4) !important;
+}
+
+/* Modificatori Layout Standard */
+.text-right {
+    text-align: right;
+}
+
+.margin-bottom-sm {
+    margin-bottom: 10px;
+}
+
+.margin-bottom-md {
+    margin-bottom: 20px;
+}
+
+.margin-bottom-lg {
+    margin-bottom: 30px;
+}
+
+.margin-top-lg {
+    margin-top: 40px;
+}
+
+.margin-top-xl {
+    margin-top: 50px;
+}
+
+/* Visualizzazione ed elementi specifici di testo */
+.table-highlight-points {
+    font-weight: 700;
+    color: #ccff00;
+}
+
+.font-size-sm {
+    font-size: 11px;
+}
+
+.font-size-md {
+    font-size: 14px;
+}
+
+.padding-btn-sm {
+    font-size: 12px !important;
+    padding: 10px 20px !important;
+}
+
+/* --- CLASSI DI SERVIZIO PER I TEMPLATE --- */
+
+/* Messaggio di assenza dati */
+.no-data-msg {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* Messaggi di errore o avviso nei form (Login/Registrazione) */
+.error-msg {
+    color: #ef4444;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgba(239, 68, 68, 0.1);
+    border-left: 3px solid #ef4444;
+    border-radius: 4px;
+}
+
+/* Evita l'andata a capo automatica del testo (usata per le date dei commenti) */
+.no-wrap {
+    white-space: nowrap;
+}
+
+/* Margine superiore piccolo per distanziare il pulsante invio commento */
+.margin-top-sm {
+    margin-top: 15px;
+}
+
+/* --- PAGINA DI ERRORE SECURITY (403) --- */
+.error-container {
+    background-color: #1e293b;
+    padding: 40px 30px;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15); /* Bagliore rosso soffuso */
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    margin-top: 40px;
+}
+
+.logo-error {
+    font-size: 48px;
+    font-weight: 900; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+    background-color: #111827; 
+    border: 3px solid #ef4444; /* Bordo rosso neon di allarme */
+    display: inline-block; 
+    padding: 12px 45px; 
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); /* Bagliore rosso */
+    margin-bottom: 25px;
+}
+
+.error-subtitle {
+    color: #ef4444; /* Scritta Accesso Negato in rosso */
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}

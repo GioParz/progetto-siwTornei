@@ -1,75 +1,147 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	
 	<head>
-		<title>Dettaglio Partita</title>
+	    <title>Dettaglio Partita - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
 	
-		<h1>Dettagli della Partita</h1>
+	    <div class="top-bar">
+	        <div class="top-bar-right">
+	            <span sec:authorize="isAnonymous()">
+	                <a th:href="@{/login}" class="login-link">Accedi</a>
+	            </span>
+	            <span sec:authorize="isAuthenticated()" class="user-menu">
+	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+	                <form th:action="@{/logout}" method="post">
+	                    <button type="submit" class="logout-btn">Logout</button>
+	                </form>
+	            </span>
+	        </div>
+	    </div>
 	
-		<p><strong>ID Partita:</strong> <span th:text="${partita.id}">Id</span> </p>
-		<p><strong>Squadra Casa:</strong>
-			<span
-				th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + '(Squadra Ritirata)'}">SquadraC</span>
-		</p>
-		<p><strong>Squadra Ospite:</strong>
-			<span
-				th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + '(Squadra Ritirata)'}">SquadraO</span>
-		</p>
-		<p><strong>Luogo:</strong> <span th:text="${partita.luogo}">Luogo</span> </p>
-		<p><strong>Stato:</strong> <span th:text="${partita.stato}">Stato</span> </p>
-		<p th:if="${partita.stato.toString() == 'TERMINATA'}">
-			<strong>Risultato finale:</strong>
-			<span th:text="${partita.goalsHome}">0</span> - <span th:text="${partita.goalsAway}">0</span>
-		</p>
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder">Tabellino Match</div>
+	        </div>
 	
-		<hr>
+	        <!-- Tabellone Risultato -->
+	        <div class="info-box scoreboard-wrapper text-center padding-lg">
+	            <div class="scoreboard-header font-size-sm text-uppercase letter-spacing-lg margin-bottom-md"
+	                 th:text="${partita.torneo.nome} + ' ' + ${partita.torneo.anno}">
+	                 Torneo di Riferimento
+	            </div>
 	
-		<h2>Commenti della Partita</h2>
+	            <div class="scoreboard-container flex-row flex-space-around flex-align-center margin-bottom-lg">
+	                <!-- Squadra Casa -->
+	                <div class="scoreboard-team team-home text-right">
+	                    <h2 class="team-title font-size-lg no-margin"
+	                        th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Ritirata)'}">
+	                        Squadra Casa
+	                    </h2>
+	                </div>
 	
-		<p th:if="${partita.commenti.isEmpty()}">Nessun commento presente per questa partita</p>
+	                <!-- Punteggio Centrale -->
+	                <div class="scoreboard-center text-center">
+	                    <div th:if="${partita.stato.toString() == 'TERMINATA'}" class="score-box-digital">
+	                        <span th:text="${partita.goalsHome}">0</span> - <span th:text="${partita.goalsAway}">0</span>
+	                    </div>
+	                    <div th:if="${partita.stato.toString() == 'PROGRAMMATA'}" class="score-vs">
+	                        VS
+	                    </div>
+	                </div>
 	
-		<table border="1" th:if="${!partita.commenti.isEmpty()}">
-			<thead>
-				<tr style="background-color: #f2f2f2;">
-					<th>Data e Ora</th>
-					<th>Autore</th>
-					<th>Testo del Commento</th>
-					<th>Azioni</th>
-				</tr>
-			</thead>
+	                <!-- Squadra Ospite -->
+	                <div class="scoreboard-team team-away text-left">
+	                    <h2 class="team-title font-size-lg no-margin"
+	                        th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico + ' (Ritirata)'}">
+	                        Squadra Ospite
+	                    </h2>
+	                </div>
+	            </div>
 	
-			<tbody>
-				<tr th:each="commento : ${partita.commenti}">
-					<td th:text="${#temporals.format(commento.dataCreazione, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</td>
-					<td th:text="${commento.utente != null ? commento.utente.nome + ' ' + commento.utente.cognome : 'Anonimo'}">Nome Cognome</td>
-					<td th:text="${commento.testo}">Testo del commento</td>
-					<td>
-						<a th:href="@{/commento/{id}/delete(id=${commento.id})}"
-							onclick="return confirm('Sei sicuro di voler cancellare questo commento?')"
-							style="color: red; text-decoration: none;">Elimina</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	            <!-- Informazioni Ausiliarie dell'Incontro -->
+	            <div class="match-meta-details margin-top-lg text-left">
+	                <p><strong>Stadio / Luogo:</strong> <span th:text="${partita.luogo}">Stadio Olimpico</span></p>
+	                <p><strong>Data e Ora:</strong> <span th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}">Data</span></p>
+	                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro.nome} + ' ' + ${partita.arbitro.cognome}">Nome Arbitro</span></p>
+	                <p><strong>Stato Incontro:</strong>
+	                    <span th:class="${partita.stato.toString() == 'TERMINATA'} ? 'badge-completed' : 'badge-scheduled'"
+	                          th:text="${partita.stato}">STATO</span>
+	                </p>
+	            </div>
+	        </div>
 	
-		<hr>
-	
-		<h2>Aggiungi un nuovo commento</h2>
-	
-		<form th:action="@{/partita/{partitaId}/commento(partitaId=${partita.id})}" method="POST">
-			<div>
-				<textarea name="testo" rows="4" cols="50" placeholder="Scrivi qui il tuo commento..." required></textarea>
+			<!-- Sezione Commenti della Community: visibile SOLO agli utenti registrati -->
+			<div sec:authorize="isAuthenticated()">
+			    <h2 class="section-title margin-top-xl">Commenti dei Tifosi</h2>
+
+			    <p th:if="${partita.commenti.isEmpty()}" class="no-data-msg margin-bottom-lg">
+			        Nessun commento presente per questa partita. Condividi per primo la tua opinione.
+			    </p>
+
+			    <table class="stadium-table margin-bottom-lg" th:if="${!partita.commenti.isEmpty()}">
+			        <thead>
+			            <tr>
+			                <th>Data e Ora</th>
+			                <th>Autore</th>
+			                <th>Contenuto</th>
+			                <th>Azioni</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr th:each="commento : ${partita.commenti}">
+			                <td th:text="${#temporals.format(commento.dataCreazione, 'dd/MM/yyyy HH:mm')}" class="comment-date no-wrap">01/01/2026 12:00</td>
+			                <td th:text="${commento.utente != null ? commento.utente.nome + ' ' + commento.utente.cognome : 'Anonimo'}" class="comment-author">Autore</td>
+			                <td th:text="${commento.testo}">Testo del commento</td>
+			                <td>
+			                    <div class="action-buttons-cell">
+			                        
+			                        <!-- Link Modifica visibile solo all'autore del commento tramite username delle credenziali -->
+			                        <a th:if="${commento.utente != null and #authentication.name == commento.utente.credentials.username}" 
+			                           th:href="@{/commento/{id}/edit(id=${commento.id})}"
+			                           class="action-link-edit">Modifica</a>
+			                        
+			                        <!-- Link Rimuovi visibile all'autore oppure ad un ADMIN -->
+			                        <a th:if="${commento.utente != null and (#authentication.name == commento.utente.credentials.username or #authorization.expression('hasAuthority(''ADMIN'')'))}"
+			                           th:href="@{/commento/{id}/delete(id=${commento.id})}"
+			                           onclick="return confirm('Sei sicuro di voler cancellare questo commento?')"
+			                           class="action-link-delete">Rimuovi</a>
+			                           
+			                    </div>
+			                </td>
+			            </tr>
+			        </tbody>
+			    </table>
+
+			    <!-- Modulo di Inserimento Commento -->
+			    <div class="margin-top-lg">
+			        <h3 class="section-title font-size-md margin-bottom-md">Lascia un commento</h3>
+			        <form th:action="@{/partita/{partitaId}/commento(partitaId=${partita.id})}" method="post" class="stadium-form">
+			            <div class="form-group">
+			                <textarea name="testo" rows="4" placeholder="Scrivi qui la tua opinione sull'incontro..." required></textarea>
+			            </div>
+			            <div class="margin-top-sm">
+			                <button type="submit" class="main-link padding-btn-sm font-size-sm">Pubblica Commento</button>
+			            </div>
+			        </form>
+			    </div>
 			</div>
-			<br>
-			<div>
-				<button type="submit">Invia Commento</button>
-			</div>
-		</form>
 	
-		<br>
-		<a th:href="@{/torneo/{id}(id=${torneo.id})}">Torna al dettaglio torneo</a>
-		
+	        <!-- Messaggio alternativo: visibile SOLO agli utenti NON registrati -->
+	        <div sec:authorize="isAnonymous()" class="info-box info-box-locked text-center padding-lg margin-top-lg">
+	            <h2 class="section-title no-margin font-size-md">Area Commenti Riservata</h2>
+	            <p class="font-size-sm locked-text-muted margin-bottom-lg">
+	                I dettagli della discussione e i commenti della community sono visibili solo ai membri registrati della piattaforma.
+	            </p>
+	            <a th:href="@{/login}" class="main-link padding-btn-sm font-size-sm">
+	                Accedi o Registrati per sbloccare i commenti
+	            </a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

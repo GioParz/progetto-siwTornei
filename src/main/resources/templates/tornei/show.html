@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	
 	<head>
 	    <title th:text="${torneo.nome} + ' - SIWTornei'">Dettaglio Torneo</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
+	    <link class="styles" rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
@@ -30,10 +30,10 @@
 	        </div>
 	        
 	        <div class="info-box">
-				<div sec:authorize="hasAuthority('ADMIN')" style="text-align: right; margin-bottom: 10px;">
-					<a th:href="@{/admin/torneo/{id}/edit(id=${torneo.id})}" class="action-link-edit" style="font-size: 14px;">Modifica Dettagli Torneo</a>
-				</div>
-				
+	            <div sec:authorize="hasAuthority('ADMIN')" class="text-right margin-bottom-sm">
+	                <a th:href="@{/admin/torneo/{id}/edit(id=${torneo.id})}" class="action-link-edit font-size-md">Modifica Dettagli Torneo</a>
+	            </div>
+	            
 	            <p><strong>Anno Edizione:</strong> <span th:text="${torneo.anno}">Anno</span></p>
 	            <p><strong>Descrizione:</strong> <span th:text="${torneo.descrizione}">Descrizione</span></p>
 	        </div>
@@ -55,7 +55,6 @@
 	                    <th>DR</th>
 	                </tr>
 	            </thead>
-				
 	            <tbody>
 	                <tr th:each="riga, status : ${classifica}" 
 	                    th:classappend="${riga.ritirata} ? 'team-retired' : ''">
@@ -65,9 +64,9 @@
 	                    </td>
 	                    <td>
 	                        <span th:text="${riga.nomeSquadra}">Nome Squadra</span>
-	                        <span th:if="${riga.ritirata}" style="font-size: 11px;"> (Ritirata)</span>
+	                        <span th:if="${riga.ritirata}" class="font-size-sm"> (Ritirata)</span>
 	                    </td>
-	                    <td th:text="${riga.punti}" th:style="${!riga.ritirata ? 'font-weight: 700; color: #ccff00;' : ''}">0</td>
+	                    <td th:text="${riga.punti}" th:classappend="${!riga.ritirata} ? 'table-highlight-points' : ''">0</td>
 	                    <td th:text="${riga.partiteGiocate}">0</td>
 	                    <td th:text="${riga.golFatti}">0</td>
 	                    <td th:text="${riga.golSubiti}">0</td>
@@ -77,10 +76,10 @@
 	        </table>
 	
 	        <!-- SEZIONE CALENDARIO PARTITE -->
-	        <h2 class="section-title" style="margin-top: 50px;">Calendario Partite</h2>
-	
-	        <div sec:authorize="hasAuthority('ADMIN')" style="margin-bottom: 20px;">
-	            <a th:href="@{/torneo/{id}/partita/new(id=${torneo.id})}" class="main-link" style="font-size: 12px; padding: 10px 20px;">+ Aggiungi Nuova Partita</a>
+	        <h2 class="section-title margin-top-xl">Calendario Partite</h2>
+	        
+	        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-md">
+	            <a th:href="@{/torneo/{id}/partita/new(id=${torneo.id})}" class="main-link padding-btn-sm">+ Aggiungi Nuova Partita</a>
 	        </div>
 	
 	        <table class="stadium-table">
@@ -92,7 +91,6 @@
 	                    <th>Azioni</th>
 	                </tr>
 	            </thead>
-				
 	            <tbody>
 	                <tr th:each="partita : ${torneo.partite}">
 	                    <td th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico + ' (Ritirata)'}">Casa</td>
@@ -126,7 +124,7 @@
 	            </tbody>
 	        </table>
 	
-	        <div style="margin-top: 40px;">
+	        <div class="margin-top-lg">
 	            <a th:href="@{/tornei}" class="back-link">← Torna alla lista dei tornei</a>
 	        </div>
 	    </main>

@@ -75,6 +75,7 @@ public class GiocatoreController {
 			return "redirect:/";
 		
 		model.addAttribute("giocatore", giocatore);
+		model.addAttribute("squadre", this.squadraService.getAllSquadre());
 		
 		return "admin/giocatori/formModifica";
 	}

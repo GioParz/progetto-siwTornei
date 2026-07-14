@@ -1,55 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+	
 	<head>
-		<title>Inserisci Partita</title>
+	    <title>Inserisci Partita - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1>Programmazione Nuova Partita</h1>
-		
-		<form th:action="@{/partite}" th:object="${partita}" method="post">
-			
-			<input type="hidden" th:field="*{torneo}" />
-			
-			<p><strong>Torneo di riferimento:</strong> <span th:text="${partita.torneo.nome} + ' ' + ${partita.torneo.anno}">Torneo Anno</span> </p>
-			<br>
-			
-			<label>Squadra in Casa:</label>
-			<select th:field="*{squadraCasa}" required>
-				<option value="">-- Seleziona Squadra Casa --</option>
-				<option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Casa</option>
-			</select>
-			<br><br>
-			
-			<label>Squadra Ospite:</label>
-			<select th:field="*{squadraOspite}" required>
-				<option value="">-- Seleziona Squadra Ospite --</option>
-				<option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Ospite</option>
-			</select>
-			<br><br>
-			
-			<label>Arbitro designato:</label>
-			<select th:field="*{arbitro}" required>
-				<option value="">-- Seleziona Arbitro --</option>
-				<option th:each="a : ${arbitri}" th:value="${a.id}" th:text="${a.nome} + ' ' + ${a.cognome}">Arbitro</option>
-			</select>
-			<br><br>
-			
-			<label>Data e Ora dell'incontro:</label>
-			<input type="datetime-local" t:field="*{dataEOra}" required />
-			<br><br>
-			
-			<label>Luogo/Stadio:</label>
-			<input type="text" th:field="*{luogo}" required />
-			<br><br>
-			
-			<button type="submit">Conferma inserimento Partita</button>
-			
-		</form>
-		
-		<br>
-		<a th:href="@{/tornei}">Annulla e torna all'elenco dei tornei</a>
-		
+	
+	    <!-- Barra Amministratore -->
+	    <div class="top-bar top-bar-admin">
+	        <div class="top-bar-right">
+	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder logo-admin">Nuovo Match</div>
+	        </div>
+	
+	        <form th:action="@{/partite}" th:object="${partita}" method="post" class="stadium-form">
+	            
+	            <input type="hidden" th:field="*{torneo}" />
+	            
+	            <div class="info-box info-box-admin padding-md margin-bottom-md">
+	                <p class="text-center text-uppercase font-size-sm letter-spacing-sm no-margin">
+	                    <strong>Competizione:</strong> 
+	                    <span th:text="${partita.torneo.nome} + ' ' + ${partita.torneo.anno}" class="admin-text-highlight">Nome Torneo</span>
+	                </p>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Squadra Ospitante (In Casa)</label>
+	                <select th:field="*{squadraCasa}" required>
+	                    <option value="">Seleziona Club Casa</option>
+	                    <option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Casa</option>
+	                </select>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Squadra Sfidante (Ospite)</label>
+	                <select th:field="*{squadraOspite}" required>
+	                    <option value="">Seleziona Club Ospite</option>
+	                    <option th:each="s : ${squadre}" th:value="${s.id}" th:text="${s.nome}">Squadra Ospite</option>
+	                </select>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Direttore di Gara (Arbitro)</label>
+	                <select th:field="*{arbitro}" required>
+	                    <option value="">Seleziona Arbitro</option>
+	                    <option th:each="a : ${arbitri}" th:value="${a.id}" th:text="${a.nome} + ' ' + ${a.cognome}">Arbitro</option>
+	                </select>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Data e Ora d'Incontro</label>
+	                <input type="datetime-local" th:field="*{dataEOra}" required />
+	            </div>
+	            
+	            <div class="form-group">
+	                <label>Stadio / Sede del Match</label>
+	                <input type="text" th:field="*{luogo}" placeholder="Es: Stadio Comunale" required />
+	            </div>
+	            
+	            <div class="margin-top-lg">
+	                <button type="submit" class="main-link btn-admin">Pianifica Incontro</button>
+	            </div>
+	        </form>
+	        
+	        <div class="margin-top-lg">
+	            <a th:href="@{/torneo/{id}(id=${partita.torneo.id})}" class="back-link">Annulla e torna al torneo</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

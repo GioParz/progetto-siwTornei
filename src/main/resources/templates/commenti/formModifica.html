@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-	    <title>Modifica Commento</title>
-	</head>
-	<body>
-	    <h1>Modifica il tuo commento</h1>
 	
-	    <form th:action="@{/commento/{id}/edit(id=${commento.id})}" th:object="${commento}" method="post">
-	        <div>
-	            <label>Il tuo messaggio:</label><br>
-	            <textarea th:field="*{testo}" rows="4" cols="50" required></textarea>
+	<head>
+	    <title>Modifica Commento - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
+	</head>
+	
+	<body>
+	
+	    <div class="top-bar">
+	        <div class="top-bar-right">
+	            <a th:href="@{/}" class="login-link">Home</a>
 	        </div>
-	        <br>
-	        <button type="submit">Aggiorna Commento</button>
-	        <a th:href="@{/partita/{id}(id=${commento.partita.id})}">Annulla</a>
-	    </form>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder">Modifica</div>
+	        </div>
+	
+	        <form th:action="@{/commento/{id}/edit(id=${commento.id})}" th:object="${commento}" method="post" class="stadium-form">
+	            
+	            <div class="form-group">
+	                <label>Il tuo messaggio</label>
+	                <textarea th:field="*{testo}" rows="5" required></textarea>
+	            </div>
+	
+	            <div class="margin-top-lg">
+	                <button type="submit" class="main-link padding-btn-sm font-size-sm">Aggiorna Commento</button>
+	            </div>
+	        </form>
+	
+	        <div class="margin-top-lg">
+	            <a th:href="@{/partita/{id}(id=${commento.partita.id})}" class="back-link">Annulla e torna alla partita</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>

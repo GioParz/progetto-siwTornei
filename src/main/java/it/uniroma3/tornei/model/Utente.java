@@ -69,6 +69,4 @@ public class Utente {
 		Utente other = (Utente) obj;
 		return Objects.equals(email, other.email);
 	}
-	
-	
 }

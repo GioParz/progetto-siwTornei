@@ -1,37 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+	
 	<head>
-		<title>Lista Arbitri</title>
+	    <title>Elenco Arbitri - SIWTornei</title>
+	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
 	<body>
-		
-		<h1>Elenco Arbitri</h1>
-		
-		<a th:href="@{/arbitro/new}">Registra Nuovo Arbitro</a>
-		<br><br>
-		
-		<table border="1">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Nome</th>
-					<th>Cognome</th>
-					<th>Azione</th>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<tr th:each="arbitro : ${arbitri}">
-					<td th:text="${arbitro.id}">ID fittizio</td>
-					<td th:text="${arbitro.nome}">Nome fittizio</td>
-					<td th:text="${arbitro.cognome}">Cognome fittizio</td>
-					<td>
-						<a th:href="@{/arbitro/{id}(id=${arbitro.id})}">Visualizza</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		
+	
+	    <div class="top-bar top-bar-admin">
+	        <div class="top-bar-right">
+	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
+	        </div>
+	    </div>
+	
+	    <main class="main-content">
+	        <div class="logo-container">
+	            <div class="logo-placeholder logo-admin">Classe Arbitrale</div>
+	        </div>
+	
+	        <div class="flex-row-between margin-bottom-md">
+	            <h2>Arbitri Registrati</h2>
+	            <a th:href="@{/admin/arbitro/new}" class="main-link btn-admin">+ Registra Nuovo Arbitro</a>
+	        </div>
+	
+	        <!-- Se la lista è vuota -->
+	        <div th:if="${#lists.isEmpty(arbitri)}" class="no-data-box">
+	            Non ci sono arbitri registrati nel sistema.
+	        </div>
+	
+	        <!-- Tabella Arbitri -->
+	        <table class="stadium-table" th:unless="${#lists.isEmpty(arbitri)}">
+	            <thead>
+	                <tr>
+	                    <th>Codice AIA</th>
+	                    <th>Cognome</th>
+	                    <th>Nome</th>
+	                    <th class="text-center">Azioni</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <tr th:each="arbitro : ${arbitri}">
+	                    <td class="font-bold text-accent" th:text="${arbitro.codiceAIA}">AIA-9999</td>
+	                    <td th:text="${arbitro.cognome}">Cognome</td>
+	                    <td th:text="${arbitro.nome}">Nome</td>
+	                    <td class="text-center actions-cell">
+	                        <a th:href="@{/arbitro/{id}(id=${arbitro.id})}" class="action-btn view-btn">Visualizza</a>
+	                        <a th:href="@{/admin/arbitro/{id}/delete(id=${arbitro.id})}" class="action-btn delete-btn" 
+	                           onclick="return confirm('Sicuro di voler eliminare questo arbitro?');">Elimina</a>
+	                    </td>
+	                </tr>
+	            </tbody>
+	        </table>
+	
+	        <div class="margin-top-lg">
+	            <a th:href="@{/}" class="back-link">Torna alla Home</a>
+	        </div>
+	    </main>
+	
 	</body>
 </html>
