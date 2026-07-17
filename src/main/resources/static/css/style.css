@@ -466,3 +466,40 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+/* --- BLOCCHI DI AVVISO E ALERT NEI FORM --- */
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: left;
+    font-weight: 400;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 20px; /* Allinea correttamente l'elenco puntato se ci sono più errori */
+}
+
+.alert li {
+    margin-bottom: 5px;
+}
+
+.alert li:last-child {
+    margin-bottom: 0;
+}
+
+/* Variante per errori critici di validazione (Stile Neon Rosso) */
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.1); /* Sfondo rosso trasparente coerente con error-msg */
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-left: 4px solid #ef4444; /* Barra rossa neon sul lato sinistro */
+    color: #f8fafc; /* Testo chiaro ad alta leggibilità */
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.1); /* Leggerissimo bagliore rosso soffuso */
+}
+
+.alert-danger li {
+    color: #fca5a5; /* Testo dei punti elenco in un rosso molto morbido e leggibile sullo scuro */
+    font-weight: 700;
+}

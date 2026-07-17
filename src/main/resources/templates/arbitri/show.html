@@ -44,9 +44,9 @@
 	                            </div>
 	                        </td>
 	                        <td>
-	                            <span th:text="${partita.squadraCasa.nome}" class="font-bold">Squadra Casa</span>
+	                            <span th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico}" class="font-bold">Squadra Casa</span>
 	                            <span class="text-muted"> vs </span>
-	                            <span th:text="${partita.squadraOspite.nome}" class="font-bold">Squadra Ospite</span>
+	                            <span th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico}" class="font-bold">Squadra Ospite</span>
 	                        </td>
 	                    </tr>
 	                </tbody>

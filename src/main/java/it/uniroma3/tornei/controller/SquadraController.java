@@ -1,7 +1,5 @@
 package it.uniroma3.tornei.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import it.uniroma3.tornei.exception.SquadraDuplicataException;
 import it.uniroma3.tornei.model.Squadra;
 import it.uniroma3.tornei.service.SquadraService;
 import jakarta.validation.Valid;
@@ -27,9 +26,8 @@ public class SquadraController {
 
 	@GetMapping("/squadre")
 	public String getSquadre(Model model) {
-		
-		List<Squadra> listaSquadre = this.squadraService.getAllSquadre();
-		model.addAttribute("squadre", listaSquadre);
+	
+		model.addAttribute("squadre", this.squadraService.getAllSquadre());
 		
 		return "squadre/list";
 	}
@@ -38,7 +36,6 @@ public class SquadraController {
 	public String getSquadra(@PathVariable("id") Long id, Model model) {
 		
 		Squadra squadra = this.squadraService.getSquadra(id);
-		
 		if (squadra == null)
 			return "redirect:/squadre";
 		
@@ -65,7 +62,13 @@ public class SquadraController {
 			return "admin/squadre/form";
 		}
 		
-		this.squadraService.saveSquadra(squadra);
+		try {
+			this.squadraService.saveSquadra(squadra);
+		} catch (SquadraDuplicataException e) {
+			bindingResult.reject("squadra.duplicata", e.getMessage());
+			return "admin/squadre/form";
+		}
+		
 		return "redirect:/squadre";
 	}
 	
@@ -109,8 +112,15 @@ public class SquadraController {
 		squadraOriginale.setNome(squadraModificata.getNome());
 		squadraOriginale.setAnnoFondazione(squadraModificata.getAnnoFondazione());
 		squadraOriginale.setCitta(squadraModificata.getCitta());
+		squadraOriginale.setStemmaUrl(squadraModificata.getStemmaUrl());
 		
-		this.squadraService.saveSquadra(squadraOriginale);
+		try {
+			this.squadraService.saveSquadra(squadraOriginale);
+		} catch (SquadraDuplicataException e) {
+			bindingResult.reject("squadra.duplicata", e.getMessage());
+			return "admin/squadre/form";
+		}
+		
 		return "redirect:/squadra/" + squadraOriginale.getId();
 	}
 }

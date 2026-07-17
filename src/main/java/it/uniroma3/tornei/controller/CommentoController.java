@@ -1,5 +1,6 @@
 package it.uniroma3.tornei.controller;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -45,7 +46,6 @@ public class CommentoController {
 		
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("partita", partita);
-			model.addAttribute("torneo", partita.getTorneo());
 			return "partite/show";
 		}
 		
@@ -69,16 +69,9 @@ public class CommentoController {
 		
 		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
 		
-		boolean isAdmin = userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"));
-		boolean isAutore = commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId());
+		this.commentoService.deleteCommento(id, credentialsLoggato);
 		
-		if(isAdmin || isAutore) {
-			this.commentoService.deleteCommento(id);
-			
-			return "redirect:/partita/" + commento.getPartita().getId();
-		}
-		
-		return "error/403";
+		return "redirect:/partita/" + commento.getPartita().getId();
 	}
 	
 	/* MODIFICA COMMENTO */
@@ -88,12 +81,12 @@ public class CommentoController {
 			@AuthenticationPrincipal UserDetails userDetails, Model model) {
 		
 		Commento commento = this.commentoService.getCommento(id);
-		if (commento == null)
+		if(commento == null)
 			return "redirect:/";
 		
 		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
 		if(!commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId()))
-			return "error/403";
+			throw new AccessDeniedException("Non puoi modificare questo commento");
 		
 		model.addAttribute("commento", commento);
 		
@@ -112,11 +105,10 @@ public class CommentoController {
 		
 		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
 		if(!commentoOriginale.getUtente().getId().equals(credentialsLoggato.getUtente().getId()))
-			return "error/403";
+			throw new AccessDeniedException("Non puoi modificare questo commento");
 		
-		if (bindingResult.hasErrors()) {
-			return "commenti/formModifica"; // Torna alla pagina di modifica mostrando l'errore
-		}
+		if(bindingResult.hasErrors())
+			return "commenti/formModifica"; //ritorna al form mostrando gli errori
 		
 		commentoOriginale.setTesto(commentoModificato.getTesto());
 		this.commentoService.saveCommento(commentoOriginale);

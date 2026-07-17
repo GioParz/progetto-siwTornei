@@ -2,7 +2,7 @@ package it.uniroma3.tornei.model;
 
 import java.util.Objects;
 
-public class RigaClassifica {
+public class RigaClassifica implements Comparable<RigaClassifica> {
 	
 	private String nomeSquadra;
 	private Integer partiteGiocate;
@@ -25,6 +25,29 @@ public class RigaClassifica {
         this.punti += puntiGuadagnati;
         this.golFatti += golFattiPartita;
         this.golSubiti += golSubitiPartita;
+    }
+    
+    public Integer getDiffReti() {
+    	return this.golFatti - this.golSubiti;
+    }
+    
+    @Override
+    public int compareTo(RigaClassifica other) {
+    	
+    	if(this == other)
+    		return 0;
+    	
+    	if(this.ritirata != other.ritirata)
+    		return this.ritirata ? 1 : -1;
+    	
+    	if(!this.punti.equals(other.getPunti()))
+    		return other.getPunti().compareTo(this.punti);
+    	
+        if (!this.getDiffReti().equals(other.getDiffReti())) {
+            return other.getDiffReti().compareTo(this.getDiffReti());
+        }
+
+        return other.getGolFatti().compareTo(this.golFatti);
     }
 
 	public String getNomeSquadra() {
@@ -89,5 +112,4 @@ public class RigaClassifica {
 		RigaClassifica other = (RigaClassifica) obj;
 		return Objects.equals(nomeSquadra, other.nomeSquadra);
 	}
- 
 }

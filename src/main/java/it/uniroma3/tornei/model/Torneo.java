@@ -11,26 +11,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.*;
 
 @Entity
 public class Torneo {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "torneo_seq")
+	@SequenceGenerator(name = "torneo_seq", sequenceName = "torneo_seq", allocationSize = 1)
 	private Long id;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String nome;
 	
-	@NotBlank
 	@NotNull
 	private Integer anno;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String descrizione;
 	
@@ -39,9 +38,6 @@ public class Torneo {
 	
 	@OneToMany(mappedBy = "torneo", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Partita> partite;
-	
-	public Torneo() {
-	}
 	
 	public Long getId() {
 		return id;
@@ -105,5 +101,4 @@ public class Torneo {
 		Torneo other = (Torneo) obj;
 		return Objects.equals(anno, other.anno) && Objects.equals(nome, other.nome);
 	}
-	
 }

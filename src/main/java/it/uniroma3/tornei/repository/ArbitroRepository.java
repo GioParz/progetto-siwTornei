@@ -8,7 +8,7 @@ import it.uniroma3.tornei.model.Arbitro;
 @Repository
 public interface ArbitroRepository extends CrudRepository<Arbitro, Long> {
 	
-	public Arbitro findByCodiceAIA(String codiceAIA);
+	Arbitro findByCodiceAIA(String codiceAIA);
 	
-	public boolean existsByCodiceAIA(String codiceAIA);
+	boolean existsByCodiceAIA(String codiceAIA);
 }

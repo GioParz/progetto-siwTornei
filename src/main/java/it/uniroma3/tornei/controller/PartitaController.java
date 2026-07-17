@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import it.uniroma3.tornei.exception.ArbitroOccupatoException;
+import it.uniroma3.tornei.exception.IncompatibilitaDataPartitaException;
 import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.model.StatoPartita;
@@ -72,25 +75,32 @@ public class PartitaController {
 	public String savePartita(@Valid @ModelAttribute("partita") Partita partita,
 			BindingResult bindingResult, Model model) {
 		
-		if (partita.getSquadraCasa() != null && partita.getSquadraOspite() != null) {
-			if (partita.getSquadraCasa().equals(partita.getSquadraOspite())) {
-				bindingResult.reject("partita.stessaSquadra");
-			}
-		}
-		
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("squadre", this.squadraService.getAllSquadre());
 			model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
+			model.addAttribute("torneo", partita.getTorneo());
 			return "partite/form";
 		}
 		
 		partita.setStato(StatoPartita.PROGRAMMATA);
 		partita.setGoalsHome(0);
 		partita.setGoalsAway(0);
-		partita.setSquadraCasaNomeStorico(partita.getSquadraCasa().getNome());
-		partita.setSquadraOspiteNomeStorico(partita.getSquadraOspite().getNome());
-		
-		this.partitaService.savePartita(partita);
+	    
+	    try {
+	        this.partitaService.savePartita(partita);
+	    } catch (ArbitroOccupatoException e) {
+	        bindingResult.reject("partita.arbitroOccupato", e.getMessage());
+	        model.addAttribute("squadre", this.squadraService.getAllSquadre());
+	        model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
+	        model.addAttribute("torneo", partita.getTorneo());
+	        return "partite/form";
+	    } catch (IncompatibilitaDataPartitaException e) {
+	        bindingResult.reject("partita.duplicata", e.getMessage());
+	        model.addAttribute("squadre", this.squadraService.getAllSquadre());
+	        model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
+	        model.addAttribute("torneo", partita.getTorneo());
+	        return "partite/form";
+	    }
 		return "redirect:/torneo/" + partita.getTorneo().getId();
 	}
 	
@@ -110,7 +120,7 @@ public class PartitaController {
 	
 	@PostMapping("/admin/partita/{id}/risultato")
 	public String salvaRisultato(@PathVariable("id") Long id, 
-			@Valid @ModelAttribute("partita") Partita partitaModificata,
+			@ModelAttribute("partita") Partita partitaModificata,
 			BindingResult bindingResult, Model model) {
 		
 		Partita partitaOriginale = this.partitaService.getPartita(id);
@@ -118,17 +128,35 @@ public class PartitaController {
 			return "redirect:/tornei";
 		}
 		
-		if (bindingResult.hasErrors()) {
-			partitaModificata.setSquadraCasa(partitaOriginale.getSquadraCasa());
-			partitaModificata.setSquadraOspite(partitaOriginale.getSquadraOspite());
-			return "admin/partite/formRisultato";
+		if (partitaModificata.getGoalsHome() == null || partitaModificata.getGoalsHome() < 0) {
+			bindingResult.rejectValue("goalsHome", "Inserisci un punteggio valido per la squadra di casa.");
+		}
+		if (partitaModificata.getGoalsAway() == null || partitaModificata.getGoalsAway() < 0) {
+			bindingResult.rejectValue("goalsAway", "Inserisci un punteggio valido per la squadra ospite.");
 		}
 		
-		partitaOriginale.setGoalsHome(partitaModificata.getGoalsHome());
-		partitaOriginale.setGoalsAway(partitaModificata.getGoalsAway());
-		partitaOriginale.setStato(StatoPartita.TERMINATA);
-		
-		this.partitaService.savePartita(partitaOriginale);
+		if (bindingResult.hasErrors()) {
+	        partitaModificata.setSquadraCasa(partitaOriginale.getSquadraCasa());
+	        partitaModificata.setSquadraOspite(partitaOriginale.getSquadraOspite());
+	        partitaModificata.setTorneo(partitaOriginale.getTorneo());
+	        partitaModificata.setLuogo(partitaOriginale.getLuogo());
+	        partitaModificata.setDataEOra(partitaOriginale.getDataEOra());
+	        partitaModificata.setStato(partitaOriginale.getStato());
+	        return "admin/partite/formRisultato";
+	    }
+	    
+	    partitaOriginale.setGoalsHome(partitaModificata.getGoalsHome());
+	    partitaOriginale.setGoalsAway(partitaModificata.getGoalsAway());
+	    partitaOriginale.setStato(StatoPartita.TERMINATA);
+	    
+	    try {
+	        this.partitaService.savePartita(partitaOriginale);
+	    } catch (RuntimeException e) {
+	        bindingResult.reject("Impossibile salvare il risultato: " + e.getMessage());
+	        partitaModificata.setStato(partitaOriginale.getStato());
+	        return "admin/partite/formRisultato";
+	    }
+	    
 		return "redirect:/torneo/" + partitaOriginale.getTorneo().getId();
 	}
 	

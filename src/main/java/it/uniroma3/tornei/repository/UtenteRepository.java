@@ -8,5 +8,5 @@ import it.uniroma3.tornei.model.Utente;
 @Repository
 public interface UtenteRepository extends CrudRepository<Utente, Long> {
 	
-	public boolean existsByEmail(String email);
+	boolean existsByEmail(String email);
 }

@@ -1,8 +1,10 @@
 package it.uniroma3.tornei.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import it.uniroma3.tornei.validation.NotAnnoFuturo;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,38 +13,55 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.*;
 
 @Entity
 public class Squadra {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "squadra_seq")
+	@SequenceGenerator(name = "squadra_seq", sequenceName = "squadra_seq", allocationSize = 1)
 	private Long id;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String nome;
 	
-	@NotBlank
+	@Size(max = 2048, message = "L'URL dell'immagine è troppo lungo (max 2048 caratteri)")
+	@Pattern(regexp = "(https?://.*)?", message = "Deve essere un URL valido (es. http://... o https://...) o rimanere vuoto")
+	@Column(nullable = true)
+	private String stemmaUrl;
+	
 	@NotNull
 	@Min(1863)
-	@Past
+	@NotAnnoFuturo
 	private Integer annoFondazione;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String citta;
 	
 	@ManyToMany(mappedBy = "squadre")
 	private List<Torneo> tornei;
 	
-	@OneToMany(mappedBy = "squadra", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "squadra", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Giocatore> giocatori;
 	
-	public Squadra() {
+	//metodi helper per corretta sincronizzazione
+	public void addGiocatore(Giocatore giocatore) {
+	    if (this.giocatori == null) {
+	        this.giocatori = new ArrayList<>();
+	    }
+	    this.giocatori.add(giocatore);
+	    giocatore.setSquadra(this); // Sincronizza il lato "ManyToOne"
+	}
+
+	public void removeGiocatore(Giocatore giocatore) {
+	    if (this.giocatori != null) {
+	        this.giocatori.remove(giocatore);
+	        giocatore.setSquadra(null); // Rimuove temporaneamente il legame
+	    }
 	}
 	
 	public Long getId() {
@@ -93,6 +112,14 @@ public class Squadra {
 		this.giocatori = giocatori;
 	}
 
+	public String getStemmaUrl() {
+		return stemmaUrl;
+	}
+
+	public void setStemmaUrl(String stemmaUrl) {
+		this.stemmaUrl = stemmaUrl;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(citta, nome);
@@ -107,6 +134,4 @@ public class Squadra {
 		Squadra other = (Squadra) obj;
 		return Objects.equals(citta, other.citta) && Objects.equals(nome, other.nome);
 	}
-	
-	
 }

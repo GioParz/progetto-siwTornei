@@ -26,12 +26,6 @@
 	                <span th:text="${giocatore.squadra.nome}" class="admin-text-highlight">Nome Squadra</span>
 	            </p>
 	        </div>
-			
-			<div th:if="${#fields.hasGlobalErrors()}" style="color: red; margin-bottom: 15px;">
-			    <ul>
-			        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore Generico</li>
-			    </ul>
-			</div>
 	
 	        <form th:action="@{/giocatori}" th:object="${giocatore}" method="post" class="stadium-form">
 	            

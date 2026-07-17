@@ -12,27 +12,32 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.*;
 
 @Entity
 public class Giocatore {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "giocatore_seq")
+	@SequenceGenerator(name = "giocatore_seq", sequenceName = "giocatore_seq", allocationSize = 1)
 	private Long id;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String nome;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String cognome;
 	
-	@NotBlank
+	@Size(max = 2048, message = "L'URL dell'immagine è troppo lungo (max 2048 caratteri)")
+	@Pattern(regexp = "(https?://.*)?", message = "Deve essere un URL valido (es. http://... o https://...) o rimanere vuoto")
+	@Column(nullable = true)
+	private String fotoUrl;
+	
 	@NotNull
 	@Past
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -42,17 +47,13 @@ public class Giocatore {
 	@Enumerated(EnumType.STRING)
 	private RuoloGiocatore ruolo;
 	
-	@NotBlank
 	@NotNull
 	@Column(nullable = false)
 	private Integer altezza;
 	
 	@ManyToOne
-	@Column(nullable = true)
+	@JoinColumn(nullable = false)
 	private Squadra squadra;
-	
-	public Giocatore() {
-	}
 
 	public Long getId() {
 		return id;
@@ -108,6 +109,14 @@ public class Giocatore {
 
 	public void setSquadra(Squadra squadra) {
 		this.squadra = squadra;
+	}
+
+	public String getFotoUrl() {
+		return fotoUrl;
+	}
+
+	public void setFotoUrl(String fotoUrl) {
+		this.fotoUrl = fotoUrl;
 	}
 
 	@Override

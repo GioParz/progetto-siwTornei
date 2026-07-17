@@ -24,7 +24,7 @@
 	            <!-- Sotto-sezione Anagrafica -->
 	            <h3 class="section-title font-size-md margin-bottom-md">Dati Anagrafici</h3>
 	            
-				<div th:object="${utente}">
+				<div th:object="${credentials.utente}">
 					<div class="form-group">
 						<label>Nome:</label>
 						<input type="text" th:field="*{nome}" />

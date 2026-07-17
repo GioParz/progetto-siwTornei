@@ -67,7 +67,7 @@
 	            <div class="match-meta-details margin-top-lg text-left">
 	                <p><strong>Stadio / Luogo:</strong> <span th:text="${partita.luogo}">Stadio Olimpico</span></p>
 	                <p><strong>Data e Ora:</strong> <span th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}">Data</span></p>
-	                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro.nome} + ' ' + ${partita.arbitro.cognome}">Nome Arbitro</span></p>
+	                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro != null ? (partita.arbitro.nome + ' ' + partita.arbitro.cognome) : partita.arbitroNomeCognomeStorico}">Nome Arbitro</span></p>
 	                <p><strong>Stato Incontro:</strong>
 	                    <span th:class="${partita.stato.toString() == 'TERMINATA'} ? 'badge-completed' : 'badge-scheduled'"
 	                          th:text="${partita.stato}">STATO</span>
@@ -101,12 +101,12 @@
 			                    <div class="action-buttons-cell">
 			                        
 			                        <!-- Link Modifica visibile solo all'autore del commento tramite username delle credenziali -->
-			                        <a th:if="${commento.utente != null and #authentication.name == commento.utente.credentials.username}" 
+			                        <a th:if="${commento.utente != null and #authentication.name == userDetails.username}" 
 			                           th:href="@{/commento/{id}/edit(id=${commento.id})}"
 			                           class="action-link-edit">Modifica</a>
 			                        
 			                        <!-- Link Rimuovi visibile all'autore oppure ad un ADMIN -->
-			                        <a th:if="${commento.utente != null and (#authentication.name == commento.utente.credentials.username or #authorization.expression('hasAuthority(''ADMIN'')'))}"
+			                        <a th:if="${commento.utente != null and (#authentication.name == userDetails.username or #authorization.expression('hasAuthority(''ADMIN'')'))}"
 			                           th:href="@{/commento/{id}/delete(id=${commento.id})}"
 			                           onclick="return confirm('Sei sicuro di voler cancellare questo commento?')"
 			                           class="action-link-delete">Rimuovi</a>

@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 
@@ -15,7 +16,8 @@ import jakarta.validation.constraints.*;
 public class Utente {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+	@SequenceGenerator(name = "users_seq", sequenceName = "users_seq", allocationSize = 1)
 	private Long id;
 	
 	@NotBlank
@@ -30,9 +32,6 @@ public class Utente {
 	@Email
 	@Column(unique = true, nullable = false)
 	private String email;
-	
-	public Utente() {
-	}
 
 	public Long getId() {
 		return id;

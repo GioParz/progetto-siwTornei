@@ -1,7 +1,5 @@
 package it.uniroma3.tornei.service;
 
-import java.util.Optional;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -28,17 +26,11 @@ public class CredentialsService {
 	}
 	
 	public Credentials getCredentialsById(Long id) {
-		
-		Optional<Credentials> result = this.credentialsRepository.findById(id);
-		
-		return result.orElse(null);
+		return this.credentialsRepository.findById(id).orElse(null);
 	}
 	
 	public Credentials getCredentialsByUsername(String username) {
-		
-		Optional<Credentials> result = this.credentialsRepository.findByUsername(username);
-		
-		return result.orElse(null);
+		return this.credentialsRepository.findByUsername(username).orElse(null);
 	}
 	
 	public boolean existsByUsername(String username) {

@@ -1,7 +1,5 @@
 package it.uniroma3.tornei.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,8 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import it.uniroma3.tornei.model.RigaClassifica;
+import it.uniroma3.tornei.exception.ModificaAnnoTorneoException;
+import it.uniroma3.tornei.exception.TorneoDuplicatoException;
+import it.uniroma3.tornei.exception.TorneoInUsoException;
 import it.uniroma3.tornei.model.Torneo;
 import it.uniroma3.tornei.service.TorneoService;
 import jakarta.validation.Valid;
@@ -28,9 +29,8 @@ public class TorneoController {
 	
 	@GetMapping("/tornei")
 	public String getTornei(Model model) {
-		
-		List<Torneo> listaTornei = this.torneoService.getAllTornei();
-		model.addAttribute("tornei" ,listaTornei);
+
+		model.addAttribute("tornei" ,this.torneoService.getAllTornei());
 		
 		return "tornei/list";
 	}
@@ -39,14 +39,11 @@ public class TorneoController {
 	public String getTorneo(@PathVariable("id") Long id, Model model) {
 		
 		Torneo torneo = this.torneoService.getTorneo(id);
-		
 		if (torneo == null)
 			return "redirect:/tornei";
 		
 		model.addAttribute("torneo", torneo);
-		
-		List<RigaClassifica> classifica = this.torneoService.calcolaClassifica(id);
-		model.addAttribute("classifica", classifica);
+		model.addAttribute("classifica", this.torneoService.calcolaClassifica(id));
 		
 		return "tornei/show";
 	}
@@ -65,17 +62,17 @@ public class TorneoController {
 	public String saveTorneo(@Valid @ModelAttribute("torneo") Torneo torneo, 
 			BindingResult bindingResult) {
 		
-		if (!bindingResult.hasErrors()) {
-			if (this.torneoService.existsByNomeAndAnno(torneo.getNome(), torneo.getAnno())) {
-				bindingResult.reject("torneo.duplicato");
-			}
-		}
-		
 		if (bindingResult.hasErrors()) {
 			return "admin/tornei/form";
 		}
 		
-		this.torneoService.saveTorneo(torneo);
+		try {
+			this.torneoService.saveTorneo(torneo);
+		} catch (TorneoDuplicatoException e) {
+			bindingResult.reject("torneo.duplicate", e.getMessage());
+			return "admin/tornei/form";
+		}
+		
 		return "redirect:/tornei";
 	}
 	
@@ -98,19 +95,37 @@ public class TorneoController {
 			@Valid @ModelAttribute("torneo") Torneo torneoModificato,
 			BindingResult bindingResult) {
 		
-		Torneo torneoOriginale = this.torneoService.getTorneo(id);
-		if(torneoOriginale == null)
-			return "redirect:/";
-		
 		if (bindingResult.hasErrors()) {
-			return "admin/tornei/form";
+            return "admin/tornei/form";
+        }
+        
+        try {
+            this.torneoService.updateTorneo(id, torneoModificato);
+        } catch (TorneoDuplicatoException e) {
+            bindingResult.reject("torneo.duplicato", e.getMessage());
+            return "admin/tornei/form";
+        } catch (ModificaAnnoTorneoException e) {
+            bindingResult.rejectValue("anno", "torneo.annoVincolato", e.getMessage());
+            return "admin/tornei/form";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/tornei";
+        }
+        
+        return "redirect:/torneo/" + id;
+	}
+	
+	/* ELIMINAZIONE TORNEO */
+	
+	@PostMapping("/admin/torneo/{id}/delete")
+	public String eliminaTorneo(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+		
+		try {
+			this.torneoService.deleteTorneo(id);
+			redirectAttributes.addFlashAttribute("successMessage", "Torneo eliminato con successo.");
+		} catch (TorneoInUsoException e) {
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
 		}
 		
-		torneoOriginale.setNome(torneoModificato.getNome());
-		torneoOriginale.setAnno(torneoModificato.getAnno());
-		torneoOriginale.setDescrizione(torneoModificato.getDescrizione());
-		
-		this.torneoService.saveTorneo(torneoOriginale);
-		return "redirect:/torneo/" + torneoOriginale.getId();
+		return "redirect:/tornei";
 	}
 }

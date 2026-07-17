@@ -1,12 +1,16 @@
 package it.uniroma3.tornei.service;
 
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.uniroma3.tornei.exception.ArbitroOccupatoException;
+import it.uniroma3.tornei.exception.IncompatibilitaDataPartitaException;
+import it.uniroma3.tornei.model.Arbitro;
 import it.uniroma3.tornei.model.Partita;
+import it.uniroma3.tornei.model.Squadra;
 import it.uniroma3.tornei.repository.PartitaRepository;
 
 @Service
@@ -20,15 +24,62 @@ public class PartitaService {
 	}
 
 	public Partita getPartita(Long id) {
-		
-		Optional<Partita> result = this.partitaRepository.findById(id);
-		
-		return result.orElse(null);
+		return this.partitaRepository.findById(id).orElse(null);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Partita savePartita(Partita partita) {
-		return this.partitaRepository.save(partita);
+        
+		//controllo arbitro occupato
+        if(partita.getArbitro() != null) {
+        	boolean arbitroImpegnato = this.partitaRepository.existsByArbitroAndDataEOra(
+        			partita.getArbitro(), partita.getDataEOra());
+        	
+        	//se l'arbitro è occupato assicuriamoci che non sia per la partita attuale
+        	if(arbitroImpegnato) {
+        		if(partita.getId() == null || !isStessaPartitaInQuellaData(partita.getId(), partita.getArbitro(), partita.getDataEOra()))
+        			throw new ArbitroOccupatoException(partita.getArbitro().getNome(), partita.getArbitro().getCognome());
+        	}
+        }
+        
+        //controllo squadre impegnate
+        if (partita.getSquadraCasa() != null) {
+            boolean casaImpegnata = this.partitaRepository.isSquadraImpegnata(partita.getSquadraCasa(), partita.getDataEOra());
+            if (casaImpegnata && (partita.getId() == null || !isSquadraImpegnataDallaPartitaStessa(partita.getId(), partita.getSquadraCasa(), partita.getDataEOra()))) {
+                throw new IncompatibilitaDataPartitaException();
+            }
+        }
+        
+        if (partita.getSquadraOspite() != null) {
+            boolean ospiteImpegnato = this.partitaRepository.isSquadraImpegnata(partita.getSquadraOspite(), partita.getDataEOra());
+            if (ospiteImpegnato && (partita.getId() == null || !isSquadraImpegnataDallaPartitaStessa(partita.getId(), partita.getSquadraOspite(), partita.getDataEOra()))) {
+                throw new IncompatibilitaDataPartitaException();
+            }
+        }
+        
+        // controllo anno torneo
+        if (partita.getTorneo() != null && 
+            partita.getDataEOra().getYear() != partita.getTorneo().getAnno()) {
+            throw new IncompatibilitaDataPartitaException();
+        }
+
+        return this.partitaRepository.save(partita);
+    }
+	
+	// Metodi helper privati per gestire la fase di EDIT senza bloccare se stessi
+	private boolean isStessaPartitaInQuellaData(Long partitaId, Arbitro arbitro, LocalDateTime dataEOra) {
+	    Partita esistente = this.partitaRepository.findById(partitaId).orElse(null);
+	    return esistente != null && esistente.getArbitro().equals(arbitro) && esistente.getDataEOra().equals(dataEOra);
+	}
+
+	private boolean isSquadraImpegnataDallaPartitaStessa(Long partitaId, Squadra squadra, LocalDateTime dataEOra) {
+	    Partita esistente = this.partitaRepository.findById(partitaId).orElse(null);
+	    if (esistente == null) return false;
+
+	    boolean isCasa = esistente.getSquadraCasa() != null && esistente.getSquadraCasa().equals(squadra);
+	    boolean isOspite = esistente.getSquadraOspite() != null && esistente.getSquadraOspite().equals(squadra);
+
+	    return esistente.getDataEOra().equals(dataEOra) && (isCasa || isOspite);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

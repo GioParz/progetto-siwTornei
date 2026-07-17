@@ -11,5 +11,8 @@ import it.uniroma3.tornei.model.RuoloGiocatore;
 @Repository
 public interface GiocatoreRepository extends CrudRepository<Giocatore, Long> {
 
-	public boolean existsByCognomeAndDataNascitaAndRuolo(String cognome, LocalDate dataNascita, RuoloGiocatore ruolo);
+	boolean existsByNomeAndCognomeAndDataNascitaAndRuolo(String nome, String cognome, LocalDate dataNascita, RuoloGiocatore ruolo);
+	
+	boolean existsByNomeAndCognomeAndDataNascitaAndRuoloAndIdNot(String nome, String cognome, LocalDate dataNascita, RuoloGiocatore ruolo, Long id);
+
 }

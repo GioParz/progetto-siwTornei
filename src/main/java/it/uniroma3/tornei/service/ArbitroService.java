@@ -1,31 +1,30 @@
 package it.uniroma3.tornei.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.uniroma3.tornei.exception.ArbitroDuplicatoException;
 import it.uniroma3.tornei.model.Arbitro;
+import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.repository.ArbitroRepository;
+import it.uniroma3.tornei.repository.PartitaRepository;
 
 @Service
 @Transactional(readOnly = true)
 public class ArbitroService {
 	
 	private final ArbitroRepository arbitroRepository;
+	private final PartitaRepository partitaRepository;
 	
-	public ArbitroService(ArbitroRepository arbitroRepository) {
+	public ArbitroService(ArbitroRepository arbitroRepository, PartitaRepository partitaRepository) {
 		this.arbitroRepository = arbitroRepository;
+		this.partitaRepository = partitaRepository;
 	}
 
 	public Arbitro getArbitroById(Long id) {
-		
-		Optional<Arbitro> result = this.arbitroRepository.findById(id);
-		
-		return result.orElse(null);
+		return this.arbitroRepository.findById(id).orElse(null);
 	}
 	
 	public Arbitro getArbitroByCodiceAIA(String codiceAIA) {
@@ -33,11 +32,7 @@ public class ArbitroService {
 	}
 	
 	public List<Arbitro> getAllArbitri() {
-		
-		List<Arbitro> arbitri = new ArrayList<>();
-		this.arbitroRepository.findAll().forEach(arbitri::add);
-		
-		return arbitri;
+		return (List<Arbitro>) this.arbitroRepository.findAll();
 	}
 	
 	public boolean existsByCodiceAIA(String codiceAIA) {
@@ -45,12 +40,30 @@ public class ArbitroService {
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
-	public Arbitro saveArbitro(Arbitro arbitro) {
+	public Arbitro saveArbitro(Arbitro arbitro) throws ArbitroDuplicatoException {
+		
+		boolean duplicato = this.arbitroRepository.existsByCodiceAIA(arbitro.getCodiceAIA());
+		if(duplicato)
+			throw new ArbitroDuplicatoException(arbitro.getCodiceAIA());
+		
 		return this.arbitroRepository.save(arbitro);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public void deleteArbitroById(Long id) {
-		this.arbitroRepository.deleteById(id);
+		
+		Arbitro arbitro = this.arbitroRepository.findById(id).orElse(null);
+		
+		if(arbitro != null) {
+			List<Partita> partite = this.partitaRepository.findByArbitro(arbitro);
+			
+			for(Partita p : partite) {
+				p.setArbitroNomeCognomeStorico(arbitro.getNome() + " " + arbitro.getCognome());
+				p.setArbitro(null);
+				this.partitaRepository.save(p);
+			}
+			
+			this.arbitroRepository.deleteById(id);
+		}
 	}
 }

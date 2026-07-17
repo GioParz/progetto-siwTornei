@@ -34,40 +34,36 @@ public class AuthenticationController {
 	@GetMapping("/register")
 	public String mostraFormRegistrazione(Model model) {
 		
-		model.addAttribute("utente", new Utente());
-		model.addAttribute("credentials", new Credentials());
+		Credentials credentials = new Credentials();
+		credentials.setUtente(new Utente());
+		
+		model.addAttribute("credentials", credentials);
 		
 		return "authentication/register";
 	}
 	
 	@PostMapping("/register")
-	public String registraUtente(@Valid @ModelAttribute("utente") Utente utente,
-			BindingResult utenteBindingResult,
-			@Valid @ModelAttribute("credentials") Credentials credentials,
-			BindingResult credentialsBindingResult) {
-		
-		if (!utenteBindingResult.hasFieldErrors("email")) {
-			if (this.credentialsService.existsByUtenteEmail(utente.getEmail())) {
-				utenteBindingResult.rejectValue("email", "utente.duplicateEmail");
-			}
-		}
+	public String registraUtente(@Valid @ModelAttribute("credentials") Credentials credentials,
+			BindingResult bindingResult) {
 
-		if (!credentialsBindingResult.hasFieldErrors("username")) {
-			if (this.credentialsService.existsByUsername(credentials.getUsername())) {
-				credentialsBindingResult.rejectValue("username", "credentials.duplicateUsername");
-			}
-		}
-
-		if (utenteBindingResult.hasErrors() || credentialsBindingResult.hasErrors()) {
+		if(this.credentialsService.existsByUsername(credentials.getUsername())) {
+			bindingResult.rejectValue("username", "credentials.duplicateUsername");
 			return "authentication/register";
 		}
-
-		credentials.setUtente(utente);
+		
+		if(credentials.getUtente() != null &&
+				this.credentialsService.existsByUtenteEmail(credentials.getUtente().getEmail())) {
+			bindingResult.rejectValue("utente.email", "utente.duplicateEmail");
+			return "authentication/register";
+		}
+		
+		if(bindingResult.hasErrors())
+			return "authentication/register";
+		
 		credentials.setRuolo(RuoloUtente.USER);
-
 		this.credentialsService.saveCredentials(credentials);
 
-		return "redirect:/login";
+		return "redirect:/login"; //appena registrato si da suito la possibilità di fare login
 	}
 	
 	/* ADMIN */

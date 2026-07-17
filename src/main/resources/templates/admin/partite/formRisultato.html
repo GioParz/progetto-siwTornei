@@ -34,7 +34,15 @@
 	        <!-- Form Risultato -->
 	        <form th:action="@{/admin/partita/{id}/risultato(id=${partita.id})}" th:object="${partita}" method="post" class="stadium-form">
 	            
-	            <div class="form-group margin-bottom-md">
+				<div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+				    <ul>
+				        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-msg">
+				            Errore di coerenza nei dati inseriti
+				        </li>
+				    </ul>
+				</div>
+				
+				<div class="form-group margin-bottom-md">
 	                <label th:text="'Gol per ' + ${partita.squadraCasa.nome}">Gol Casa</label>
 	                <input type="number" name="goalsHome" th:value="${partita.goalsHome}" placeholder="0" class="input-score-number" />
 					<span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" style="color: red;"></span>

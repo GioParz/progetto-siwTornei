@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import it.uniroma3.tornei.validation.NotStessaSquadra;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,70 +16,67 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.*;
 
 @Entity
+@NotStessaSquadra
 public class Partita {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "partita_seq")
+	@SequenceGenerator(name = "partita_seq", sequenceName = "partita_seq", allocationSize = 1)
 	private Long id;
 	
-	@NotBlank
 	@NotNull
-	@Future
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	@Column(nullable = false)
 	private LocalDateTime dataEOra;
 	
 	@NotBlank
-	@NotNull
 	@Column(nullable = false)
 	private String luogo;
 	
-	@NotBlank
-	@NotNull
-	@Column(nullable = false)
-	@Min(0)
+	@Column(nullable = true)
 	private Integer goalsHome;
 	
-	@NotBlank
-	@NotNull
-	@Column(nullable = false)
-	@Min(0)
+	@Column(nullable = true)
 	private Integer goalsAway;
 	
 	@Enumerated(EnumType.STRING)
 	private StatoPartita stato;
 	
 	@ManyToOne
+	@NotNull
+	@JoinColumn(nullable = false)
 	private Torneo torneo;
 	
-	@NotNull
 	@ManyToOne
-	@Column(nullable = true)
+	@JoinColumn(nullable = true)
 	private Squadra squadraCasa;
 	
-	@NotNull
 	@ManyToOne
-	@Column(nullable = true)
+	@JoinColumn(nullable = true)
 	private Squadra squadraOspite;
 	
 	//in caso di squadra eliminata
+	@Column(nullable = true)
 	private String squadraCasaNomeStorico;
+	@Column(nullable = true)
 	private String squadraOspiteNomeStorico;
 	
-	@NotNull
 	@ManyToOne
+	@JoinColumn(nullable = true)
 	private Arbitro arbitro;
+	
+	@Column(nullable = true)
+	private String arbitroNomeCognomeStorico;
 	
 	@OneToMany(mappedBy = "partita", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Commento> commenti = new ArrayList<>();
-	
-	public Partita() {
-	}
 
 	public Long getId() {
 		return id;
@@ -184,23 +182,40 @@ public class Partita {
 		this.commenti = commenti;
 	}
 
+	public String getArbitroNomeCognomeStorico() {
+		return arbitroNomeCognomeStorico;
+	}
+
+	public void setArbitroNomeCognomeStorico(String arbitroNomeCognomeStorico) {
+		this.arbitroNomeCognomeStorico = arbitroNomeCognomeStorico;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(dataEOra, luogo, squadraCasa, squadraOspite);
+
+	    String casaIdentificativo = (squadraCasa != null) ? squadraCasa.getNome() : squadraCasaNomeStorico;
+	    String ospiteIdentificativo = (squadraOspite != null) ? squadraOspite.getNome() : squadraOspiteNomeStorico;
+	    
+	    return Objects.hash(dataEOra, luogo, casaIdentificativo, ospiteIdentificativo);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-		Partita other = (Partita) obj;
-		return Objects.equals(dataEOra, other.dataEOra) 
-				&& Objects.equals(luogo, other.luogo)
-				&& Objects.equals(squadraCasa, other.squadraCasa) 
-				&& Objects.equals(squadraOspite, other.squadraOspite);
+	    if (this == obj)
+	        return true;
+	    if (obj == null || getClass() != obj.getClass())
+	        return false;
+	    Partita other = (Partita) obj;
+	    
+	    String casaThis = (this.squadraCasa != null) ? this.squadraCasa.getNome() : this.squadraCasaNomeStorico;
+	    String ospiteThis = (this.squadraOspite != null) ? this.squadraOspite.getNome() : this.squadraOspiteNomeStorico;
+	    
+	    String casaOther = (other.squadraCasa != null) ? other.squadraCasa.getNome() : other.squadraCasaNomeStorico;
+	    String ospiteOther = (other.squadraOspite != null) ? other.squadraOspite.getNome() : other.squadraOspiteNomeStorico;
+	    
+	    return Objects.equals(dataEOra, other.dataEOra) 
+	            && Objects.equals(luogo, other.luogo)
+	            && Objects.equals(casaThis, casaOther) 
+	            && Objects.equals(ospiteThis, ospiteOther);
 	}
-	
-	
 }

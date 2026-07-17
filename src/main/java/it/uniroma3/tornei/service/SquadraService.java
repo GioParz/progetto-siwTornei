@@ -1,16 +1,15 @@
 package it.uniroma3.tornei.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.uniroma3.tornei.exception.SquadraDuplicataException;
 import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.model.Squadra;
 import it.uniroma3.tornei.model.StatoPartita;
+import it.uniroma3.tornei.model.Torneo;
 import it.uniroma3.tornei.repository.PartitaRepository;
 import it.uniroma3.tornei.repository.SquadraRepository;
 
@@ -27,22 +26,22 @@ public class SquadraService {
 	}
 
 	public Squadra getSquadra(Long id) {
-		
-		Optional<Squadra> result = this.squadraRepository.findById(id);
-		
-		return result.orElse(null);
+		return this.squadraRepository.findById(id).orElse(null);
 	}
 	
 	public List<Squadra> getAllSquadre() {
-		
-		List<Squadra> squadre = new ArrayList<>();
-		this.squadraRepository.findAll().forEach(squadre::add);
-		
-		return squadre;
+		return (List<Squadra>) this.squadraRepository.findAll();
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public Squadra saveSquadra(Squadra squadra) {
+		
+		boolean duplicato = squadra.getId() == null
+				? this.squadraRepository.existsByNomeAndCitta(squadra.getNome(), squadra.getCitta())
+				: this.squadraRepository.existsByNomeAndCittaAndIdNot(squadra.getNome(), squadra.getCitta(), squadra.getId());
+		if(duplicato)
+			throw new SquadraDuplicataException(squadra.getNome(), squadra.getCitta());
+		
 		return this.squadraRepository.save(squadra);
 	}
 	
@@ -57,6 +56,7 @@ public class SquadraService {
 				if(p.getStato().equals(StatoPartita.PROGRAMMATA)) {
 					this.partitaRepository.delete(p);
 				} else {
+					p.setSquadraCasaNomeStorico(squadra.getNome());
 					p.setSquadraCasa(null);
 					this.partitaRepository.save(p);
 				}
@@ -67,12 +67,19 @@ public class SquadraService {
 				if(p.getStato().equals(StatoPartita.PROGRAMMATA)) {
 					this.partitaRepository.delete(p);
 				} else {
+					p.setSquadraOspiteNomeStorico(squadra.getNome());
 					p.setSquadraOspite(null);
 					this.partitaRepository.save(p);
 				}
 			}
+			
+			if (squadra.getTornei() != null) {
+	            for (Torneo torneo : squadra.getTornei()) {
+	                torneo.getSquadre().remove(squadra);
+	            }
+	        }
+	        
+	        this.squadraRepository.delete(squadra);
 		}
-		
-		this.squadraRepository.deleteById(id);
 	}
 }

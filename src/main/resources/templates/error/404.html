@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	
 	<head>
-	    <title>Accesso Negato - SIWTornei</title>
+	    <title>Pagina Non Trovata - SIWTornei</title>
 	    <link rel="stylesheet" th:href="@{/css/style.css}">
 	</head>
 	
@@ -15,26 +15,26 @@
 	    </div>
 	
 	    <main class="main-content">
-	        
+	         
 	        <div class="error-container">
 	            <div class="logo-container">
-	                <div class="logo-error">403</div>
+	                <div class="logo-error">404</div>
 	            </div>
-	            
-	            <h2 class="error-subtitle">Accesso Negato</h2>
-	            
+	             
+	            <h2 class="error-subtitle">Risorsa Non Trovata</h2>
+	             
 	            <p class="welcome-text font-size-md margin-bottom-lg">
-					Cartellino rosso! Non hai l'autorizzazione per accedere o modificare questa risorsa. 
-					L'ingresso in questa area del campo è riservato unicamente ai titolari o agli amministratori.
+	                La pagina, il torneo o la squadra che stai cercando sembra essere "fuorigioco". 
+	                Verifica che l'indirizzo inserito sia corretto o che la risorsa non sia stata eliminata.
 	            </p>
-	            
+	             
 	            <div class="admin-section">
 	                <a th:href="@{/}" class="main-link">Torna alla Home Page</a>
 	            </div>
 	        </div>
 	
 	        <div class="margin-top-lg">
-	            <a th:href="@{/tornei}" class="back-link">← Vedi i tornei disponibili</a>
+	            <a th:href="@{/tornei}" class="back-link">← Torna all'elenco dei tornei</a>
 	        </div>
 	    </main>
 	

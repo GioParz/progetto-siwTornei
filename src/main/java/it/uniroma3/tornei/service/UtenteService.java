@@ -1,9 +1,6 @@
 package it.uniroma3.tornei.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +19,11 @@ public class UtenteService {
 	}
 
 	public Utente getUtente(Long id) {
-		
-		Optional<Utente> result = this.utenteRepository.findById(id);
-		
-		return result.orElse(null);
+		return this.utenteRepository.findById(id).orElse(null);
 	}
 	
 	public List<Utente> getAllUtenti() {
-		
-		List<Utente> utenti = new ArrayList<>();
-		this.utenteRepository.findAll().forEach(utenti::add);
-		
-		return utenti;
+		return (List<Utente>) this.utenteRepository.findAll();
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

@@ -10,34 +10,36 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 @Entity
 public class Credentials {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credentials_seq")
+	@SequenceGenerator(name = "credentials_seq", sequenceName = "credentials_seq", allocationSize = 1)
 	private Long id;
 	
 	@NotBlank
-	@NotNull
 	@Column(unique = true, nullable = false)
 	private String username;
 	
 	@NotBlank
-	@NotNull
+	@Size(min = 3)
 	@Column(nullable = false)
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
 	private RuoloUtente ruolo;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@Valid //quando valida le credenziali valida anche l'utente
+	@OneToOne(cascade = CascadeType.ALL, optional = false)
+	@JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false)
 	private Utente utente;
-	
-	public Credentials() {
-	}
 
 	public Long getId() {
 		return id;
@@ -93,6 +95,4 @@ public class Credentials {
 		Credentials other = (Credentials) obj;
 		return Objects.equals(username, other.username);
 	}
-	
-	
 }

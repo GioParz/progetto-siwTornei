@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import it.uniroma3.tornei.exception.ArbitroDuplicatoException;
 import it.uniroma3.tornei.model.Arbitro;
 import it.uniroma3.tornei.service.ArbitroService;
 import jakarta.validation.Valid;
@@ -38,7 +39,6 @@ public class ArbitroController {
 	public String getArbitro(@PathVariable("id") Long id, Model model) {
 		
 		Arbitro arbitro = this.arbitroService.getArbitroById(id);
-		
 		if (arbitro == null)
 			return "redirect:/arbitri";
 		
@@ -64,19 +64,19 @@ public class ArbitroController {
 		if(bindingResult.hasErrors())
 			return "admin/arbitri/form"; //torna al form mostrando gli errori
 		
-		if(this.arbitroService.existsByCodiceAIA(arbitro.getCodiceAIA())) {
-			bindingResult.rejectValue("codiceAIA", "arbitro.duplicate");
+		try {
+			this.arbitroService.saveArbitro(arbitro);
+		} catch (ArbitroDuplicatoException e) {
+			bindingResult.rejectValue("codiceAIA", e.getMessage());
 			return "admin/arbitri/form";
 		}
-		
-		this.arbitroService.saveArbitro(arbitro);
 		
 		return "redirect:/arbitri";
 	}
 	
 	/* ELIMINAZIONE ARBITRO */
 	
-	@GetMapping("admin/arbitro/{id}/delete")
+	@GetMapping("/admin/arbitro/{id}/delete")
 	public String deleteArbitro(@PathVariable("id") Long id) {
 		
 		this.arbitroService.deleteArbitroById(id);;

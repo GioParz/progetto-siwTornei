@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import it.uniroma3.tornei.exception.GiocatoreDuplicatoException;
 import it.uniroma3.tornei.model.Giocatore;
-import it.uniroma3.tornei.model.RuoloGiocatore;
 import it.uniroma3.tornei.model.Squadra;
 import it.uniroma3.tornei.service.GiocatoreService;
 import it.uniroma3.tornei.service.SquadraService;
@@ -32,7 +32,6 @@ public class GiocatoreController {
 	public String getGiocatore(@PathVariable("id") Long id, Model model) {
 		
 		Giocatore giocatore = this.giocatoreService.getGiocatore(id);
-		
 		if (giocatore == null)
 			return "redirect:/giocatori";
 		
@@ -54,7 +53,6 @@ public class GiocatoreController {
 		giocatore.setSquadra(squadra);
 		
 		model.addAttribute("giocatore", giocatore);
-		model.addAttribute("ruoli", RuoloGiocatore.values());
 		
 		return "giocatori/form";
 	}
@@ -63,20 +61,21 @@ public class GiocatoreController {
 	public String saveGiocatore(@Valid @ModelAttribute("giocatore") Giocatore giocatore,
 			BindingResult bindingResult, Model model) {
 		
-		if (!bindingResult.hasErrors()) {
-			if (this.giocatoreService.existsByCognomeAndDataNascitaAndRuolo(
-					giocatore.getCognome(), giocatore.getDataNascita(), giocatore.getRuolo())) {
-				bindingResult.reject("giocatore.duplicato"); // Errore globale (non associato a un singolo campo)
-			}
-		}
-		
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("ruoli", RuoloGiocatore.values());
+			if (giocatore.getSquadra() != null)
+				model.addAttribute("squadra", this.squadraService.getSquadra(giocatore.getSquadra().getId()));
 			
 			return "giocatori/form";
 		}
 		
-		this.giocatoreService.saveGiocatore(giocatore);
+		try {
+			this.giocatoreService.saveGiocatore(giocatore);
+		} catch (GiocatoreDuplicatoException e) {
+			bindingResult.reject("giocatore.duplicato", e.getMessage());
+			model.addAttribute("squadra", giocatore.getSquadra());
+			return "giocatori/form";
+		}
+		
 		return "redirect:/squadra/" + giocatore.getSquadra().getId();
 	}
 	
@@ -100,25 +99,22 @@ public class GiocatoreController {
 			@Valid @ModelAttribute("giocatore") Giocatore giocatoreModificato,
 			BindingResult bindingResult, Model model) {
 		
-		Giocatore giocatoreOriginale = this.giocatoreService.getGiocatore(id);
-		if(giocatoreOriginale == null)
-			return "redirect:/";
-		
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("squadre", this.squadraService.getAllSquadre());
-			model.addAttribute("ruoli", RuoloGiocatore.values());
 			return "admin/giocatori/formModifica";
 		}
 		
-		giocatoreOriginale.setNome(giocatoreModificato.getNome());
-		giocatoreOriginale.setCognome(giocatoreModificato.getCognome());
-		giocatoreOriginale.setDataNascita(giocatoreModificato.getDataNascita());
-		giocatoreOriginale.setRuolo(giocatoreModificato.getRuolo());
-		giocatoreOriginale.setAltezza(giocatoreModificato.getAltezza());
-		giocatoreOriginale.setSquadra(giocatoreModificato.getSquadra());
-		
-		this.giocatoreService.saveGiocatore(giocatoreOriginale);
-		
-		return "redirect:/squadra/" + giocatoreOriginale.getSquadra().getId();
+		try {
+			Giocatore aggiornato = this.giocatoreService.updateGiocatore(id, giocatoreModificato);
+			if (aggiornato == null) {
+				return "redirect:/";
+			}
+			
+			return "redirect:/squadra/" + aggiornato.getSquadra().getId();
+		} catch (GiocatoreDuplicatoException e) {
+			bindingResult.reject("giocatore.duplicato", e.getMessage());
+			model.addAttribute("squadre", this.squadraService.getAllSquadre());
+			return "admin/giocatori/formModifica";
+		}
 	}
 }

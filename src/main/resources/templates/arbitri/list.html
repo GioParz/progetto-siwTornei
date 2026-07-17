@@ -21,8 +21,11 @@
 	
 	        <div class="flex-row-between margin-bottom-md">
 	            <h2>Arbitri Registrati</h2>
-	            <a th:href="@{/admin/arbitro/new}" class="main-link btn-admin">+ Registra Nuovo Arbitro</a>
 	        </div>
+			
+			<div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
+				<a th:href="@{/admin/arbitro/new}" class="main-link btn-admin">+ Registra Nuovo Arbitro</a>
+			</div>
 	
 	        <!-- Se la lista è vuota -->
 	        <div th:if="${#lists.isEmpty(arbitri)}" class="no-data-box">

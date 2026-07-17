@@ -23,10 +23,12 @@
 	            
 	            <input type="hidden" th:field="*{torneo}" />
 				
-				<div th:if="${#fields.hasGlobalErrors()}" style="color: red">
-					<ul>
-						<li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore di logica del match</li>
-					</ul>
+				<div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+				    <ul>
+				        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-msg">
+				            Messaggio di errore generico
+				        </li>
+				    </ul>
 				</div>
 	            
 	            <div class="info-box info-box-admin padding-md margin-bottom-md">
