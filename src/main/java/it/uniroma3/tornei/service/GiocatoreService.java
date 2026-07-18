@@ -70,6 +70,7 @@ public class GiocatoreService {
 			Squadra nuovaSquadra = this.squadraRepository.findById(datiAggiornati.getSquadra().getId()).orElse(null);
 			if (nuovaSquadra != null) {
 				nuovaSquadra.addGiocatore(originale);
+				originale.setSquadra(nuovaSquadra);
 			}
 		}
 

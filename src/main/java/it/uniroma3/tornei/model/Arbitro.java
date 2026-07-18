@@ -1,5 +1,6 @@
 package it.uniroma3.tornei.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class Arbitro {
 	private String codiceAIA;
 	
 	@OneToMany(mappedBy = "arbitro")
-	private List<Partita> partite;
+	private List<Partita> partite = new ArrayList<>();
 
 	public Long getId() {
 		return id;

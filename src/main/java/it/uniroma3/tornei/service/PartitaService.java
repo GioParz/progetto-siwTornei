@@ -1,6 +1,7 @@
 package it.uniroma3.tornei.service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -43,15 +44,18 @@ public class PartitaService {
         }
         
         //controllo squadre impegnate
+        LocalDateTime inizioGiorno = partita.getDataEOra().toLocalDate().atStartOfDay();
+        LocalDateTime fineGiorno = partita.getDataEOra().toLocalDate().atTime(23, 59, 59);
+        
         if (partita.getSquadraCasa() != null) {
-            boolean casaImpegnata = this.partitaRepository.isSquadraImpegnata(partita.getSquadraCasa(), partita.getDataEOra());
+            boolean casaImpegnata = this.partitaRepository.isSquadraImpegnata(partita.getSquadraCasa(), inizioGiorno, fineGiorno);
             if (casaImpegnata && (partita.getId() == null || !isSquadraImpegnataDallaPartitaStessa(partita.getId(), partita.getSquadraCasa(), partita.getDataEOra()))) {
                 throw new IncompatibilitaDataPartitaException();
             }
         }
         
         if (partita.getSquadraOspite() != null) {
-            boolean ospiteImpegnato = this.partitaRepository.isSquadraImpegnata(partita.getSquadraOspite(), partita.getDataEOra());
+            boolean ospiteImpegnato = this.partitaRepository.isSquadraImpegnata(partita.getSquadraOspite(), inizioGiorno, fineGiorno);
             if (ospiteImpegnato && (partita.getId() == null || !isSquadraImpegnataDallaPartitaStessa(partita.getId(), partita.getSquadraOspite(), partita.getDataEOra()))) {
                 throw new IncompatibilitaDataPartitaException();
             }
@@ -69,7 +73,7 @@ public class PartitaService {
 	// Metodi helper privati per gestire la fase di EDIT senza bloccare se stessi
 	private boolean isStessaPartitaInQuellaData(Long partitaId, Arbitro arbitro, LocalDateTime dataEOra) {
 	    Partita esistente = this.partitaRepository.findById(partitaId).orElse(null);
-	    return esistente != null && esistente.getArbitro().equals(arbitro) && esistente.getDataEOra().equals(dataEOra);
+	    return esistente != null && Objects.equals(esistente.getArbitro(), arbitro) && esistente.getDataEOra().equals(dataEOra);
 	}
 
 	private boolean isSquadraImpegnataDallaPartitaStessa(Long partitaId, Squadra squadra, LocalDateTime dataEOra) {
@@ -79,7 +83,9 @@ public class PartitaService {
 	    boolean isCasa = esistente.getSquadraCasa() != null && esistente.getSquadraCasa().equals(squadra);
 	    boolean isOspite = esistente.getSquadraOspite() != null && esistente.getSquadraOspite().equals(squadra);
 
-	    return esistente.getDataEOra().equals(dataEOra) && (isCasa || isOspite);
+	    boolean stessoGiorno = esistente.getDataEOra().toLocalDate().equals(dataEOra.toLocalDate());
+
+	    return stessoGiorno && (isCasa || isOspite);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

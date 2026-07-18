@@ -25,6 +25,7 @@ public interface PartitaRepository extends CrudRepository<Partita, Long> {
 	
 	@Query("SELECT COUNT(p) > 0 FROM Partita p WHERE " +
 			"(p.squadraCasa = :squadra OR p.squadraOspite = :squadra)" +
-			"AND p.dataEOra = :dataEOra")
-	boolean isSquadraImpegnata(@Param("squadra") Squadra squadra, @Param("dataEOra") LocalDateTime dataEOra);
+			"AND p.dataEOra BETWEEN :inizioGiorno AND :fineGiorno")
+	boolean isSquadraImpegnata(@Param("squadra") Squadra squadra, 
+			@Param("inizioGiorno") LocalDateTime inizioGiorno, @Param("fineGiorno") LocalDateTime fineGiorno);
 }

@@ -10,7 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.Valid;
@@ -38,7 +37,6 @@ public class Credentials {
 	
 	@Valid //quando valida le credenziali valida anche l'utente
 	@OneToOne(cascade = CascadeType.ALL, optional = false)
-	@JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false)
 	private Utente utente;
 
 	public Long getId() {

@@ -67,7 +67,7 @@ public class ArbitroController {
 		try {
 			this.arbitroService.saveArbitro(arbitro);
 		} catch (ArbitroDuplicatoException e) {
-			bindingResult.rejectValue("codiceAIA", e.getMessage());
+			bindingResult.rejectValue("codiceAIA", "arbitro.duplicato", e.getMessage());
 			return "admin/arbitri/form";
 		}
 		

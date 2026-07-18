@@ -43,10 +43,10 @@ public class Squadra {
 	private String citta;
 	
 	@ManyToMany(mappedBy = "squadre")
-	private List<Torneo> tornei;
+	private List<Torneo> tornei = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "squadra", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<Giocatore> giocatori;
+	private List<Giocatore> giocatori = new ArrayList<>();
 	
 	//metodi helper per corretta sincronizzazione
 	public void addGiocatore(Giocatore giocatore) {

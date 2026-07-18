@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Credentials;
 import it.uniroma3.tornei.model.Partita;
+import it.uniroma3.tornei.model.RuoloUtente;
 import it.uniroma3.tornei.service.CommentoService;
 import it.uniroma3.tornei.service.CredentialsService;
 import it.uniroma3.tornei.service.PartitaService;
@@ -68,6 +69,10 @@ public class CommentoController {
 			return "redirect:/";
 		
 		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
+		if (!commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId()) && 
+			    !credentialsLoggato.getRuolo().equals(RuoloUtente.ADMIN)) {
+			    throw new AccessDeniedException("Non sei autorizzato ad eliminare questo commento");
+			}
 		
 		this.commentoService.deleteCommento(id, credentialsLoggato);
 		

@@ -76,9 +76,7 @@ public class PartitaController {
 			BindingResult bindingResult, Model model) {
 		
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("squadre", this.squadraService.getAllSquadre());
-			model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
-			model.addAttribute("torneo", partita.getTorneo());
+			caricaDatiFormPartita(partita, model);
 			return "partite/form";
 		}
 		
@@ -89,19 +87,25 @@ public class PartitaController {
 	    try {
 	        this.partitaService.savePartita(partita);
 	    } catch (ArbitroOccupatoException e) {
-	        bindingResult.reject("partita.arbitroOccupato", e.getMessage());
-	        model.addAttribute("squadre", this.squadraService.getAllSquadre());
-	        model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
-	        model.addAttribute("torneo", partita.getTorneo());
+	        bindingResult.rejectValue("arbitro", "partita.arbitroOccupato", e.getMessage());
+	        caricaDatiFormPartita(partita, model);
 	        return "partite/form";
 	    } catch (IncompatibilitaDataPartitaException e) {
-	        bindingResult.reject("partita.duplicata", e.getMessage());
-	        model.addAttribute("squadre", this.squadraService.getAllSquadre());
-	        model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
-	        model.addAttribute("torneo", partita.getTorneo());
+	        bindingResult.reject("partita.incompatibileData", e.getMessage());
+	        caricaDatiFormPartita(partita, model);
 	        return "partite/form";
 	    }
+	    
 		return "redirect:/torneo/" + partita.getTorneo().getId();
+	}
+	
+	//metodo helper privato per evitare codice duplicato
+	private void caricaDatiFormPartita(Partita partita, Model model) {
+	    model.addAttribute("squadre", this.squadraService.getAllSquadre());
+	    model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
+	    if (partita.getTorneo() != null && partita.getTorneo().getId() != null) {
+	        model.addAttribute("torneo", this.torneoService.getTorneo(partita.getTorneo().getId()));
+	    }
 	}
 	
 	/* PER INSERIMENTO RISULTATO PARTITA */
@@ -120,7 +124,7 @@ public class PartitaController {
 	
 	@PostMapping("/admin/partita/{id}/risultato")
 	public String salvaRisultato(@PathVariable("id") Long id, 
-			@ModelAttribute("partita") Partita partitaModificata,
+			@Valid @ModelAttribute("partita") Partita partitaModificata,
 			BindingResult bindingResult, Model model) {
 		
 		Partita partitaOriginale = this.partitaService.getPartita(id);
@@ -152,7 +156,7 @@ public class PartitaController {
 	    try {
 	        this.partitaService.savePartita(partitaOriginale);
 	    } catch (RuntimeException e) {
-	        bindingResult.reject("Impossibile salvare il risultato: " + e.getMessage());
+	        bindingResult.reject("partita.salvataggioRisultatoFallito", e.getMessage());
 	        partitaModificata.setStato(partitaOriginale.getStato());
 	        return "admin/partite/formRisultato";
 	    }

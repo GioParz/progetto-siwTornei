@@ -121,7 +121,7 @@ public class Giocatore {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cognome, dataNascita, ruolo);
+		return Objects.hash(nome, cognome, dataNascita, ruolo);
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class Giocatore {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Giocatore other = (Giocatore) obj;
-		return Objects.equals(cognome, other.cognome) 
+		return  Objects.equals(nome, other.nome) && Objects.equals(cognome, other.cognome) 
 				&& Objects.equals(dataNascita, other.dataNascita)
 				&& Objects.equals(ruolo, other.ruolo);
 	}

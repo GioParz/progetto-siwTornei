@@ -1,5 +1,6 @@
 package it.uniroma3.tornei.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -34,10 +35,10 @@ public class Torneo {
 	private String descrizione;
 	
 	@ManyToMany
-	private List<Squadra> squadre;
+	private List<Squadra> squadre = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "torneo", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<Partita> partite;
+	private List<Partita> partite = new ArrayList<>();
 	
 	public Long getId() {
 		return id;

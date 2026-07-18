@@ -12,13 +12,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler {
 	
 	@ExceptionHandler({
-		ArbitroDuplicatoException.class,
-        ArbitroOccupatoException.class,
-        GiocatoreDuplicatoException.class,
-        IncompatibilitaDataPartitaException.class,
         ModificaAnnoTorneoException.class,
-        SquadraDuplicataException.class,
-        TorneoDuplicatoException.class,
         TorneoInUsoException.class
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
