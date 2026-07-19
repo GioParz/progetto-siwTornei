@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title>Accesso Negato - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <a th:href="@{/tornei}" class="login-link">Tornei</a>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        
-	        <div class="error-container">
-	            <div class="logo-container">
-	                <div class="logo-error">403</div>
-	            </div>
-	            
-	            <h2 class="error-subtitle">Accesso Negato</h2>
-	            
-	            <p class="welcome-text font-size-md margin-bottom-lg">
-					Cartellino rosso! Non hai l'autorizzazione per accedere o modificare questa risorsa. 
-					L'ingresso in questa area del campo è riservato unicamente ai titolari o agli amministratori.
-	            </p>
-	            
-	            <div class="admin-section">
-	                <a th:href="@{/}" class="main-link">Torna alla Home Page</a>
-	            </div>
-	        </div>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/tornei}" class="back-link">← Vedi i tornei disponibili</a>
-	        </div>
-	    </main>
-	
-	</body>
+<head>
+    <title>Accesso Negato - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <main class="main-content">
+        <div class="error-container">
+            <div class="logo-container">
+                <div class="logo-error">403</div>
+            </div>
+            
+            <h2 class="error-subtitle">Accesso Negato</h2>
+            
+            <p class="welcome-text font-size-md margin-bottom-lg">
+                Cartellino rosso! Non hai l'autorizzazione per accedere o modificare questa risorsa. 
+                L'ingresso in questa area del campo è riservato unicamente ai titolari o agli amministratori.
+            </p>
+            
+            <div class="admin-section">
+                <a th:href="@{/}" class="main-link">Torna alla Home Page</a>
+            </div>
+        </div>
+    </main>
+
+</body>
 </html>

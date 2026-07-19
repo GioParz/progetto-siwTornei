@@ -1,42 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title>Errore di Sistema - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <a th:href="@{/tornei}" class="login-link">Tornei</a>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	         
-	        <div class="error-container">
-	            <div class="logo-container">
-	                <div class="logo-error">500</div>
-	            </div>
-	             
-	            <h2 class="error-subtitle" style="color: #ef4444;">Errore del Server</h2>
-	             
-	            <p class="welcome-text font-size-md margin-bottom-lg">
-	                Qualcosa è andato storto durante l'elaborazione della tua richiesta. 
-	                Il nostro sistema ha subito un fallo tattico! Ti invitiamo a riprovare più tardi.
-	            </p>
-	             
-	            <div class="admin-section">
-	                <a th:href="@{/}" class="main-link">Torna alla Home Page</a>
-	            </div>
-	        </div>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/tornei}" class="back-link">← Torna alla navigazione sicura</a>
-	        </div>
-	    </main>
-	
-	</body>
+<head>
+    <title>Errore di Sistema - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <main class="main-content">
+        <div class="error-container">
+            <div class="logo-container">
+                <div class="logo-error">500</div>
+            </div>
+             
+            <h2 class="error-subtitle">Errore del Server</h2>
+             
+            <p class="welcome-text font-size-md margin-bottom-lg">
+                Qualcosa è andato storto durante l'elaborazione della tua richiesta. 
+                Il nostro sistema ha subito un fallo tactical! Ti invitiamo a riprovare più tardi.
+            </p>
+             
+            <div class="admin-section">
+                <a th:href="@{/}" class="main-link">Torna alla Home Page</a>
+            </div>
+        </div>
+    </main>
+
+</body>
 </html>

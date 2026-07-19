@@ -1,62 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title th:text="${squadra.id != null} ? 'Modifica Squadra' : 'Nuova Squadra'">Gestione Squadra</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar top-bar-admin">
-	        <div class="top-bar-right">
-	            <span class="welcome-user" style="color: #ef4444; font-weight: 700;">PANNELLO AMMINISTRATORE</span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder" 
-	                 th:text="${squadra.id != null} ? 'Modifica Club' : 'Registra Nuovo Club'"
-	                 th:classappend="${squadra.id != null} ? 'logo-admin' : ''">
-	                 Gestione Squadra
-	            </div>
-	        </div>
-	
-	        <form th:action="${squadra.id != null} ? @{/admin/squadra/{id}/edit(id=${squadra.id})} : @{/admin/squadre}" 
-	              th:object="${squadra}" method="post" class="stadium-form">
-	            
-	            <div class="form-group">
-	                <label>Nome del Club</label>
-	                <input type="text" th:field="*{nome}" placeholder="Es: Raptors FC" />
-					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="form-group">
-	                <label>Anno di Fondazione</label>
-	                <input type="number" th:field="*{annoFondazione}" placeholder="Es: 2018" />
-					<span th:if="${#fields.hasErrors('annoFondazione')}" th:errors="*{annoFondazione}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="form-group">
-	                <label>Città</label>
-	                <input type="text" th:field="*{citta}" placeholder="Es: Roma" />
-					<span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="margin-top-lg">
-	                <button type="submit" class="main-link" 
-	                        th:text="${squadra.id != null} ? 'Salva Modifiche' : 'Registra Squadra'"
-	                        th:classappend="${squadra.id != null} ? 'btn-admin' : ''">
-	                        Invia
-	                </button>
-	            </div>
-	        </form>
-	        
-	        <div class="margin-top-lg">
-	            <a th:href="@{/squadre}" class="back-link">Annulla e torna alla lista</a>
-	        </div>
-	    </main>
-	
-	</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title th:text="${squadra.id != null} ? 'Modifica Squadra' : 'Nuova Squadra'">Gestione Squadra</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar admin-bar">
+        <div class="top-bar-right">
+            <span class="welcome-user"><strong class="panel-admin-text">PANNELLO ADMIN</strong></span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <!-- Box Titolo centrato (Variante Rossa in caso di modifica tramite box-admin) -->
+        <div>
+            <div class="title-box" 
+                 th:text="${squadra.id != null} ? 'Modifica Club' : 'Registra Nuovo Club'"
+                 th:classappend="${squadra.id != null} ? 'box-admin' : ''">
+                 Gestione Squadra
+            </div>
+        </div>
+
+        <form th:action="${squadra.id != null} ? @{/admin/squadra/{id}/edit(id=${squadra.id})} : @{/admin/squadre}" 
+              th:object="${squadra}" method="post" class="stadium-form">
+            
+            <div class="form-group">
+                <label>Nome del Club</label>
+                <input type="text" th:field="*{nome}" placeholder="Es: Raptors FC" />
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="field-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Anno di Fondazione</label>
+                <input type="number" th:field="*{annoFondazione}" placeholder="Es: 2018" />
+                <span th:if="${#fields.hasErrors('annoFondazione')}" th:errors="*{annoFondazione}" class="field-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Città</label>
+                <input type="text" th:field="*{citta}" placeholder="Es: Roma" />
+                <span th:if="${#fields.hasErrors('citta')}" th:errors="*{citta}" class="field-error"></span>
+            </div>
+            
+            <div class="margin-top-lg">
+                <button type="submit" class="main-link" 
+                        th:text="${squadra.id != null} ? 'Salva Modifiche' : 'Registra Squadra'"
+                        th:classappend="${squadra.id != null} ? 'btn-admin' : ''">
+                        Invia
+                </button>
+            </div>
+        </form>
+        
+        <div class="margin-top-lg">
+            <a th:href="@{/squadre}" class="back-link">Annulla e torna alla lista</a>
+        </div>
+    </main>
+
+</body>
 </html>

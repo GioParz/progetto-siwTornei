@@ -1,78 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title>Registrazione - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <a th:href="@{/login}" class="login-link">Accedi</a>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder">Registrazione</div>
-	        </div>
-	
-	        <form th:action="@{/register}" method="post" class="stadium-form">
-	            
-	            <!-- Sotto-sezione Anagrafica -->
-	            <h3 class="section-title font-size-md margin-bottom-md">Dati Anagrafici</h3>
-	            
-				<div th:object="${credentials.utente}">
-					<div class="form-group">
-						<label>Nome:</label>
-						<input type="text" th:field="*{nome}" />
-						<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
-					</div>
-				
-					<div class="form-group">
-						<label>Cognome:</label>
-						<input type="text" th:field="*{cognome}" />
-						<span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" style="color: red;"></span>
-					</div>
-				
-					<div class="form-group">
-						<label>Email:</label>
-						<input type="email" th:field="*{email}" />
-						<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></span>
-					</div>
-				</div>
-	
-	            <!-- Sotto-sezione Credenziali -->
-	            <h3 class="section-title font-size-md margin-top-xl margin-bottom-md">Dati di Accesso</h3>
-	
-				<div th:object="${credentials}">
-					<div class="form-group">
-						<label>Username:</label>
-						<input type="text" th:field="*{username}" />
-						<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;"></span>
-					</div>
-				
-					<div class="form-group">
-						<label>Password:</label>
-						<input type="password" th:field="*{password}" />
-						<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></span>
-					</div>
-				</div>
-	
-	            <div class="margin-top-lg">
-	                <button type="submit" class="main-link">Conferma Registrazione</button>
-	            </div>
-	        </form>
-	
-	        <div class="margin-top-lg">
-	            <p class="welcome-text font-size-md">
-	                Hai già un account? <a th:href="@{/login}" class="action-link-view">Accedi qui</a>
-	            </p>
-	            <a th:href="@{/tornei}" class="back-link">← Torna alla lista dei tornei</a>
-	        </div>
-	    </main>
-	
-	</body>
+<head>
+    <title>Registrazione - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <a th:href="@{/}" class="login-link">Home</a>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box">Registrazione</div>
+        </div>
+
+        <form th:action="@{/register}" method="post" class="stadium-form">
+            
+            <!-- Sotto-sezione Anagrafica -->
+            <h2 class="section-title">Dati Anagrafici</h2>
+            
+            <div th:object="${credentials.utente}">
+                <div class="form-group">
+                    <label>Nome</label>
+                    <input type="text" th:field="*{nome}" placeholder="Inserisci il tuo nome" />
+                    <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="field-error"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label>Cognome</label>
+                    <input type="text" th:field="*{cognome}" placeholder="Inserisci il tuo cognome" />
+                    <span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" class="field-error"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" th:field="*{email}" placeholder="esempio@email.com" />
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="field-error"></span>
+                </div>
+            </div>
+
+            <!-- Sotto-sezione Credenziali -->
+            <h2 class="section-title margin-top-lg">Dati di Accesso</h2>
+
+            <div th:object="${credentials}">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" th:field="*{username}" placeholder="Scegli un username" />
+                    <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="field-error"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" th:field="*{password}" placeholder="Crea una password" />
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="field-error"></span>
+                </div>
+            </div>
+
+            <div class="margin-top-lg">
+                <button type="submit" class="main-link">Conferma Registrazione</button>
+            </div>
+        </form>
+
+        <div class="margin-top-lg">
+            <p class="no-data-msg">
+                Hai già un account? <a th:href="@{/login}" class="action-link-view">Accedi qui</a>
+            </p>
+        </div>
+    </main>
+
+</body>
 </html>

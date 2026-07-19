@@ -1,46 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	<head>
-		<title>Pannello Amministratore</title>
-	</head>
-	
-	<body>
-		
-		<header>
-			<h1>Pannello di Controllo Amministrativo</h1>
-			<p>Benvenuto, <strong sec:authentication="name">Admin</strong> (Ruolo: ADMIN) </p>
-			
-			<nav>
-				<a th:href="@{/}">Torna alla Home</a> |
-				<a th:href="@{/tornei}">Visualizza i Tornei</a> |
-				
-				<form th:action="@{/logout}" method="post" style="display: inline;">
-					<button type="submit">Esci (Logout)</button>
-				</form>
-			</nav>
-		</header>
-		
-		<hr>
-		
-		<main>
-			<h3>Operazioni di Gestione</h3>	
-			<ul>
-				<li>
-					<a th:href="@{/admin/torneo/new}"><strong>Crea un Nuovo Torneo</strong></a>
-				</li>
-				<li>
-					<a th:href="@{/admin/arbitro/new}"><strong>Inserisci un Nuovo Arbitro</strong></a>
-				</li>
-				<li>
-					<a th:href="@{/admin/squadra/new}"><strong>Aggiungi una Nuova Squadra</strong></a>
-				</li>
-				<li>
-					<p>Usa la lista dei tornei per inserire nuove partite, modificare i risultati o eliminare eventi</p>
-					<p>Usa la lista delle squadre per inserire nuovi giocatori, modificare le loro schede o rimuoverli dal sito</p>
-				</li>
-			</ul>
-		</main>
-		
-	</body>
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Pannello Amministratore - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Barra superiore Admin (Riga inferiore Rossa) -->
+    <div class="top-bar admin-bar">
+        <div class="top-bar-right">
+            <span class="user-menu">
+                <span class="welcome-user"><strong class="panel-admin-text">PANNELLO ADMIN</strong> (Ciao, <span sec:authentication="name">Admin</span>!)</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <div class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </div>
+
+    <!-- Contenuto operativo Admin -->
+    <main class="main-content">
+        <h1 class="welcome-text">Bentornato, ADMIN! Di cosa ci occupiamo oggi?</h1>
+
+        <div class="buttons-container">
+            <a th:href="@{/admin/torneo/new}" class="main-link admin-btn">+ Crea Nuovo Torneo</a>
+            <a th:href="@{/admin/squadra/new}" class="main-link admin-btn">+ Inserisci Nuova Squadra</a>
+            <a th:href="@{/admin/arbitro/new}" class="main-link admin-btn">+ Inserisci Nuovo Arbitro</a>
+        </div>
+
+        <div class="margin-top-lg">
+            <a th:href="@{/}" class="back-link">← Torna alla Home pubblica</a>
+        </div>
+    </main>
+
+</body>
 </html>

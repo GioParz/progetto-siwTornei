@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
@@ -32,6 +33,9 @@ public class Utente {
 	@Email
 	@Column(unique = true, nullable = false)
 	private String email;
+	
+	@OneToOne(mappedBy = "utente")
+	private Credentials credentials;
 
 	public Long getId() {
 		return id;
@@ -63,6 +67,14 @@ public class Utente {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Credentials getCredentials() {
+		return credentials;
+	}
+
+	public void setCredentials(Credentials credentials) {
+		this.credentials = credentials;
 	}
 
 	@Override

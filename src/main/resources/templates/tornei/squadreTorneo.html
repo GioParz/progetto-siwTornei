@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" 
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Lista Squadre - SIWTornei</title>
+    <title>Squadre Partecipanti - SIWTornei</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -26,45 +26,38 @@
     </a>
 
     <main class="main-content">
+        <!-- Box centrale indicante il torneo specifico -->
         <div>
-            <div class="title-box">Club Partecipanti</div>
+            <div class="title-box" th:text="'Iscritti: ' + ${torneo.nome}">Squadre Torneo</div>
         </div>
 
-        <!-- Solo l'ADMIN può registrare una nuova Squadra -->
-        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
-            <a th:href="@{/admin/squadra/new}" class="main-link admin-btn">Registra Nuova Squadra</a>
-        </div>
+        <p th:if="${squadre.isEmpty()}" class="no-data-msg">Nessuna squadra ancora iscritta a questo torneo.</p>
 
-        <!-- Tabella -->
-        <table class="stadium-table table-centered">
+        <!-- Tabella con i Club iscritti al Torneo selezionato -->
+        <table class="stadium-table table-centered" th:if="${!squadre.isEmpty()}">
             <thead>
                 <tr>
-                    <th>Nome Squadra</th>
-                    <th>Azioni</th>
+                    <th>Nome Club</th>
+                    <th>Città</th>
+                    <th>Azione</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="squadra : ${squadre}">
                     <td th:text="${squadra.nome}">Nome Squadra</td>
+                    <td th:text="${squadra.citta}">Città</td>
                     <td>
                         <div class="action-buttons-cell">
-                            <a th:href="@{/squadra/{id}(id=${squadra.id})}" class="action-link-view">Visualizza</a>
-                            
-                            <!-- Azioni Admin -->
-                            <a sec:authorize="hasAuthority('ADMIN')" 
-                               th:href="@{/admin/squadra/{id}/edit(id=${squadra.id})}" 
-                               class="action-link-edit">Modifica</a>
-                               
-                            <a sec:authorize="hasAuthority('ADMIN')" 
-                               th:href="@{/admin/squadra/{id}/delete(id=${squadra.id})}"
-                               onclick="return confirm('Sei sicuro di voler eliminare questa squadra e tutti i suoi giocatori?');"
-                               class="action-link-delete">Elimina</a>
+                            <a th:href="@{/squadra/{id}(id=${squadra.id})}" class="action-link-view">Dettagli Club</a>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
 
+        <div class="margin-top-lg">
+            <a th:href="@{/torneo/{id}(id=${torneo.id})}" class="back-link">← Torna al dettaglio del torneo</a>
+        </div>
     </main>
 
 </body>

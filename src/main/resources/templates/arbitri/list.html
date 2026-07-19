@@ -1,65 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title>Elenco Arbitri - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar top-bar-admin">
-	        <div class="top-bar-right">
-	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder logo-admin">Classe Arbitrale</div>
-	        </div>
-	
-	        <div class="flex-row-between margin-bottom-md">
-	            <h2>Arbitri Registrati</h2>
-	        </div>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Elenco Arbitri - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="login-link">Accedi</a>
+            </span>
+            <span sec:authorize="isAuthenticated()" class="user-menu">
+                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+
+        <div>
+            <div class="title-box">Classe Arbitrale</div>
+        </div>
 			
-			<div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
-				<a th:href="@{/admin/arbitro/new}" class="main-link btn-admin">+ Registra Nuovo Arbitro</a>
-			</div>
-	
-	        <!-- Se la lista è vuota -->
-	        <div th:if="${#lists.isEmpty(arbitri)}" class="no-data-box">
-	            Non ci sono arbitri registrati nel sistema.
-	        </div>
-	
-	        <!-- Tabella Arbitri -->
-	        <table class="stadium-table" th:unless="${#lists.isEmpty(arbitri)}">
-	            <thead>
-	                <tr>
-	                    <th>Codice AIA</th>
-	                    <th>Cognome</th>
-	                    <th>Nome</th>
-	                    <th class="text-center">Azioni</th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	                <tr th:each="arbitro : ${arbitri}">
-	                    <td class="font-bold text-accent" th:text="${arbitro.codiceAIA}">AIA-9999</td>
-	                    <td th:text="${arbitro.cognome}">Cognome</td>
-	                    <td th:text="${arbitro.nome}">Nome</td>
-	                    <td class="text-center actions-cell">
-	                        <a th:href="@{/arbitro/{id}(id=${arbitro.id})}" class="action-btn view-btn">Visualizza</a>
-	                        <a th:href="@{/admin/arbitro/{id}/delete(id=${arbitro.id})}" class="action-btn delete-btn" 
-	                           onclick="return confirm('Sicuro di voler eliminare questo arbitro?');">Elimina</a>
-	                    </td>
-	                </tr>
-	            </tbody>
-	        </table>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/}" class="back-link">Torna alla Home</a>
-	        </div>
-	    </main>
-	
-	</body>
+        <!-- Pulsante visibile solo all'ADMIN per registrare -->
+        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
+            <a th:href="@{/admin/arbitro/new}" class="main-link admin-btn">Registra Nuovo Arbitro</a>
+        </div>
+
+        <!-- Messaggio Lista Vuota -->
+        <div th:if="${#lists.isEmpty(arbitri)}" class="no-data-msg">
+            Non ci sono arbitri registrati nel sistema.
+        </div>
+
+        <!-- Tabella Arbitri Centrata -->
+        <table class="stadium-table table-centered" th:unless="${#lists.isEmpty(arbitri)}">
+            <thead>
+                <tr>
+                    <th>Codice AIA</th>
+                    <th>Cognome</th>
+                    <th>Nome</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="arbitro : ${arbitri}">
+                    <td th:text="${arbitro.codiceAIA}">AIA-9999</td>
+                    <td th:text="${arbitro.cognome}">Cognome</td>
+                    <td th:text="${arbitro.nome}">Nome</td>
+                    <td>
+                        <div class="action-buttons-cell">
+                            <a th:href="@{/arbitro/{id}(id=${arbitro.id})}" class="action-link-view">Visualizza</a>
+                            
+                            <!-- Eliminazione riservata all'ADMIN -->
+                            <a sec:authorize="hasAuthority('ADMIN')" 
+                               th:href="@{/admin/arbitro/{id}/delete(id=${arbitro.id})}" 
+                               class="action-link-delete" 
+                               onclick="return confirm('Sicuro di voler eliminare questo arbitro?');">Elimina</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
+
+</body>
 </html>

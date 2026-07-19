@@ -1,66 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" 
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	
-	<head>
-	    <title th:text="${giocatore.nome} + ' ' + ${giocatore.cognome} + ' - SIWTornei'">Dettaglio Giocatore</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <span sec:authorize="isAnonymous()">
-	                <a th:href="@{/login}" class="login-link">Accedi</a>
-	            </span>
-	            <span sec:authorize="isAuthenticated()" class="user-menu">
-	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
-	                <form th:action="@{/logout}" method="post">
-	                    <button type="submit" class="logout-btn">Logout</button>
-	                </form>
-	            </span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder">Profilo Atleta</div>
-	        </div>
-	
-	        <div class="info-box padding-lg">
-	            <!-- Solo l'ADMIN vede il tasto rapido di modifica -->
-	            <div sec:authorize="hasAuthority('ADMIN')" class="text-right margin-bottom-sm">
-	                <a th:href="@{/admin/giocatore/{id}/edit(id=${giocatore.id})}" class="action-link-edit font-size-md">Modifica Anagrafica</a>
-	            </div>
-	
-	            <!-- Nome e Cognome in grande risalto -->
-	            <h2 class="text-center font-size-lg no-margin margin-bottom-lg" 
-	                th:text="${giocatore.nome} + ' ' + ${giocatore.cognome}">
-	                Nome Cognome
-	            </h2>
-	
-	            <div class="match-meta-details" style="max-width: 400px; margin: 0 auto;">
-	                <p><strong>Club di Appartenenza:</strong> 
-	                    <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="admin-text-highlight" style="text-decoration: underline;" 
-						   th:text="${giocatore.squadra.nome != null ? giocatore.squadra.nome : 'Attualmente non assegnato a nessuna squadra'}">Squadra</a>
-	                </p>
-	                <p><strong>Data di Nascita:</strong> 
-	                    <span th:text="${giocatore.dataNascita != null ? #temporals.format(giocatore.dataNascita, 'dd/MM/yyyy') : 'Non specificata'}">01/01/2000</span>
-	                </p>
-	                <p><strong>Ruolo:</strong> 
-	                    <span class="badge-scheduled" th:text="${giocatore.ruolo}">RUOLO</span>
-	                </p>
-	                <p><strong>Altezza:</strong> 
-	                    <span th:text="${giocatore.altezza != null ? giocatore.altezza + ' cm' : 'Non specificata'}">180 cm</span>
-	                </p>
-	            </div>
-	        </div>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="back-link">← Torna alla squadra</a>
-	        </div>
-	    </main>
-	
-	</body>
+<head>
+    <title th:text="${giocatore.nome} + ' ' + ${giocatore.cognome} + ' - SIWTornei'">Dettaglio Giocatore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="login-link">Accedi</a>
+            </span>
+            <span sec:authorize="isAuthenticated()" class="user-menu">
+                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box">Profilo Atleta</div>
+        </div>
+
+        <div class="info-box">
+            <!-- Pulsante di Modifica per l'ADMIN -->
+            <div sec:authorize="hasAuthority('ADMIN')" class="text-right margin-bottom-sm">
+                <a th:href="@{/admin/giocatore/{id}/edit(id=${giocatore.id})}" class="action-link-edit">Modifica Anagrafica</a>
+            </div>
+
+            <!-- SPAZIO FOTO: con classe avatar -->
+            <div class="avatar-container">
+                <img th:src="${giocatore.fotoUrl != null} ? ${giocatore.fotoUrl} : @{/images/avatar-placeholder.png}" 
+                     alt="Foto Giocatore" class="player-photo">
+            </div>
+
+            <!-- Nome e Cognome in risalto -->
+            <h2 class="section-title text-center" th:text="${giocatore.nome} + ' ' + ${giocatore.cognome}">
+                Nome Cognome
+            </h2>
+
+            <div class="profile-details-box">
+                <p><strong>Club di Appartenenza:</strong> 
+                    <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="player-club-link"
+					   th:text="${giocatore.squadra.nome != null ? giocatore.squadra.nome : 'Attualmente non assegnato'}">Squadra</a>
+                </p>
+                <p><strong>Data di Nascita:</strong> 
+                    <span th:text="${giocatore.dataNascita != null ? #temporals.format(giocatore.dataNascita, 'dd/MM/yyyy') : 'Non specificata'}">01/01/2000</span>
+                </p>
+                <p><strong>Ruolo:</strong> 
+                    <span class="badge-scheduled" th:text="${giocatore.ruolo}">RUOLO</span>
+                </p>
+                <p><strong>Altezza:</strong> 
+                    <span th:text="${giocatore.altezza != null ? giocatore.altezza + ' cm' : 'Non specificata'}">180 cm</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="margin-top-lg">
+            <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="back-link">← Torna alla squadra</a>
+        </div>
+    </main>
+
+</body>
 </html>

@@ -1,65 +1,75 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'">Gestione Torneo</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <!-- Barra fittizia Admin per coerenza estetica -->
-	    <div class="top-bar top-bar-admin">
-	        <div class="top-bar-right">
-	            <span class="welcome-user" style="color: #ef4444; font-weight: 700;">PANNELLO AMMINISTRATORE</span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <!-- Il bordo cambia colore in rosso se siamo in modifica (id presente), altrimenti mantiene il classico verde neon -->
-	            <div class="logo-placeholder" 
-	                 th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Crea Nuovo Torneo'"
-	                 th:classappend="${torneo.id != null} ? 'logo-admin' : ''">
-	                 Gestione Torneo
-	            </div>
-	        </div>
-	
-	        <form th:action="${torneo.id != null} ? @{/admin/torneo/{id}/edit(id=${torneo.id})} : @{/admin/tornei}" 
-	              th:object="${torneo}" method="post" class="stadium-form">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'">Gestione Torneo</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar admin-bar">
+        <div class="top-bar-right">
+            <span class="welcome-user"><strong class="panel-admin-text">PANNELLO ADMIN</strong></span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        
+        <!-- Box del Titolo centrato (diventa rosso neon in modifica tramite box-admin) -->
+        <div>
+            <div class="title-box" 
+                 th:text="${torneo.id != null} ? 'Modifica Torneo' : 'Nuovo Torneo'"
+                 th:classappend="${torneo.id != null} ? 'box-admin' : ''">
+                 Nuovo Torneo
+            </div>
+        </div>
+
+        <!-- Form strutturato -->
+        <form th:action="${torneo.id != null} ? @{/admin/torneo/{id}/edit(id=${torneo.id})} : @{/admin/tornei}" 
+              th:object="${torneo}" method="post" class="stadium-form">
+			  
+			<div th:if="${#fields.hasGlobalErrors()}" class="error-msg">
+				<ul class="no-margin">
+					<li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore di validazione globale</li>
+				</ul>
+			</div>
 				  
-				<div class="form-group">
-	                <label>Nome del Torneo</label>
-	                <input type="text" th:field="*{nome}" placeholder="Es: Champions League Amatoriale" />
-					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="form-group">
-	                <label>Edizione (Anno)</label>
-	                <input type="number" th:field="*{anno}" placeholder="Es: 2026" />
-					<span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="form-group">
-	                <label>Descrizione Breve</label>
-	                <input type="text" th:field="*{descrizione}" placeholder="Es: Torneo estivo di Calcio a 5" />
-					<span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="margin-top-lg">
-	                <!-- Il pulsante diventa rosso in caso di modifica -->
-	                <button type="submit" class="main-link" 
-	                        th:text="${torneo.id != null} ? 'Salva Modifiche' : 'Crea Torneo'"
-	                        th:classappend="${torneo.id != null} ? 'btn-admin' : ''">
-	                        Invia
-	                </button>
-	            </div>
-	        </form>
-	        
-	        <div class="margin-top-lg">
-	            <a th:href="@{/tornei}" class="back-link">Annulla e torna alla lista</a>
-	        </div>
-	    </main>
-	
-	</body>
+            <div class="form-group">
+                <label>Nome del Torneo</label>
+                <input type="text" th:field="*{nome}" placeholder="Es: Champions League Amatoriale" />
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="field-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Edizione (Anno)</label>
+                <input type="number" th:field="*{anno}" placeholder="Es: 2026" />
+                <span th:if="${#fields.hasErrors('anno')}" th:errors="*{anno}" class="field-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Descrizione Breve</label>
+                <input type="text" th:field="*{descrizione}" placeholder="Es: Torneo estivo di Calcio a 5" />
+                <span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}" class="field-error"></span>
+            </div>
+            
+            <div class="margin-top-lg">
+                <!-- Il bottone prende la variante rossa btn-admin se siamo in modifica -->
+                <button type="submit" class="main-link" 
+                        th:text="${torneo.id != null} ? 'Salva Modifiche' : 'Crea Torneo'"
+                        th:classappend="${torneo.id != null} ? 'btn-admin' : ''">
+                        Invia
+                </button>
+            </div>
+        </form>
+        
+        <div class="margin-top-lg">
+            <a th:href="@{/tornei}" class="back-link">Annulla e torna alla lista</a>
+        </div>
+    </main>
+
+</body>
 </html>

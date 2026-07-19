@@ -1,55 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registra Arbitro - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar admin-bar">
+        <div class="top-bar-right">
+            <span class="welcome-user"><strong class="panel-admin-text">PANNELLO ADMIN</strong></span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box box-admin">Nuova Anagrafica</div>
+        </div>
+
+        <form th:action="@{/admin/arbitri}" th:object="${arbitro}" method="post" class="stadium-form">
+            
+            <!-- Contenitore Errori Globali del Backend -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="error-msg">
+                <ul class="no-margin">
+                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore globale</li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" th:field="*{nome}" placeholder="Inserisci il nome" />
+                <span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="field-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Cognome</label>
+                <input type="text" th:field="*{cognome}" placeholder="Inserisci il cognome" />
+                <span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" class="field-error"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Codice AIA</label>
+                <input type="text" th:field="*{codiceAIA}" placeholder="Es: AIA-54321" />
+                <span th:if="${#fields.hasErrors('codiceAIA')}" th:errors="*{codiceAIA}" class="field-error"></span>
+            </div>
+
+            <div class="margin-top-lg">
+                <button type="submit" class="main-link admin-btn">Registra Arbitro</button>
+            </div>
+        </form>
 	
-	<head>
-	    <title>Registra Arbitro - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar top-bar-admin">
-	        <div class="top-bar-right">
-	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder logo-admin">Nuova Anagrafica</div>
-	        </div>
-	
-	        <h2 class="text-center">Registrazione Nuovo Arbitro</h2>
-	
-	        <form th:action="@{/admin/arbitri}" th:object="${arbitro}" method="post" class="stadium-form">
-	            
-	            <div class="form-group">
-	                <label>Nome</label>
-	                <input type="text" th:field="*{nome}" placeholder="Inserisci il nome" />
-					<span th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="form-group">
-	                <label>Cognome</label>
-	                <input type="text" th:field="*{cognome}" placeholder="Inserisci il cognome" />
-					<span th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}" style="color: red;"></span>
-	            </div>
-	            
-	            <div class="form-group">
-	                <label>Codice AIA</label>
-	                <input type="text" th:field="*{codiceAIA}" placeholder="Es: AIA-54321" />
-					<span th:if="${#fields.hasErrors('codiceAIA')}" th:errors="*{codiceAIA}" style="color: red;"></span>
-	            </div>
-	
-	            <div class="margin-top-lg">
-	                <button type="submit" class="main-link btn-admin">Registra Arbitro</button>
-	            </div>
-	        </form>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/arbitri}" class="back-link">Annulla e torna alla lista</a>
-	        </div>
-	    </main>
-	
-	</body>
+        <div class="margin-top-lg">
+            <a th:href="@{/arbitri}" class="back-link">Annulla e torna alla lista</a>
+        </div>
+    </main>
+
+</body>
 </html>

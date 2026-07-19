@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Pagina Non Trovata - SIWTornei</title>
+    <title>Richiesta Errata - SIWTornei</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
     <main class="main-content">
-        <div class="error-container">
+        <div class="error-container page-error-400">
             <div class="logo-container">
-                <div class="logo-error">404</div>
+                <div class="logo-error">400</div>
             </div>
              
-            <h2 class="error-subtitle">Risorsa Non Trovata</h2>
+            <h2 class="error-subtitle">Richiesta Errata</h2>
              
             <p class="welcome-text font-size-md margin-bottom-lg">
-                La pagina, il torneo o la squadra che stai cercando sembra essere "fuorigioco". 
-                Verifica che l'indirizzo inserito sia corretto o che la risorsa non sia stata eliminata.
+                La richiesta inviata al server non è valida. Sembra esserci stato un "errore di impostazione" o un passaggio impreciso nei dati inviati! 
+                Verifica le informazioni inserite e riprova.
             </p>
              
             <div class="admin-section">

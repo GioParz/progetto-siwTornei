@@ -1,41 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifica Commento - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <a th:href="@{/}" class="login-link">Home</a>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box">Modifica Commento</div>
+        </div>
+
+        <form th:action="@{/commento/{id}/edit(id=${commento.id})}" th:object="${commento}" method="post" class="stadium-form">
+            
+            <!-- Contenitore Errori Globali del Backend -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="error-msg">
+                <ul class="no-margin">
+                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore globale sulla modifica</li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <label>Il tuo messaggio</label>
+                <textarea th:field="*{testo}" rows="5" placeholder="Modifica il testo del tuo commento..."></textarea>
+                <span th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}" class="field-error"></span>
+            </div>
+
+            <div class="margin-top-lg">
+                <button type="submit" class="main-link">Aggiorna Commento</button>
+            </div>
+        </form>
 	
-	<head>
-	    <title>Modifica Commento - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <a th:href="@{/}" class="login-link">Home</a>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder">Modifica</div>
-	        </div>
-	
-	        <form th:action="@{/commento/{id}/edit(id=${commento.id})}" th:object="${commento}" method="post" class="stadium-form">
-	            
-	            <div class="form-group">
-	                <label>Il tuo messaggio</label>
-	                <textarea th:field="*{testo}" rows="5"></textarea>
-					<span th:if="${#fields.hasErrors('testo')}" th:errors="*{testo}" style="color: red;"></span>
-	            </div>
-	
-	            <div class="margin-top-lg">
-	                <button type="submit" class="main-link padding-btn-sm font-size-sm">Aggiorna Commento</button>
-	            </div>
-	        </form>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/partita/{id}(id=${commento.partita.id})}" class="back-link">Annulla e torna alla partita</a>
-	        </div>
-	    </main>
-	
-	</body>
+        <div class="margin-top-lg">
+            <a th:href="@{/partita/{id}(id=${commento.partita.id})}" class="back-link">← Annulla e torna alla partita</a>
+        </div>
+    </main>
+
+</body>
 </html>

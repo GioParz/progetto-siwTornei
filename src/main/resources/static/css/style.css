@@ -1,95 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap');
 
-/* STILE DI BASE DEL SITO */
+/* ==========================================================================
+   1. STILE DI BASE ED ELEMENTI GLOBALI
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
-    margin: 0; /* via ogni spazio di default del browser per attaccare la barra blu ai bordi */
+    margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
     background-color: #0f172a;
-    color: #f8fafc; 
-}
-
-.top-bar {
-    background-color: #1e3a8a;
-    padding: 10px 20px; /* spazio interno sopra/sotto 10px e destra/sinistra 20px */
-    height: 50px;
-    display: flex; /* trasforma la barra in un binario flessibile */
-    justify-content: flex-end;
-    align-items: center;
-    border-bottom: 2px solid #ccff00; /* sottile linea verde lime sotto la barra */
-    box-shadow: 0 4px 15px rgba(204, 255, 0, 0.1); /* effetto leggera ombra neon sotto la barra */
-}
-
-.top-bar-right a.login-link {
-    color: white;
-    text-decoration: none;
-    font-weight: 700;
-    text-transform: uppercase; /* forza il testo a diventare maiuscolo */
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    transition: color 0.2s; /* il cambio di colore avviene sfumato in 0.2s */
-}
-
-.top-bar-right a.login-link:hover {
-    color: #ccff00; /* al passaggio del mouse si accende di verde neon */
-}
-
-.user-menu {
-    display: flex;
-    flex-direction: column; /* mette le scritte in colonna */
-    align-items: flex-end;
-}
-
-.welcome-user {
-    color: white;
-    font-size: 13px;
-    font-weight: 400;
-}
-
-.welcome-user strong {
-    color: #ccff00; /* il nome utente loggato si illumina in neon */
-    font-weight: 700;
-}
-
-.logout-btn {
-    background: none; /* annulla lo stile natio dei bottoni HTML */
-    border: none;
-    color: #94a3b8;
-    font-size: 11px;
-    cursor: pointer; /* fa apparire la manina del mouse */
-    padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: color 0.2s;
-}
-
-.logout-btn:hover {
-    color: #ff3333; /* il tasto logout si accende di rosso quando ci passi sopra */
+    color: #f8fafc;
 }
 
 .main-content {
     max-width: 800px;
-    margin: 60px auto; /* 60px sopra/sotto e automatico a destra/sinistra */
+    margin: 50px auto;
     text-align: center;
     padding: 0 20px;
-}
-
-.logo-container {
-    margin-bottom: 35px;
-}
-
-.logo-placeholder {
-    font-size: 38px;
-    font-weight: 900; 
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: white;
-    background-color: #1e3a8a; 
-    border: 3px solid #ccff00; /* DETTAGLIO NEON: Cornice verde evidenziatore */
-    display: inline-block; /* il rettangolo si estende per la lunghezza del suo contenuto */
-    padding: 12px 35px; /* spazio interno tra la scritta e il bordo */
-    box-shadow: 0 0 20px rgba(204, 255, 0, 0.2); /* effetto bagliore */
 }
 
 .welcome-text {
@@ -100,90 +30,284 @@ body {
     line-height: 1.4;
 }
 
-.main-link {
+/* Link di ritorno mini (in fondo alle pagine) */
+.back-link, .back-home-link {
     display: inline-block;
-    background-color: #2563eb; 
+    margin-top: 30px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+}
+
+.back-link:hover, .back-home-link:hover {
+    color: white;
+}
+
+/* ==========================================================================
+   2. TOP BAR & NAVIGAZIONE (PUBBLICA E ADMIN)
+   ========================================================================== */
+.top-bar {
+    background-color: #1e3a8a;
+    padding: 10px 20px;
+    height: 50px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-bottom: 2px solid #ccff00; /* Linea verde neon di base */
+    box-shadow: 0 4px 15px rgba(204, 255, 0, 0.1);
+}
+
+/* Modificatore per la sezione Admin: cambia lo sfondo in scuro e la linea inferiore in rosso */
+.top-bar.admin-bar, .top-bar-admin {
+    background-color: #111827;
+    border-bottom: 2px solid #ef4444;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+}
+
+.panel-admin-text {
+    color: #ff4a4a !important;
+}
+
+/* Contenuti Top Bar (Utente e Login) */
+.top-bar-right {
+    display: flex;
+    align-items: center;
+}
+
+.top-bar-right a.login-link {
     color: white;
     text-decoration: none;
-    padding: 14px 30px;
-    border-radius: 4px; /* angoli leggermente smussati */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.top-bar-right a.login-link:hover {
+    color: #ccff00;
+}
+
+.user-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.welcome-user {
+    color: white;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.welcome-user strong {
+    color: #ccff00; /* Nome utente in verde neon */
+    font-weight: 700;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.logout-btn:hover {
+    color: #ff3333;
+}
+
+/* Scritta PANNELLO ADMIN (In alto a destra nelle sezioni speciali dell'admin) */
+.panel-admin-text {
+    color: #ef4444;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   3. GESTIONE LOGO & IMMAGINI
+   ========================================================================== */
+.logo-container, .logo-wrapper {
+    width: 100%;
+    display: block;
+    line-height: 0;
+    margin-bottom: 35px;
+}
+
+.logo-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Stemma della squadra (forma squadrata/arrotondata) */
+.team-crest {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    object-fit: contain;
+    border: 2px solid #334155;
+    background-color: #1e293b;
+    padding: 10px;
+}
+
+/* Immagine del profilo atleta (forma circolare) */
+.player-photo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccff00;
+    background-color: #1e293b;
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.2);
+}
+
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   4. TITOLI IN BOX CON EFFETTO NEON
+   ========================================================================== */
+.title-box {
+    font-size: 26px;
+    font-weight: 900; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+    background-color: #1e3a8a; 
+    border: 3px solid #ccff00; /* Bordo Neon Verde */
+    display: inline-block; 
+    padding: 10px 30px; 
+    box-shadow: 0 0 20px rgba(204, 255, 0, 0.2);
+    margin-bottom: 35px;
+}
+
+/* Variante rossa per il Box Titolo (Pannello / Modifica Admin) */
+.title-box.box-admin, .logo-admin {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2) !important;
+}
+
+.section-title {
+    text-align: left;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 10px;
+    color: white;
+    margin-top: 40px;
+}
+
+/* ==========================================================================
+   5. PULSANTI, INTERAZIONI ED EFFETTI NEON / SOLLEVAMENTO
+   ========================================================================== */
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.main-link, .btn-primary {
+    display: inline-block;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    padding: 14px 35px;
+    border-radius: 4px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 14px;
-    border: 1px solid transparent; /* bordo invisibile che apparirà passandoci il mouse sopra */
+    border: 1px solid transparent;
     transition: all 0.2s ease;
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    cursor: pointer;
 }
 
-.main-link:hover {
+/* Effetto Ombra Neon Verde e Sollevamento */
+.main-link:hover, .btn-primary:hover {
     background-color: #1d4ed8;
-    border-color: #ccff00; /* DETTAGLIO NEON: Quando passi sul pulsante compare il bordo neon */
+    border-color: #ccff00;
     box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
-    transform: translateY(-2px); /* effetto movimento: si alza di 2 pixel */
+    transform: translateY(-3px);
 }
 
-.admin-section {
-    margin-top: 60px;
-    border-top: 1px dashed #334155;
-    padding-top: 30px;
-}
-
-.admin-section p {
-    color: #94a3b8;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-.admin-link {
+/* Modificatore per i bottoni in stile Admin (Base Rossa, illumina Verde all'hover) */
+.main-link.admin-btn, .admin-link, .btn-admin {
     display: inline-block;
-    background-color: #ef4444; /* Rosso admin */
-    color: white;
+    background-color: #ef4444 !important;
+    color: white !important;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 10px 24px !important;
     border-radius: 4px;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 12px;
     letter-spacing: 0.5px;
-    transition: background-color 0.2s;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3) !important;
+    cursor: pointer;
 }
 
-.admin-link:hover {
-    background-color: #b91c1c;
+.main-link.admin-btn:hover, .admin-link:hover, .btn-admin:hover {
+    background-color: #b91c1c !important;
+    border-color: #ccff00 !important; /* Mantiene la coerenza del bordo verde neon */
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.4) !important;
+    transform: translateY(-3px);
 }
 
-/* --- TABELLE E STILE TABELLONE SPORTIVO --- */
+/* ==========================================================================
+   6. STRUTTURE DELLE TABELLE SPORTIVE
+   ========================================================================== */
 .stadium-table {
     width: 100%;
-    border-collapse: collapse; /* elimina il doppio spazio tra i bordi delle celle */
+    border-collapse: collapse;
     margin: 25px 0;
     font-size: 14px;
     background-color: #1e293b;
     border-radius: 6px;
-    overflow: hidden; /* taglia gli spigoli interni per non farli uscire dagli angoli arrotondati */
+    overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .stadium-table thead tr {
     background-color: #1e3a8a;
     color: white;
-    text-align: left;
     text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 0.5px;
 }
 
-.stadium-table th, .stadium-table td {
+/* Forza la centratura di tutte le celle e intestazioni delle tabelle */
+.stadium-table th, 
+.stadium-table td,
+.stadium-table.table-centered th, 
+.stadium-table.table-centered td {
     padding: 12px 15px;
-    border-bottom: 1px solid #334155; /* linee divisorie discrete scure */
+    border-bottom: 1px solid #334155;
+    text-align: center !important;
+    vertical-align: middle !important;
 }
 
 .stadium-table tbody tr:last-of-type {
-    border-bottom: 2px solid #ccff00; /* fondo tabella neon */
+    border-bottom: 2px solid #ccff00; /* Fondo tabella neon verde */
 }
 
-/* Righe speciali */
+/* Stati e badge specifici all'interno delle tabelle */
 .team-retired {
     color: #64748b !important;
     background-color: #0f172a;
@@ -213,12 +337,17 @@ body {
     padding: 4px 12px;
     border-radius: 4px;
     font-weight: 900;
-    color: #ccff00; /* punteggi illuminati in neon */
+    color: #ccff00; /* Punteggi illuminati in neon */
     letter-spacing: 1px;
     display: inline-block;
 }
 
-/* Bottoni e link rapidi di azione dentro le tabelle */
+.table-highlight-points {
+    font-weight: 700;
+    color: #ccff00;
+}
+
+/* Bottoni di azione rapidi nelle celle */
 .action-buttons-cell {
     display: flex;
     gap: 10px;
@@ -240,38 +369,123 @@ body {
     text-decoration: underline;
 }
 
-/* --- SEZIONI INFO E FORM CARD --- */
+/* ==========================================================================
+   7. SEZIONI DETTAGLIO, CARD INFO E BLOCCHI PUNTEGGIO
+   ========================================================================== */
 .info-box {
     background-color: #1e293b;
     padding: 20px;
     border-radius: 6px;
     text-align: left;
     margin-bottom: 30px;
-    border-left: 4px solid #2563eb;
+    border-left: 4px solid #2563eb; /* Bordo azzurro/blu distintivo laterale */
 }
-.info-box p { margin: 8px 0; }
 
-.section-title {
-    text-align: left;
+.info-box p { 
+    margin: 8px 0; 
+}
+
+/* Evidenziazione nomi squadre e risultati nel blocco dati della partita */
+.match-highlight-teams {
     font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.match-highlight-teams span {
+    color: #ccff00; /* Risultato evidenziato in verde neon */
+    font-weight: 900;
+}
+
+/* Struttura Tabellone Scoreboard */
+.scoreboard-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 25px 0;
+}
+
+.scoreboard-col-team {
+    flex: 1;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.score-box-display {
+    background-color: #0f172a;
+    border: 2px solid #ccff00;
+    padding: 10px 25px;
+    font-size: 28px;
+    font-weight: 900;
+    color: #ccff00;
+    border-radius: 4px;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.2);
+}
+
+.competition-badge-zone {
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid #334155;
-    padding-bottom: 10px;
-    color: white;
-}
-
-.back-link {
-    color: #94a3b8;
-    text-decoration: none;
     font-size: 13px;
-    transition: color 0.2s;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 20px;
 }
-.back-link:hover { color: white; }
 
-/* Stile per i Form di Inserimento */
+.competition-badge-zone span {
+	color: #e2e8f0;
+	font-weight: bold;
+}
+
+.profile-details-box {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.profile-details-box a {
+    text-decoration: underline;
+}
+
+/* Dettaglio Giocatore: Link del club leggibile (Azzurro/Ciano Neon) */
+.player-club-link {
+    color: #00f2fe !important;
+    text-decoration: underline;
+    font-weight: 600;
+}
+.player-club-link:hover {
+    color: #4facfe !important;
+}
+
+/* Dettaglio Tabellino Match */
+.match-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+.match-team-home {
+    flex: 1;
+    text-align: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.match-team-away {
+    flex: 1;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.match-score-box {
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   8. FORM DI INSERIMENTO DATI (LOGIN, REGISTRAZIONE, MODIFICHE ADMIN)
+   ========================================================================== */
 .stadium-form {
-    background-color: #1e293b;
+    background-color: #1e293b; /* Blocco di colore leggermente più chiaro dello sfondo */
     padding: 30px;
     border-radius: 6px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -282,7 +496,7 @@ body {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-    gap: 8px; /* spazio fisso di 8px tra etichetta e casella di testo */
+    gap: 8px;
 }
 
 .form-group label {
@@ -293,119 +507,58 @@ body {
     letter-spacing: 0.5px;
 }
 
-.form-group input {
-    background-color: #0f172a;
+.form-group input, 
+.form-group textarea,
+.form-group select {
+    background-color: #0f172a; /* Campi di input interni più scuri */
     border: 1px solid #334155;
     padding: 12px;
     color: white;
     font-family: 'Montserrat', sans-serif;
     border-radius: 4px;
     font-size: 14px;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
+    width: 100%;
 }
 
-.form-group input:focus {
+/* Illuminazione Neon in fase di scrittura (:focus) */
+.form-group input:focus, 
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
-    border-color: #ccff00; 
+    border-color: #ccff00;
+    box-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
 }
 
-/* Estensione per le caselle di testo grandi (Textarea) */
 .form-group textarea {
-    background-color: #0f172a;
-    border: 1px solid #334155;
-    padding: 12px;
-    color: white;
-    font-family: 'Montserrat', sans-serif;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.2s;
-    resize: vertical; /* permette solo l'allungamento verticale */
+    resize: vertical;
 }
 
-.form-group textarea:focus {
-    outline: none;
-    border-color: #ccff00; 
-}
-
-
-/* --- SEZIONE AGGIUNTIVA --- */
-
-/* Nuovi stili dedicati all'Admin */
-.top-bar-admin {
-    background-color: #111827;
-    border-bottom: 2px solid #ef4444;
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
-}
-
-.logo-admin {
-    border-color: #ef4444 !important;
-}
-
-.btn-admin {
-    background-color: #ef4444 !important;
-    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3) !important;
-}
-.btn-admin:hover {
-    background-color: #b91c1c !important;
-    border-color: #ccff00 !important;
-    box-shadow: 0 0 15px rgba(204, 255, 0, 0.4) !important;
-}
-
-/* Modificatori Layout Standard */
-.text-right {
-    text-align: right;
-}
-
-.margin-bottom-sm {
-    margin-bottom: 10px;
-}
-
-.margin-bottom-md {
-    margin-bottom: 20px;
-}
-
-.margin-bottom-lg {
-    margin-bottom: 30px;
-}
-
-.margin-top-lg {
-    margin-top: 40px;
-}
-
-.margin-top-xl {
+/* ==========================================================================
+   9. GESTIONE SEPARAZIONE ADMIN & ERRORI NEI FORM
+   ========================================================================== */
+.admin-separation-zone, .admin-section {
     margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px dashed #334155; /* Linea tratteggiata per i blocchi admin inferiori */
 }
 
-/* Visualizzazione ed elementi specifici di testo */
-.table-highlight-points {
-    font-weight: 700;
-    color: #ccff00;
-}
-
-.font-size-sm {
-    font-size: 11px;
-}
-
-.font-size-md {
-    font-size: 14px;
-}
-
-.padding-btn-sm {
-    font-size: 12px !important;
-    padding: 10px 20px !important;
-}
-
-/* --- CLASSI DI SERVIZIO PER I TEMPLATE --- */
-
-/* Messaggio di assenza dati */
-.no-data-msg {
+.admin-separation-zone p, .admin-section p {
     color: #94a3b8;
-    font-style: italic;
     font-size: 14px;
-    text-align: left;
+    margin-bottom: 15px;
 }
 
-/* Messaggi di errore o avviso nei form (Login/Registrazione) */
+/* Messaggi di errore di validazione dei campi o globali (Rimozione stili inline) */
+.field-error {
+    color: #ef4444;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 5px;
+    text-align: left;
+    display: block;
+}
+
 .error-msg {
     color: #ef4444;
     font-size: 14px;
@@ -418,56 +571,7 @@ body {
     border-radius: 4px;
 }
 
-/* Evita l'andata a capo automatica del testo (usata per le date dei commenti) */
-.no-wrap {
-    white-space: nowrap;
-}
-
-/* Margine superiore piccolo per distanziare il pulsante invio commento */
-.margin-top-sm {
-    margin-top: 15px;
-}
-
-/* --- PAGINA DI ERRORE SECURITY (403) --- */
-.error-container {
-    background-color: #1e293b;
-    padding: 40px 30px;
-    border-radius: 6px;
-    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15); /* Bagliore rosso soffuso */
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    margin-top: 40px;
-}
-
-.logo-error {
-    font-size: 48px;
-    font-weight: 900; 
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: white;
-    background-color: #111827; 
-    border: 3px solid #ef4444; /* Bordo rosso neon di allarme */
-    display: inline-block; 
-    padding: 12px 45px; 
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); /* Bagliore rosso */
-    margin-bottom: 25px;
-}
-
-.error-subtitle {
-    color: #ef4444; /* Scritta Accesso Negato in rosso */
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-}
-
-/* Rimuove le freccette di incremento/decremento dai campi di tipo number */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* --- BLOCCHI DI AVVISO E ALERT NEI FORM --- */
+/* Blocchi di avviso ed elenchi di errori (Stile Neon Rosso) */
 .alert {
     padding: 15px 20px;
     margin-bottom: 25px;
@@ -479,7 +583,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .alert ul {
     margin: 0;
-    padding-left: 20px; /* Allinea correttamente l'elenco puntato se ci sono più errori */
+    padding-left: 20px;
 }
 
 .alert li {
@@ -490,16 +594,92 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-bottom: 0;
 }
 
-/* Variante per errori critici di validazione (Stile Neon Rosso) */
 .alert-danger {
-    background-color: rgba(239, 68, 68, 0.1); /* Sfondo rosso trasparente coerente con error-msg */
+    background-color: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    border-left: 4px solid #ef4444; /* Barra rossa neon sul lato sinistro */
-    color: #f8fafc; /* Testo chiaro ad alta leggibilità */
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.1); /* Leggerissimo bagliore rosso soffuso */
+    border-left: 4px solid #ef4444;
+    color: #f8fafc;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
 }
 
 .alert-danger li {
-    color: #fca5a5; /* Testo dei punti elenco in un rosso molto morbido e leggibile sullo scuro */
+    color: #fca5a5;
     font-weight: 700;
+}
+
+/* ==========================================================================
+   10. CLASSI DI UTILITY E PAGINE DI ERRORE SECURITY (400, 403, 404, 500)
+   ========================================================================== */
+.no-data-msg {
+    color: #94a3b8;
+    font-style: normal;
+    font-size: 14px;
+    text-align: center;
+}
+
+.no-data-msg a{
+	font-weight: bold;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.text-right { text-align: right; }
+.margin-bottom-sm { margin-bottom: 10px; }
+.margin-bottom-md { margin-bottom: 20px; }
+.margin-bottom-lg { margin-bottom: 30px; }
+.margin-top-sm { margin-top: 15px; }
+.margin-top-lg { margin-top: 40px; }
+.margin-top-xl { margin-top: 50px; }
+.font-size-sm { font-size: 11px; }
+.font-size-md { font-size: 14px; }
+.padding-btn-sm { font-size: 12px !important; padding: 10px 20px !important; }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Gestione dei container delle eccezioni e degli errori di navigazione */
+.error-container, .container-error-page {
+    background-color: #1e293b;
+    padding: 40px 30px;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    margin: 40px auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px; /* Crea spazio sicuro rispetto al titolo sotto */
+}
+
+.logo-error {
+    font-size: 48px;
+    font-weight: 900; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: white;
+    background-color: #111827; 
+    border: 3px solid #ef4444; /* Bordo rosso allarme */
+    display: inline-block; 
+    padding: 10px 30px;
+	line-height: 1; 
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    margin-bottom: 25px;
+}
+
+.error-subtitle {
+    color: #ef4444;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
 }

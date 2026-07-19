@@ -1,81 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	
-	<head>
-	    <title th:text="${squadra.nome} + ' - SIWTornei'">Dettaglio Squadra</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <span sec:authorize="isAnonymous()">
-	                <a th:href="@{/login}" class="login-link">Accedi</a>
-	            </span>
-	            <span sec:authorize="isAuthenticated()" class="user-menu">
-	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
-	                <form th:action="@{/logout}" method="post">
-	                    <button type="submit" class="logout-btn">Logout</button>
-	                </form>
-	            </span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	
-	        <div class="logo-container">
-	            <div class="logo-placeholder" th:text="${squadra.nome}">Nome Club</div>
-	        </div>
-	
-	        <div class="info-box">
-	            <!-- Pulsante di modifica rapida solo per l'Admin -->
-	            <div sec:authorize="hasAuthority('ADMIN')" class="text-right margin-bottom-sm">
-	                <a th:href="@{/admin/squadra/{id}/edit(id=${squadra.id})}" class="action-link-edit font-size-md">Modifica Club</a>
-	            </div>
-	
-	            <p><strong>Città di Provenienza:</strong> <span th:text="${squadra.citta}">Città</span></p>
-	            <p><strong>Anno Fondazione:</strong> <span th:text="${squadra.annoFondazione}">Anno</span></p>
-	        </div>
-	
-	        <!-- Sezione Rosa Giocatori -->
-	        <h2 class="section-title">Rosa Giocatori</h2>
-	
-	        <!-- Solo l'ADMIN può inserire nuovi giocatori nella squadra -->
-	        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-md margin-top-lg">
-	            <a th:href="@{/squadra/{id}/giocatore/new(id=${squadra.id})}" class="main-link padding-btn-sm">+ Aggiungi Nuovo Giocatore</a>
-	        </div>
-	
-	        <p th:if="${squadra.giocatori.isEmpty()}" class="no-data-msg">La rosa di questa squadra è attualmente vuota.</p>
-	
-	        <table class="stadium-table" th:if="${!squadra.giocatori.isEmpty()}">
-	            <thead>
-	                <tr>
-	                    <th>Cognome</th>
-	                    <th>Nome</th>
-	                    <th>Ruolo</th>
-	                    <th>Azione</th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	                <tr th:each="giocatore : ${squadra.giocatori}">
-	                    <td th:text="${giocatore.cognome}" style="font-weight: 700;">Cognome</td>
-	                    <td th:text="${giocatore.nome}">Nome</td>
-	                    <td>
-	                        <span class="badge-scheduled" th:text="${giocatore.ruolo}">Ruolo</span>
-	                    </td>
-	                    <td>
-	                        <a th:href="@{/giocatore/{id}(id=${giocatore.id})}" class="action-link-view">Visualizza</a>
-	                    </td>
-	                </tr>
-	            </tbody>
-	        </table>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/squadre}" class="back-link">← Torna alla lista delle squadre</a>
-	        </div>
-	    </main>
-	
-	</body>
+<head>
+    <title th:text="${squadra.nome} + ' - SIWTornei'">Dettaglio Squadra</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="login-link">Accedi</a>
+            </span>
+            <span sec:authorize="isAuthenticated()" class="user-menu">
+                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <!-- Box con il nome della Squadra -->
+        <div>
+            <div class="title-box" th:text="${squadra.nome}">Nome Club</div>
+        </div>
+		
+		<div class="avatar-container">
+		    <img th:src="${squadra.stemmaUrl != null} ? ${squadra.stemmaUrl} : @{/images/team-placeholder.png}" 
+		         alt="Stemma Club" class="team-crest">
+		</div>
+
+        <!-- Box Informazioni -->
+        <div class="info-box">
+            <div sec:authorize="hasAuthority('ADMIN')" class="text-right margin-bottom-sm">
+                <a th:href="@{/admin/squadra/{id}/edit(id=${squadra.id})}" class="action-link-edit font-size-md">Modifica Club</a>
+            </div>
+            <p><strong>Città di Provenienza:</strong> <span th:text="${squadra.citta}">Città</span></p>
+            <p><strong>Anno Fondazione:</strong> <span th:text="${squadra.annoFondazione}">Anno</span></p>
+        </div>
+
+        <!-- Sezione Rosa Giocatori -->
+        <h2 class="section-title">Rosa Giocatori</h2>
+
+        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-md margin-top-lg">
+            <a th:href="@{/squadra/{id}/giocatore/new(id=${squadra.id})}" class="main-link admin-btn">+ Aggiungi Nuovo Giocatore</a>
+        </div>
+
+        <p th:if="${squadra.giocatori.isEmpty()}" class="no-data-msg">La rosa di questa squadra è attualmente vuota.</p>
+
+        <!-- Tabella Giocatori -->
+        <table class="stadium-table table-centered" th:if="${!squadra.giocatori.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>Cognome</th>
+                    <th>Nome</th>
+                    <th>Ruolo</th>
+                    <th>Azione</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="giocatore : ${squadra.giocatori}">
+                    <td th:text="${giocatore.cognome}">Cognome</td>
+                    <td th:text="${giocatore.nome}">Nome</td>
+                    <td>
+                        <span class="badge-scheduled" th:text="${giocatore.ruolo}">Ruolo</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons-cell">
+                            <a th:href="@{/giocatore/{id}(id=${giocatore.id})}" class="action-link-view">Visualizza</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="margin-top-lg">
+            <a href="javascript:history.back()" class="back-link">← Torna indietro</a>
+        </div>
+    </main>
+
+</body>
 </html>

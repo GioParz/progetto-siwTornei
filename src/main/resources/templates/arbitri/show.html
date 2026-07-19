@@ -1,62 +1,80 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	
-	<head>
-	    <title>Scheda Arbitro - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder">Arbitro</div>
-	        </div>
-	
-	        <!-- Intestazione Scheda -->
-	        <div class="team-header text-center">
-	            <h1 th:text="${arbitro.nome} + ' ' + ${arbitro.cognome}">Nome Cognome</h1>
-	            <p class="section-subtitle">Codice AIA: <span class="font-bold text-accent" th:text="${arbitro.codiceAIA}">AIA-12345</span></p>
-	        </div>
-	
-	        <!-- Sezione Partite Arbitrate -->
-	        <div class="margin-top-lg">
-	            <h3>Partite Arbitrate</h3>
-	            
-	            <div th:if="${#lists.isEmpty(arbitro.partite)}" class="no-data-box">
-	                Questo arbitro non ha ancora diretto nessuna partita nel torneo.
-	            </div>
-	
-	            <table class="stadium-table" th:unless="${#lists.isEmpty(arbitro.partite)}">
-	                <thead>
-	                    <tr>
-	                        <th>Stato / Risultato</th>
-	                        <th>Incontro</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <tr th:each="partita : ${arbitro.partite}">
-	                        <td class="text-center">
-	                            <div class="score-badge">
-	                                <span th:text="${partita.goalsHome}">0</span>
-	                                <span class="score-divider">-</span>
-	                                <span th:text="${partita.goalsAway}">0</span>
-	                            </div>
-	                        </td>
-	                        <td>
-	                            <span th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico}" class="font-bold">Squadra Casa</span>
-	                            <span class="text-muted"> vs </span>
-	                            <span th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico}" class="font-bold">Squadra Ospite</span>
-	                        </td>
-	                    </tr>
-	                </tbody>
-	            </table>
-	        </div>
-	
-	        <div class="margin-top-lg text-center">
-	            <a th:href="@{/arbitri}" class="back-link">Torna all'elenco arbitri</a>
-	        </div>
-	    </main>
-	
-	</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Scheda Arbitro - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="login-link">Accedi</a>
+            </span>
+            <span sec:authorize="isAuthenticated()" class="user-menu">
+                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box">Profilo Direttore di Gara</div>
+        </div>
+
+        <!-- Box Riepilogo Arbitro -->
+        <div class="info-box">
+            <h2 class="section-title text-center" th:text="${arbitro.nome} + ' ' + ${arbitro.cognome}">
+                Nome Cognome
+            </h2>
+            <p class="no-data-msg text-center">
+                <strong>Codice AIA:</strong> <span th:text="${arbitro.codiceAIA}">AIA-12345</span>
+            </p>
+        </div>
+
+        <!-- Sezione Partite Arbitrate -->
+        <h2 class="section-title margin-top-xl">Elenco Match Diretti</h2>
+            
+        <div th:if="${#lists.isEmpty(arbitro.partite)}" class="no-data-msg">
+            Questo arbitro non ha ancora diretto nessuna partita nel torneo.
+        </div>
+
+        <!-- Tabella Incontri Centrata -->
+        <table class="stadium-table table-centered" th:unless="${#lists.isEmpty(arbitro.partite)}">
+            <thead>
+                <tr>
+                    <th>Risultato</th>
+                    <th>Incontro</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="partita : ${arbitro.partite}">
+                    <td>
+                        <span class="badge-completed">
+                            <span th:text="${partita.goalsHome}">0</span> - <span th:text="${partita.goalsAway}">0</span>
+                        </span>
+                    </td>
+                    <td>
+                        <span th:text="${partita.squadraCasa != null ? partita.squadraCasa.nome : partita.squadraCasaNomeStorico}">Squadra Casa</span>
+                        <span class="locked-text-muted"> vs </span>
+                        <span th:text="${partita.squadraOspite != null ? partita.squadraOspite.nome : partita.squadraOspiteNomeStorico}">Squadra Ospite</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="margin-top-lg">
+            <a th:href="@{/arbitri}" class="back-link">← Torna all'elenco arbitri</a>
+        </div>
+    </main>
+
+</body>
 </html>

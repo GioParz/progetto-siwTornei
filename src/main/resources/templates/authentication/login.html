@@ -1,51 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
 <head>
-	    <title>Accedi - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <a th:href="@{/tornei}" class="login-link">Tornei</a>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder">Login</div>
-	        </div>
-	
-	        <p th:if="${param.error}" class="error-msg">
-	            Username o password non validi. Riprova.
-	        </p>
-	
-	        <form th:action="@{/login}" method="post" class="stadium-form">
-	            <div class="form-group">
-	                <label>Username</label>
-	                <input type="text" name="username" placeholder="Inserisci il tuo username" required />
-	            </div>
-	
-	            <div class="form-group">
-	                <label>Password</label>
-	                <input type="password" name="password" placeholder="Inserisci la tua password" required />
-	            </div>
-	
-	            <div class="margin-top-lg">
-	                <button type="submit" class="main-link">Accedi</button>
-	            </div>
-	        </form>
-	
-	        <div class="margin-top-lg">
-	            <p class="welcome-text font-size-md">
-	                Non hai un account? <a th:href="@{/register}" class="action-link-view">Registrati qui</a>
-	            </p>
-	            <a th:href="@{/tornei}" class="back-link">← Torna alla lista dei tornei</a>
-	        </div>
-	    </main>
-	
-	</body>
+    <title>Accedi - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <a th:href="@{/}" class="login-link">Home</a>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box">Login</div>
+        </div>
+
+        <!-- Messaggio di errore stilizzato in caso di fallimento autenticazione -->
+        <div th:if="${param.error}" class="error-msg">
+            <p class="no-margin text-center">Username o password non validi. Riprova.</p>
+        </div>
+
+        <form th:action="@{/login}" method="post" class="stadium-form">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Inserisci il tuo username" required />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Inserisci la tua password" required />
+            </div>
+
+            <div class="margin-top-lg">
+                <button type="submit" class="main-link">Accedi</button>
+            </div>
+        </form>
+
+        <div class="margin-top-lg">
+            <p class="no-data-msg">
+                Non hai un account? <a th:href="@{/register}" class="action-link-view">Registrati qui</a>
+            </p>
+        </div>
+    </main>
+
+</body>
 </html>

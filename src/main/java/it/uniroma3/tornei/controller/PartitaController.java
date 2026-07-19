@@ -124,7 +124,7 @@ public class PartitaController {
 	
 	@PostMapping("/admin/partita/{id}/risultato")
 	public String salvaRisultato(@PathVariable("id") Long id, 
-			@Valid @ModelAttribute("partita") Partita partitaModificata,
+			@ModelAttribute("partita") Partita partitaModificata,
 			BindingResult bindingResult, Model model) {
 		
 		Partita partitaOriginale = this.partitaService.getPartita(id);
@@ -133,10 +133,10 @@ public class PartitaController {
 		}
 		
 		if (partitaModificata.getGoalsHome() == null || partitaModificata.getGoalsHome() < 0) {
-			bindingResult.rejectValue("goalsHome", "Inserisci un punteggio valido per la squadra di casa.");
+			bindingResult.rejectValue("goalsHome", "error.goalsHome");
 		}
 		if (partitaModificata.getGoalsAway() == null || partitaModificata.getGoalsAway() < 0) {
-			bindingResult.rejectValue("goalsAway", "Inserisci un punteggio valido per la squadra ospite.");
+			bindingResult.rejectValue("goalsAway", "error.goalsAway");
 		}
 		
 		if (bindingResult.hasErrors()) {

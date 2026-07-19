@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Operazione non consentita</title>
-    <link rel="stylesheet" th:href="@{/css/stile.css}">
+    <title>Operazione non consentita - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <div class="container" style="text-align: center; margin-top: 50px;">
-        <h2>Attenzione: Operazione non valida</h2>
-        <hr>
-        <!-- Mostra il messaggio specifico dell'eccezione lanciata -->
-        <p class="error-msg" th:text="${errorMessage}">Errore generico di validazione.</p>
-        <br>
-        <a href="javascript:history.back()" class="btn">Torna Indietro</a>
-    </div>
+
+    <main class="main-content">
+        <div class="error-container">
+            <div class="logo-container">
+                <div class="logo-error">X</div>
+            </div>
+            
+            <h2 class="error-subtitle">Operazione Non Valida</h2>
+            
+            <!-- Mostra il messaggio specifico dell'eccezione lanciata racchiuso nel blocco error-msg -->
+            <div class="error-msg margin-bottom-lg">
+                <p class="no-margin text-center" th:text="${errorMessage}">Errore generico di validazione.</p>
+            </div>
+            
+            <div class="admin-section">
+                <a th:href="@{/}" class="main-link">Torna alla Home Page</a>
+            </div>
+        </div>
+    </main>
+
 </body>
 </html>

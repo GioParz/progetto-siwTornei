@@ -1,68 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inserisci Risultato Partita - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar admin-bar">
+        <div class="top-bar-right">
+            <span class="welcome-user"><strong class="panel-admin-text">PANNELLO ADMIN</strong></span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        <div>
+            <div class="title-box box-admin">Modifica Punteggio</div>
+        </div>
 	
-	<head>
-	    <title>Inserisci Risultato Partita - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
+        <div class="info-box">
+            <h2 class="section-title">
+                <span th:text="${partita.squadraCasa.nome}">Squadra A</span> 
+                vs 
+                <span th:text="${partita.squadraOspite.nome}">Squadra B</span>
+            </h2>
+            <p class="no-data-msg">
+                Stadio: <span th:text="${partita.luogo}">Stadio</span> | 
+                Stato Incontro: <span th:text="${partita.stato}">PROGRAMMATA</span>
+            </p>
+        </div>
 	
-	<body>
-	
-	    <div class="top-bar top-bar-admin">
-	        <div class="top-bar-right">
-	            <span class="welcome-user admin-text-highlight">PANNELLO AMMINISTRATORE</span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder logo-admin">Modifica Punteggio</div>
-	        </div>
-	
-	        <div class="info-box text-center padding-md margin-bottom-md">
-	            <h2 class="font-size-lg no-margin margin-bottom-sm">
-	                <span th:text="${partita.squadraCasa.nome}">Squadra A</span> 
-	                vs 
-	                <span th:text="${partita.squadraOspite.nome}">Squadra B</span>
-	            </h2>
-	            <p class="no-margin font-size-sm text-muted">
-	                Stadio: <span th:text="${partita.luogo}">Stadio</span> | 
-	                Stato Incontro: <span th:text="${partita.stato}" class="admin-text-highlight">PROGRAMMATA</span>
-	            </p>
-	        </div>
-	
-	        <!-- Form Risultato -->
-	        <form th:action="@{/admin/partita/{id}/risultato(id=${partita.id})}" th:object="${partita}" method="post" class="stadium-form">
-	            
-				<div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
-				    <ul>
-				        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="error-msg">
-				            Errore di coerenza nei dati inseriti
-				        </li>
-				    </ul>
-				</div>
+        <!-- Form Risultato -->
+        <form th:action="@{/admin/partita/{id}/risultato(id=${partita.id})}" th:object="${partita}" method="post" class="stadium-form">
+            
+            <!-- Visualizzazione errori globali -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="error-msg">
+                <ul class="no-margin">
+                    <li th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore di coerenza nei dati inseriti</li>
+                </ul>
+            </div>
 				
-				<div class="form-group margin-bottom-md">
-	                <label th:text="'Gol per ' + ${partita.squadraCasa.nome}">Gol Casa</label>
-	                <input type="number" name="goalsHome" th:value="${partita.goalsHome}" placeholder="0" class="input-score-number" />
-					<span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" style="color: red;"></span>
-	            </div>
+			<div class="form-group">
+			    <label th:text="'Gol per ' + ${partita.squadraCasa.nome}">Gol Casa</label>
+			    <input type="number" th:field="*{goalsHome}" placeholder="0" />
+			    <span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" class="field-error"></span>
+			</div>
+			    
+			<div class="form-group">
+			    <label th:text="'Gol per ' + ${partita.squadraOspite.nome}">Gol Ospite</label>
+			    <input type="number" th:field="*{goalsAway}" placeholder="0" />
+			    <span th:if="${#fields.hasErrors('goalsAway')}" th:errors="*{goalsAway}" class="field-error"></span>
+			</div>
 	            
-	            <div class="form-group margin-bottom-lg">
-	                <label th:text="'Gol per ' + ${partita.squadraOspite.nome}">Gol Ospite</label>
-	                <input type="number" name="goalsAway" th:value="${partita.goalsAway}" placeholder="0" class="input-score-number" />
-					<span th:if="${#fields.hasErrors('goalsHome')}" th:errors="*{goalsHome}" style="color: red;"></span>
-				</div>
-	            
-	            <div>
-	                <button type="submit" class="main-link btn-admin">Registra Risultato Definitivo</button>
-	            </div>
-	        </form>
-	        
-	        <div class="margin-top-lg">
-	            <a th:href="@{/torneo/{id}(id=${partita.getTorneo().getId()})}" class="back-link">Annulla e torna al torneo</a>
-	        </div>
-	    </main>
-	
-	</body>
+            <div class="margin-top-lg">
+                <button type="submit" class="main-link admin-btn">Registra Risultato Definitivo</button>
+            </div>
+        </form>
+        
+        <div class="margin-top-lg">
+            <a th:href="@{/torneo/{id}(id=${partita.getTorneo().getId()})}" class="back-link">Annulla e torna al torneo</a>
+        </div>
+    </main>
+
+</body>
 </html>

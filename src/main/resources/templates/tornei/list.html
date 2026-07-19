@@ -1,66 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-	
-	<head>
-	    <title>Lista Tornei - SIWTornei</title>
-	    <link rel="stylesheet" th:href="@{/css/style.css}">
-	</head>
-	
-	<body>
-	
-	    <div class="top-bar">
-	        <div class="top-bar-right">
-	            <span sec:authorize="isAnonymous()">
-	                <a th:href="@{/login}" class="login-link">Accedi</a>
-	            </span>
-	            <span sec:authorize="isAuthenticated()" class="user-menu">
-	                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
-	                <form th:action="@{/logout}" method="post">
-	                    <button type="submit" class="logout-btn">Logout</button>
-	                </form>
-	            </span>
-	        </div>
-	    </div>
-	
-	    <main class="main-content">
-	        <div class="logo-container">
-	            <div class="logo-placeholder">Elenco Tornei</div>
-	        </div>
-	        
-	        <!-- Solo l'ADMIN può aggiungere un nuovo torneo -->
-	        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
-	            <a th:href="@{/admin/torneo/new}" class="main-link btn-admin">Aggiungi Nuovo Torneo</a>
-	        </div>
-	
-	        <table class="stadium-table">
-	            <thead>
-	                <tr>
-	                    <th>Nome Torneo</th>
-	                    <th>Anno Edizione</th>
-	                    <th>Azione</th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	                <tr th:each="torneo : ${tornei}">
-	                    <td th:text="${torneo.nome}" style="font-weight: 700;">Nome Torneo</td>
-	                    <td th:text="${torneo.anno}">2026</td>
-	                    <td>
-	                        <div class="action-buttons-cell">
-	                            <a th:href="@{/torneo/{id}(id=${torneo.id})}" class="action-link-view">Visualizza</a>
-	                            <a sec:authorize="hasAuthority('ADMIN')"
-	                               th:href="@{/admin/torneo/{id}/edit(id=${torneo.id})}"
-	                               class="action-link-edit">Modifica</a>
-	                        </div>
-	                    </td>
-	                </tr>
-	            </tbody>
-	        </table>
-	
-	        <div class="margin-top-lg">
-	            <a th:href="@{/}" class="back-link">← Torna alla Home</a>
-	        </div>
-	    </main>
-	
-	</body>
+<head>
+    <title>Lista Tornei - SIWTornei</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-right">
+            <span sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="login-link">Accedi</a>
+            </span>
+            <span sec:authorize="isAuthenticated()" class="user-menu">
+                <span class="welcome-user">Ciao, <strong sec:authentication="name">Utente</strong>!</span>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="logout-btn">Logout</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <a th:href="@{/}" class="logo-wrapper">
+        <img th:src="@{/images/logo.jpg}" alt="SIW Tornei Logo" class="logo-img">
+    </a>
+
+    <main class="main-content">
+        
+        <div>
+            <div class="title-box">Elenco Tornei</div>
+        </div>
+        
+        <!-- Sezione di inserimento visibile solo all'Admin -->
+        <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
+            <a th:href="@{/admin/torneo/new}" class="main-link admin-btn">Aggiungi Nuovo Torneo</a>
+        </div>
+
+        <!-- Tabella con dati -->
+        <table class="stadium-table table-centered">
+            <thead>
+                <tr>
+                    <th>Nome Torneo</th>
+                    <th>Anno Edizione</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="torneo : ${tornei}">
+                    <td th:text="${torneo.nome}">Nome Torneo</td>
+                    <td th:text="${torneo.anno}">2026</td>
+                    <td>
+                        <div class="action-buttons-cell">
+                            <a th:href="@{/torneo/{id}(id=${torneo.id})}" class="action-link-view">Visualizza</a>
+                            <a sec:authorize="hasAuthority('ADMIN')"
+                               th:href="@{/admin/torneo/{id}/edit(id=${torneo.id})}"
+                               class="action-link-edit">Modifica</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </main>
+
+</body>
 </html>

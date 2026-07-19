@@ -47,7 +47,7 @@ public class SecurityConfiguration {
 		httpSecurity.authorizeHttpRequests(authorize -> {
 			//rotte pubbliche
 			authorize.requestMatchers("/css/**", "/images/**", "/error/**", "/favicon.ico").permitAll();
-			authorize.requestMatchers(HttpMethod.GET, "/", "/index", "/register", "/tornei", "/torneo/{id}", 
+			authorize.requestMatchers(HttpMethod.GET, "/", "/index", "/register", "/tornei", "/torneo/{id}", "/torneo/{id}/squadre",
 													"/partita/{id}", "/giocatore/{id}", "/squadre", "/squadra/{id}",
 													"/arbitri", "/arbitro/{id}").permitAll();
 			authorize.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll();

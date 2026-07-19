@@ -48,6 +48,18 @@ public class TorneoController {
 		return "tornei/show";
 	}
 	
+	/* VISUALIZZAZIONE SQUADRE PARTECIPANTI */
+	
+	@GetMapping("/torneo/{id}/squadre")
+	public String getSquadreDelTorneo(@PathVariable("id") Long id, Model model) {
+	    Torneo torneo = this.torneoService.getTorneo(id); 
+	    
+	    model.addAttribute("torneo", torneo);
+	    model.addAttribute("squadre", torneo.getSquadre()); 
+	    
+	    return "tornei/squadreTorneo";
+	}
+	
 	/* CREAZIONE NUOVO TORNEO */
 	
 	@GetMapping("/admin/torneo/new")
