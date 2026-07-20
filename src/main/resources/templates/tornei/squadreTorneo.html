@@ -48,7 +48,7 @@
                     <td th:text="${squadra.citta}">Città</td>
                     <td>
                         <div class="action-buttons-cell">
-                            <a th:href="@{/squadra/{id}(id=${squadra.id})}" class="action-link-view">Dettagli Club</a>
+                            <a th:href="@{/squadra/{id}(id=${squadra.id}, fromTorneo=${torneo.id})}" class="action-link-view">Dettagli Club</a>
                         </div>
                     </td>
                 </tr>

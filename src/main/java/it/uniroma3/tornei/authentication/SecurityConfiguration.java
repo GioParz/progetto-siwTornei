@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,9 +56,17 @@ public class SecurityConfiguration {
 			authorize.requestMatchers(HttpMethod.GET, "/admin/**", "/torneo/{id}/partita/new",
 													"/squadra/{squadraId}/giocatore/new").hasAnyAuthority("ADMIN");
 			authorize.requestMatchers(HttpMethod.POST, "/admin/**", "/partite", "/giocatori").hasAnyAuthority("ADMIN");
+			
+			//API commenti
+			authorize.requestMatchers(HttpMethod.GET, "/api/commenti/partita/**").permitAll();
+			authorize.requestMatchers(HttpMethod.POST, "/api/commenti/partita/**").authenticated();
+			
 			//tutte le altre rotte
 			authorize.anyRequest().authenticated();
 		});
+		
+		httpSecurity.cors(Customizer.withDefaults());
+		httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
 		
 		httpSecurity.formLogin(form -> {
 			form.loginPage("/login").permitAll();

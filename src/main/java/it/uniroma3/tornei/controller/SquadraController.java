@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import it.uniroma3.tornei.exception.SquadraDuplicataException;
 import it.uniroma3.tornei.model.Squadra;
@@ -33,13 +34,17 @@ public class SquadraController {
 	}
 	
 	@GetMapping("/squadra/{id}")
-	public String getSquadra(@PathVariable("id") Long id, Model model) {
+	public String getSquadra(@PathVariable("id") Long id,
+			@RequestParam(value = "fromTorneo", required = false) Long fromTorneoId, Model model) {
 		
 		Squadra squadra = this.squadraService.getSquadra(id);
 		if (squadra == null)
 			return "redirect:/squadre";
 		
 		model.addAttribute("squadra", squadra);
+		
+		if(fromTorneoId != null)
+			model.addAttribute("fromTorneoId", fromTorneoId);
 		
 		return "squadre/show";
 	}

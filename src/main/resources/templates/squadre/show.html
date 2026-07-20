@@ -81,7 +81,19 @@
         </table>
 
         <div class="margin-top-lg">
-            <a href="javascript:history.back()" class="back-link">← Torna indietro</a>
+			<!-- Se veniamo dalle squadre di un Torneo specifico, torniamo esattamente lì -->
+			<a th:if="${fromTorneoId != null}" 
+			   th:href="@{/torneo/{id}/squadre(id=${fromTorneoId})}" 
+			   class="back-link">
+			   ← Torna alle Squadre del Torneo
+			</a>
+
+			<!-- Se veniamo da un Giocatore o da un'altra parte, torniamo alla lista generale delle Squadre -->
+			<a th:if="${fromTorneoId == null}" 
+			   th:href="@{@{/squadre}}" 
+			   class="back-link">
+			   ← Torna alla lista Squadre
+			</a>
         </div>
     </main>
 

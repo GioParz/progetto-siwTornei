@@ -50,16 +50,16 @@
             <div class="profile-details-box">
                 <p><strong>Club di Appartenenza:</strong> 
                     <a th:href="@{/squadra/{id}(id=${giocatore.squadra.id})}" class="player-club-link"
-					   th:text="${giocatore.squadra.nome != null ? giocatore.squadra.nome : 'Attualmente non assegnato'}">Squadra</a>
+					   th:text="${giocatore.squadra.nome}">Squadra</a>
                 </p>
                 <p><strong>Data di Nascita:</strong> 
-                    <span th:text="${giocatore.dataNascita != null ? #temporals.format(giocatore.dataNascita, 'dd/MM/yyyy') : 'Non specificata'}">01/01/2000</span>
+                    <span th:text="${#temporals.format(giocatore.dataNascita, 'dd/MM/yyyy')}">01/01/2000</span>
                 </p>
                 <p><strong>Ruolo:</strong> 
                     <span class="badge-scheduled" th:text="${giocatore.ruolo}">RUOLO</span>
                 </p>
                 <p><strong>Altezza:</strong> 
-                    <span th:text="${giocatore.altezza != null ? giocatore.altezza + ' cm' : 'Non specificata'}">180 cm</span>
+                    <span th:text="${giocatore.altezza + ' cm'}">180 cm</span>
                 </p>
             </div>
         </div>

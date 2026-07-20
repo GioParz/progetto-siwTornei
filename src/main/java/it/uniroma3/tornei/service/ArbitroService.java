@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.uniroma3.tornei.exception.ArbitroDuplicatoException;
 import it.uniroma3.tornei.model.Arbitro;
 import it.uniroma3.tornei.model.Partita;
+import it.uniroma3.tornei.model.StatoPartita;
 import it.uniroma3.tornei.repository.ArbitroRepository;
 import it.uniroma3.tornei.repository.PartitaRepository;
 
@@ -58,9 +59,14 @@ public class ArbitroService {
 			List<Partita> partite = this.partitaRepository.findByArbitro(arbitro);
 			
 			for(Partita p : partite) {
-				p.setArbitroNomeCognomeStorico(arbitro.getNome() + " " + arbitro.getCognome());
-				p.setArbitro(null);
-				this.partitaRepository.save(p);
+				if(p.getStato().equals(StatoPartita.PROGRAMMATA)) {
+					this.partitaRepository.delete(p);
+					p.setArbitro(null);
+				} else {
+					p.setArbitroNomeCognomeStorico(arbitro.getNome() + " " + arbitro.getCognome());
+					p.setArbitro(null);
+					this.partitaRepository.save(p);
+				}
 			}
 			
 			this.arbitroRepository.deleteById(id);

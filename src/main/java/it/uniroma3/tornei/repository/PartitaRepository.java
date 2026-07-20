@@ -28,4 +28,5 @@ public interface PartitaRepository extends CrudRepository<Partita, Long> {
 			"AND p.dataEOra BETWEEN :inizioGiorno AND :fineGiorno")
 	boolean isSquadraImpegnata(@Param("squadra") Squadra squadra, 
 			@Param("inizioGiorno") LocalDateTime inizioGiorno, @Param("fineGiorno") LocalDateTime fineGiorno);
+	
 }

@@ -70,7 +70,7 @@ public class PartitaService {
         return this.partitaRepository.save(partita);
     }
 	
-	// Metodi helper privati per gestire la fase di EDIT senza bloccare se stessi
+	// Metodi helper privati per gestire la fase di EDIT
 	private boolean isStessaPartitaInQuellaData(Long partitaId, Arbitro arbitro, LocalDateTime dataEOra) {
 	    Partita esistente = this.partitaRepository.findById(partitaId).orElse(null);
 	    return esistente != null && Objects.equals(esistente.getArbitro(), arbitro) && esistente.getDataEOra().equals(dataEOra);
