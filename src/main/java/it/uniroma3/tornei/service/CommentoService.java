@@ -1,5 +1,7 @@
 package it.uniroma3.tornei.service;
 
+import java.util.List;
+
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -7,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Credentials;
+import it.uniroma3.tornei.model.Partita;
 import it.uniroma3.tornei.model.RuoloUtente;
 import it.uniroma3.tornei.repository.CommentoRepository;
 
@@ -22,6 +25,10 @@ public class CommentoService {
 
 	public Commento getCommento(Long id) {
 		return this.commentoRepository.findById(id).orElse(null);
+	}
+	
+	public List<Commento> getCommentiByPartita(Partita partita) {
+		return this.commentoRepository.findByPartita(partita);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

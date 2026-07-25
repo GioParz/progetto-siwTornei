@@ -30,6 +30,16 @@
         <div>
             <div class="title-box" th:text="${torneo.nome}">Nome Torneo</div>
         </div>
+		
+		<!-- Messaggio di Conferma/Successo -->
+		<div th:if="${successMessage}" class="alert alert-success">
+		    <span th:text="${successMessage}">Operazione completata!</span>
+		</div>
+
+		<!-- Messaggio di Errore -->
+		<div th:if="${errorMessage}" class="alert alert-danger error-msg">
+		    <span th:text="${errorMessage}">Si è verificato un errore!</span>
+		</div>
         
         <!-- Link pubblico per vedere le squadre iscritte -->
         <div class="margin-bottom-lg">
@@ -120,10 +130,10 @@
                             <a th:href="@{/partita/{id}(id=${partita.id})}" class="action-link-view">Dettagli</a>
                             
                             <!-- Elimina riservato all'ADMIN -->
-                            <a sec:authorize="hasAuthority('ADMIN')" 
-                               th:href="@{/admin/partita/{id}/delete(id=${partita.id})}"
-                               onclick="return confirm('Cancellare definitivamente la partita?')"
-                               class="action-link-delete">Elimina</a>
+							<form sec:authorize="hasAuthority('ADMIN')"
+								  th:action="@{/admin/partita/{id}/delete(id=${partita.id})}" method="post">
+								<button type="submit" class="action-link-delete" onclick="return confirm('Cancellare definitivamente la partita?')">Elimina</button>
+							</form>
                         </div>
                     </td>
                 </tr>

@@ -32,6 +32,16 @@ public class TorneoService {
 		return this.torneoRepository.findById(id).orElse(null);
 	}
 	
+	//carica torneo con partite e relative squadre in 1 sola query JOIN FETCH
+	public Torneo getTorneoWithPartite(Long id) {
+		return this.torneoRepository.findByIdWithPartiteAndSquadre(id).orElse(null);
+	}
+
+	//carica torneo con le squadre iscritte in 1 sola query JOIN FETCH
+	public Torneo getTorneoWithSquadre(Long id) {
+		return this.torneoRepository.findByIdWithSquadre(id).orElse(null);
+	}
+	
 	public List<Torneo> getAllTornei() {
 		return (List<Torneo>) this.torneoRepository.findAll();
 	}
@@ -119,24 +129,24 @@ public class TorneoService {
 	
 	// Metodo di supporto per aggiornare un torneo esistente validando il cambio d'anno
 	@Transactional(isolation = Isolation.READ_COMMITTED)
-    public Torneo updateTorneo(Long id, Torneo datiAggiornati) {
+    public Torneo updateTorneo(Long id, Torneo torneoAggiornato) {
 		
         Torneo originale = this.torneoRepository.findById(id).orElse(null);
             
-        if (this.torneoRepository.existsByNomeAndAnnoAndIdNot(datiAggiornati.getNome(), datiAggiornati.getAnno(), id)) {
+        if (this.torneoRepository.existsByNomeAndAnnoAndIdNot(torneoAggiornato.getNome(), torneoAggiornato.getAnno(), id)) {
             throw new TorneoDuplicatoException(originale.getNome(), originale.getAnno());
         }
 
-        if (!originale.getAnno().equals(datiAggiornati.getAnno())) {
+        if (!originale.getAnno().equals(torneoAggiornato.getAnno())) {
             if (originale.getPartite() != null && !originale.getPartite().isEmpty()) {
                 throw new ModificaAnnoTorneoException();
             }
             
-            originale.setAnno(datiAggiornati.getAnno());
+            originale.setAnno(torneoAggiornato.getAnno());
         }
         
-        originale.setNome(datiAggiornati.getNome());
-        originale.setDescrizione(datiAggiornati.getDescrizione());
+        originale.setNome(torneoAggiornato.getNome());
+        originale.setDescrizione(torneoAggiornato.getDescrizione());
         
         return this.torneoRepository.save(originale);
     }

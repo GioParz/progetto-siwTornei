@@ -11,6 +11,8 @@ import it.uniroma3.tornei.model.Credentials;
 import it.uniroma3.tornei.model.RuoloUtente;
 import it.uniroma3.tornei.model.Utente;
 import it.uniroma3.tornei.service.CredentialsService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 @Controller
@@ -44,7 +46,7 @@ public class AuthenticationController {
 	
 	@PostMapping("/register")
 	public String registraUtente(@Valid @ModelAttribute("credentials") Credentials credentials,
-			BindingResult bindingResult) {
+			BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response) {
 
 		if(this.credentialsService.existsByUsername(credentials.getUsername())) {
 			bindingResult.rejectValue("username", "credentials.duplicateUsername");
@@ -63,7 +65,7 @@ public class AuthenticationController {
 		credentials.setRuolo(RuoloUtente.USER);
 		this.credentialsService.saveCredentials(credentials);
 
-		return "redirect:/login"; //appena registrato si da suito la possibilità di fare login
+		return "redirect:/login"; //appena registrato si da subito la possibilità di fare login
 	}
 	
 	/* ADMIN */

@@ -55,10 +55,10 @@
                                th:href="@{/admin/squadra/{id}/edit(id=${squadra.id})}" 
                                class="action-link-edit">Modifica</a>
                                
-                            <a sec:authorize="hasAuthority('ADMIN')" 
-                               th:href="@{/admin/squadra/{id}/delete(id=${squadra.id})}"
-                               onclick="return confirm('Sei sicuro di voler eliminare questa squadra e tutti i suoi giocatori?');"
-                               class="action-link-delete">Elimina</a>
+							<form sec:authorize="hasAuthority('ADMIN')" th:action="@{/admin/squadra/{id}/delete(id=${squadra.id})}" method="post">
+								<button type="submit" class="action-link-delete"
+									onclick="return confirm('Cancellare definitivamente la squadra?')">Elimina</button>
+							</form>
                         </div>
                     </td>
                 </tr>

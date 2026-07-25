@@ -38,7 +38,7 @@ public class TorneoController {
 	@GetMapping("/torneo/{id}")
 	public String getTorneo(@PathVariable("id") Long id, Model model) {
 		
-		Torneo torneo = this.torneoService.getTorneo(id);
+		Torneo torneo = this.torneoService.getTorneoWithPartite(id);
 		if (torneo == null)
 			return "redirect:/tornei";
 		
@@ -52,7 +52,7 @@ public class TorneoController {
 	
 	@GetMapping("/torneo/{id}/squadre")
 	public String getSquadreDelTorneo(@PathVariable("id") Long id, Model model) {
-	    Torneo torneo = this.torneoService.getTorneo(id); 
+	    Torneo torneo = this.torneoService.getTorneoWithSquadre(id); 
 	    
 	    model.addAttribute("torneo", torneo);
 	    model.addAttribute("squadre", torneo.getSquadre()); 

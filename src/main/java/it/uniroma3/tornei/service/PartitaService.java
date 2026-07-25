@@ -1,6 +1,7 @@
 package it.uniroma3.tornei.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -26,6 +27,16 @@ public class PartitaService {
 
 	public Partita getPartita(Long id) {
 		return this.partitaRepository.findById(id).orElse(null);
+	}
+	
+	//usa la JOIN FETCH per caricare la partita con i commenti e le entità collegate in 1 sola query
+	public Partita getPartitaWithCommenti(Long id) {
+		return this.partitaRepository.findByIdWithCommenti(id).orElse(null);
+	}
+
+	//usa l'EntityGraph per prendere tutte le partite di un torneo ottimizzando le relazioni @ManyToOne
+	public List<Partita> getPartiteByTorneo(Long torneoId) {
+		return this.partitaRepository.findByTorneo_Id(torneoId);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)
@@ -78,7 +89,8 @@ public class PartitaService {
 
 	private boolean isSquadraImpegnataDallaPartitaStessa(Long partitaId, Squadra squadra, LocalDateTime dataEOra) {
 	    Partita esistente = this.partitaRepository.findById(partitaId).orElse(null);
-	    if (esistente == null) return false;
+	    if (esistente == null)
+	    	return false;
 
 	    boolean isCasa = esistente.getSquadraCasa() != null && esistente.getSquadraCasa().equals(squadra);
 	    boolean isOspite = esistente.getSquadraOspite() != null && esistente.getSquadraOspite().equals(squadra);

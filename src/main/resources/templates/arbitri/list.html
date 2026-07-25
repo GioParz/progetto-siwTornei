@@ -61,10 +61,10 @@
                             <a th:href="@{/arbitro/{id}(id=${arbitro.id})}" class="action-link-view">Visualizza</a>
                             
                             <!-- Eliminazione riservata all'ADMIN -->
-                            <a sec:authorize="hasAuthority('ADMIN')" 
-                               th:href="@{/admin/arbitro/{id}/delete(id=${arbitro.id})}" 
-                               class="action-link-delete" 
-                               onclick="return confirm('Sicuro di voler eliminare questo arbitro?');">Elimina</a>
+							<form sec:authorize="hasAuthority('ADMIN')"
+								  th:action="@{/admin/arbitro/{id}/delete(id=${arbitro.id})}" method="post">
+								<button type="submit" class="action-link-delete" onclick="return confirm('Sicuro di voler eliminare questo arbitro?');">Elimina</button>
+							</form>
                         </div>
                     </td>
                 </tr>

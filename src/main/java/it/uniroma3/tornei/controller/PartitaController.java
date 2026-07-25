@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.uniroma3.tornei.exception.ArbitroOccupatoException;
 import it.uniroma3.tornei.exception.IncompatibilitaDataPartitaException;
@@ -41,7 +42,7 @@ public class PartitaController {
 	@GetMapping("/partita/{id}")
 	public String getPartita(@PathVariable("id") Long id, Model model) {
 		
-		Partita partita = this.partitaService.getPartita(id);
+		Partita partita = this.partitaService.getPartitaWithCommenti(id);
 		if(partita == null)
 			return "redirect:/tornei";
 		
@@ -52,7 +53,7 @@ public class PartitaController {
 		return "partite/show";
 	}
 	
-	/* PER INSERIMENTO E SALVATAGGIO PARTITA */
+	/* INSERIMENTO NUOVA PARTITA */
 	
 	@GetMapping("/torneo/{torneoId}/partita/new")
 	public String mostraFormPartita(@PathVariable("torneoId") Long torneoId, Model model) {
@@ -140,6 +141,7 @@ public class PartitaController {
 		}
 		
 		if (bindingResult.hasErrors()) {
+			//se ci sono errori rimandiamo al form di inserimento risultato riempendo i campi non modificati
 	        partitaModificata.setSquadraCasa(partitaOriginale.getSquadraCasa());
 	        partitaModificata.setSquadraOspite(partitaOriginale.getSquadraOspite());
 	        partitaModificata.setTorneo(partitaOriginale.getTorneo());
@@ -166,8 +168,8 @@ public class PartitaController {
 	
 	/* PER ELIMINAZIONE PARTITA */
 	
-	@GetMapping("/admin/partita/{id}/delete")
-	public String eliminaPartita(@PathVariable("id") Long id) {
+	@PostMapping("/admin/partita/{id}/delete")
+	public String eliminaPartita(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		
 		Partita partita = this.partitaService.getPartita(id);
 		
@@ -175,6 +177,7 @@ public class PartitaController {
 			Long torneoId = partita.getTorneo().getId();
 			
 			this.partitaService.deletePartita(id);
+			redirectAttributes.addFlashAttribute("successMessage", "Partita eliminata con successo");
 			
 			return "redirect:/torneo/" + torneoId;
 		}

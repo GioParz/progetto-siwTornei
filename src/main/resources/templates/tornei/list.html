@@ -30,6 +30,16 @@
         <div>
             <div class="title-box">Elenco Tornei</div>
         </div>
+		
+		<!-- Messaggio di Conferma/Successo -->
+		<div th:if="${successMessage}" class="alert alert-success">
+			<span th:text="${successMessage}">Operazione completata!</span>
+		</div>
+		
+		<!-- Messaggio di Errore -->
+		<div th:if="${errorMessage}" class="alert alert-danger error-msg">
+			<span th:text="${errorMessage}">Si è verificato un errore!</span>
+		</div>
         
         <!-- Sezione di inserimento visibile solo all'Admin -->
         <div sec:authorize="hasAuthority('ADMIN')" class="margin-bottom-lg">
@@ -52,9 +62,15 @@
                     <td>
                         <div class="action-buttons-cell">
                             <a th:href="@{/torneo/{id}(id=${torneo.id})}" class="action-link-view">Visualizza</a>
-                            <a sec:authorize="hasAuthority('ADMIN')"
+                            
+							<!-- Elimina e modifica SOLO per l'Admin -->
+							<a sec:authorize="hasAuthority('ADMIN')"
                                th:href="@{/admin/torneo/{id}/edit(id=${torneo.id})}"
                                class="action-link-edit">Modifica</a>
+							<form sec:authorize="hasAuthority('ADMIN')" th:action="@{/admin/torneo/{id}/delete(id=${torneo.id})}" method="post">
+								<button type="submit" class="action-link-delete"
+									onclick="return confirm('Cancellare definitivamente il torneo?')">Elimina</button>
+							</form>
                         </div>
                     </td>
                 </tr>

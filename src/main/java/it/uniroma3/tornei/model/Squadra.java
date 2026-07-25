@@ -34,7 +34,7 @@ public class Squadra {
 	private String stemmaUrl;
 	
 	@NotNull
-	@Min(1863)
+	@Min(1857)
 	@NotAnnoFuturo
 	private Integer annoFondazione;
 	

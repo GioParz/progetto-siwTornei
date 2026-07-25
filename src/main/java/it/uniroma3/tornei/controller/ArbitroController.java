@@ -1,7 +1,5 @@
 package it.uniroma3.tornei.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,10 +26,7 @@ public class ArbitroController {
 
 	@GetMapping("/arbitri")
 	public String getArbitri(Model model) {
-		
-		List<Arbitro> listaArbitri = this.arbitroService.getAllArbitri();
-		model.addAttribute("arbitri", listaArbitri);
-		
+		model.addAttribute("arbitri", this.arbitroService.getAllArbitri());
 		return "arbitri/list";
 	}
 	
@@ -76,11 +71,9 @@ public class ArbitroController {
 	
 	/* ELIMINAZIONE ARBITRO */
 	
-	@GetMapping("/admin/arbitro/{id}/delete")
+	@PostMapping("/admin/arbitro/{id}/delete")
 	public String deleteArbitro(@PathVariable("id") Long id) {
-		
-		this.arbitroService.deleteArbitroById(id);;
-		
+		this.arbitroService.deleteArbitroById(id);
 		return "redirect:/arbitri";
 	}
 }

@@ -28,10 +28,6 @@ public class ArbitroService {
 		return this.arbitroRepository.findById(id).orElse(null);
 	}
 	
-	public Arbitro getArbitroByCodiceAIA(String codiceAIA) {
-		return this.arbitroRepository.findByCodiceAIA(codiceAIA).orElse(null);
-	}
-	
 	public List<Arbitro> getAllArbitri() {
 		return (List<Arbitro>) this.arbitroRepository.findAll();
 	}

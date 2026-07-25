@@ -27,9 +27,7 @@ public class SquadraController {
 
 	@GetMapping("/squadre")
 	public String getSquadre(Model model) {
-	
-		model.addAttribute("squadre", this.squadraService.getAllSquadre());
-		
+		model.addAttribute("squadre", this.squadraService.getAllSquadreWithGiocatori());
 		return "squadre/list";
 	}
 	
@@ -37,7 +35,7 @@ public class SquadraController {
 	public String getSquadra(@PathVariable("id") Long id,
 			@RequestParam(value = "fromTorneo", required = false) Long fromTorneoId, Model model) {
 		
-		Squadra squadra = this.squadraService.getSquadra(id);
+		Squadra squadra = this.squadraService.getSquadraWithGiocatori(id);
 		if (squadra == null)
 			return "redirect:/squadre";
 		
@@ -79,7 +77,7 @@ public class SquadraController {
 	
 	/* ELIMINAZIONE SQUADRA */
 	
-	@GetMapping("/admin/squadra/{id}/delete")
+	@PostMapping("/admin/squadra/{id}/delete")
 	public String eliminaSquadra(@PathVariable("id") Long id) {
 		
 		this.squadraService.deleteSquadra(id);

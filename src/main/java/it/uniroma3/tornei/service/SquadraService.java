@@ -29,8 +29,18 @@ public class SquadraService {
 		return this.squadraRepository.findById(id).orElse(null);
 	}
 	
+	//recupera la squadra caricando la rosa dei giocatori in un'unica query
+	public Squadra getSquadraWithGiocatori(Long id) {
+		return this.squadraRepository.findByIdWithGiocatori(id).orElse(null);
+	}
+	
 	public List<Squadra> getAllSquadre() {
 		return (List<Squadra>) this.squadraRepository.findAll();
+	}
+	
+	//recupera l'elenco di tutte le squadre insieme alla loro rosa giocatori
+	public List<Squadra> getAllSquadreWithGiocatori() {
+		return this.squadraRepository.findAllWithGiocatori();
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

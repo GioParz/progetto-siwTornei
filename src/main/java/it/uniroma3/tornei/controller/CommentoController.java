@@ -58,27 +58,6 @@ public class CommentoController {
 		return "redirect:/partita/" + partitaId;
 	}
 	
-	/* CANCELLAZIONE COMMENTO */
-	
-	@GetMapping("/commento/{id}/delete")
-	public String eliminaCommento(@PathVariable("id") Long id,
-			@AuthenticationPrincipal UserDetails userDetails) {
-			
-		Commento commento = this.commentoService.getCommento(id);
-		if(commento == null)
-			return "redirect:/";
-		
-		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
-		if (!commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId()) && 
-			    !credentialsLoggato.getRuolo().equals(RuoloUtente.ADMIN)) {
-			    throw new AccessDeniedException("Non sei autorizzato ad eliminare questo commento");
-			}
-		
-		this.commentoService.deleteCommento(id, credentialsLoggato);
-		
-		return "redirect:/partita/" + commento.getPartita().getId();
-	}
-	
 	/* MODIFICA COMMENTO */
 	
 	@GetMapping("/commento/{id}/edit")
@@ -119,5 +98,26 @@ public class CommentoController {
 		this.commentoService.saveCommento(commentoOriginale);
 		
 		return "redirect:/partita/" + commentoOriginale.getPartita().getId();
+	}
+	
+	/* CANCELLAZIONE COMMENTO */
+	
+	@PostMapping("/commento/{id}/delete")
+	public String eliminaCommento(@PathVariable("id") Long id,
+			@AuthenticationPrincipal UserDetails userDetails) {
+			
+		Commento commento = this.commentoService.getCommento(id);
+		if(commento == null)
+			return "redirect:/";
+		
+		Credentials credentialsLoggato = this.credentialsService.getCredentialsByUsername(userDetails.getUsername());
+		if (!commento.getUtente().getId().equals(credentialsLoggato.getUtente().getId()) && 
+			    !credentialsLoggato.getRuolo().equals(RuoloUtente.ADMIN)) {
+			    throw new AccessDeniedException("Non sei autorizzato ad eliminare questo commento");
+			}
+		
+		this.commentoService.deleteCommento(id, credentialsLoggato);
+		
+		return "redirect:/partita/" + commento.getPartita().getId();
 	}
 }

@@ -62,7 +62,7 @@
             <div class="margin-top-lg">
                 <p><strong>Stadio / Luogo:</strong> <span th:text="${partita.luogo}">Stadio</span></p>
                 <p><strong>Data e Ora:</strong> <span th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}">Data</span></p>
-                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro != null ? (partita.arbitro.nome + ' ' + partita.arbitro.cognome) : partita.arbitroNomeCognomeStorico}">Nome Arbitro</span></p>
+                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro != null ? (partita.arbitro.nome + ' ' + partita.arbitro.cognome) : partita.arbitroNomeCognomeStorico + '(Arbitro non più in attività)'}">Nome Arbitro</span></p>
                 <p><strong>Stato Incontro:</strong>
                     <span th:class="${partita.stato.toString() == 'TERMINATA'} ? 'match-score' : 'badge-scheduled'" th:text="${partita.stato}">STATO</span>
                 </p>
@@ -99,10 +99,10 @@
 							       class="action-link-edit">Modifica</a>
 							    
 							    <!-- 2. Tasto RIMUOVI: visibile all'autore del commento OPPURE a chi ha il ruolo di ADMIN -->
-							    <a th:if="${userDetails != null and commento.utente != null and (userDetails.username == commento.utente.credentials.username or #authorization.expression('hasAuthority(''ADMIN'')'))}"
-							       th:href="@{/commento/{id}/delete(id=${commento.id})}"
-							       onclick="return confirm('Sei sicuro di voler cancellare questo commento?')"
-							       class="action-link-delete">Rimuovi</a>
+								<form th:if="${userDetails != null and commento.utente != null and (userDetails.username == commento.utente.credentials.username or #authorization.expression('hasAuthority(''ADMIN'')'))}" 
+									  th:action="@{/commento/{id}/delete(id=${commento.id})}" method="post">
+									<button type="submit" class="action-link-delete">Rimuovi</button>
+								</form>
 							</div>
                         </td>
                     </tr>
