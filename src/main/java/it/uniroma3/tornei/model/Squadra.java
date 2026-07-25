@@ -45,7 +45,7 @@ public class Squadra {
 	@ManyToMany(mappedBy = "squadre")
 	private List<Torneo> tornei = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "squadra", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "squadra", cascade = CascadeType.REMOVE)
 	private List<Giocatore> giocatori = new ArrayList<>();
 	
 	//metodi helper per corretta sincronizzazione
