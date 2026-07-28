@@ -29,6 +29,16 @@
         <div>
             <div class="title-box">Tabellino Match</div>
         </div>
+		
+		<!-- Messaggio di Conferma/Successo -->
+		<div th:if="${successMessage}" class="alert alert-success">
+			<span th:text="${successMessage}">Operazione completata!</span>
+		</div>
+		
+		<!-- Messaggio di Errore -->
+		<div th:if="${errorMessage}" class="alert alert-danger error-msg">
+			<span th:text="${errorMessage}">Si è verificato un errore!</span>
+		</div>
 	
         <!-- Tabellone Risultato -->
         <div class="info-box">
@@ -62,7 +72,7 @@
             <div class="margin-top-lg">
                 <p><strong>Stadio / Luogo:</strong> <span th:text="${partita.luogo}">Stadio</span></p>
                 <p><strong>Data e Ora:</strong> <span th:text="${#temporals.format(partita.dataEOra, 'dd/MM/yyyy HH:mm')}">Data</span></p>
-                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro != null ? (partita.arbitro.nome + ' ' + partita.arbitro.cognome) : partita.arbitroNomeCognomeStorico + '(Arbitro non più in attività)'}">Nome Arbitro</span></p>
+                <p><strong>Arbitro Designato:</strong> <span th:text="${partita.arbitro != null ? (partita.arbitro.nome + ' ' + partita.arbitro.cognome) : partita.arbitroNomeCognomeStorico + ' (Arbitro non più in attività)'}">Nome Arbitro</span></p>
                 <p><strong>Stato Incontro:</strong>
                     <span th:class="${partita.stato.toString() == 'TERMINATA'} ? 'match-score' : 'badge-scheduled'" th:text="${partita.stato}">STATO</span>
                 </p>

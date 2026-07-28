@@ -36,7 +36,7 @@ public class PartitaService {
 
 	//usa l'EntityGraph per prendere tutte le partite di un torneo ottimizzando le relazioni @ManyToOne
 	public List<Partita> getPartiteByTorneo(Long torneoId) {
-		return this.partitaRepository.findByTorneo_Id(torneoId);
+		return this.partitaRepository.findByTorneoId(torneoId);
 	}
 	
 	@Transactional(isolation = Isolation.READ_COMMITTED)

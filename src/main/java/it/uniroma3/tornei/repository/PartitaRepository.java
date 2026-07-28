@@ -37,7 +37,7 @@ public interface PartitaRepository extends CrudRepository<Partita, Long> {
 	 * Recupera in un'unica JOIN le 4 relazioni @ManyToOne (torneo, squadraCasa, squadraOspite, arbitro).
 	 */
 	@EntityGraph(attributePaths = { "torneo", "squadraCasa", "squadraOspite", "arbitro" }, type = EntityGraphType.FETCH)
-	List<Partita> findByTorneo_Id(Long torneoId);
+	List<Partita> findByTorneoId(Long torneoId);
 
 	/**
 	 * Dettaglio partita comprensivo di torneo, squadre, arbitro e lista commenti con autore.

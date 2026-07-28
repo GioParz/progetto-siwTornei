@@ -72,6 +72,7 @@ public class Partita {
 	@JoinColumn(nullable = true)
 	private Arbitro arbitro;
 	
+	//in caso di arbitro eliminato
 	@Column(nullable = true)
 	private String arbitroNomeCognomeStorico;
 	

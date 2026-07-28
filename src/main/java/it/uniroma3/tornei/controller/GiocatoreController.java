@@ -72,7 +72,7 @@ public class GiocatoreController {
 			this.giocatoreService.saveGiocatore(giocatore);
 		} catch (GiocatoreDuplicatoException e) {
 			bindingResult.reject("giocatore.duplicato", e.getMessage());
-			model.addAttribute("squadra", giocatore.getSquadra());
+			model.addAttribute("squadra", this.squadraService.getSquadra(giocatore.getSquadra().getId()));
 			return "giocatori/form";
 		}
 		

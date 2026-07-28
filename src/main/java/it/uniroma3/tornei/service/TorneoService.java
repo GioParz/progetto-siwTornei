@@ -33,7 +33,7 @@ public class TorneoService {
 	}
 	
 	//carica torneo con partite e relative squadre in 1 sola query JOIN FETCH
-	public Torneo getTorneoWithPartite(Long id) {
+	public Torneo getTorneoWithPartiteAndSquadre(Long id) {
 		return this.torneoRepository.findByIdWithPartiteAndSquadre(id).orElse(null);
 	}
 

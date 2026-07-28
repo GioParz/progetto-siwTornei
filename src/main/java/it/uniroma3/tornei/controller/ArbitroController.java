@@ -57,7 +57,7 @@ public class ArbitroController {
 			BindingResult bindingResult) {
 		
 		if(bindingResult.hasErrors())
-			return "admin/arbitri/form"; //torna al form mostrando gli errori
+			return "admin/arbitri/form";
 		
 		try {
 			this.arbitroService.saveArbitro(arbitro);

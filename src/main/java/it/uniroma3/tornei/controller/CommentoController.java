@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import it.uniroma3.tornei.model.Commento;
 import it.uniroma3.tornei.model.Credentials;
 import it.uniroma3.tornei.model.Partita;
@@ -39,7 +41,7 @@ public class CommentoController {
 	public String aggiungiCommento(@PathVariable("partitaId") Long partitaId, 
 			@Valid @ModelAttribute("nuovoCommento") Commento commento,
 			BindingResult bindingResult, Model model,
-			@AuthenticationPrincipal UserDetails userDetails) {
+			@AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
 		
 		Partita partita = this.partitaService.getPartita(partitaId);
 		if(partita == null)
@@ -54,6 +56,7 @@ public class CommentoController {
 		commento.setUtente(this.credentialsService.getCredentialsByUsername(userDetails.getUsername()).getUtente());
 		
 		this.commentoService.saveCommento(commento);
+		redirectAttributes.addFlashAttribute("successMessage", "Commento aggiunto con successo");
 		
 		return "redirect:/partita/" + partitaId;
 	}
@@ -104,7 +107,7 @@ public class CommentoController {
 	
 	@PostMapping("/commento/{id}/delete")
 	public String eliminaCommento(@PathVariable("id") Long id,
-			@AuthenticationPrincipal UserDetails userDetails) {
+			@AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes) {
 			
 		Commento commento = this.commentoService.getCommento(id);
 		if(commento == null)
@@ -117,6 +120,7 @@ public class CommentoController {
 			}
 		
 		this.commentoService.deleteCommento(id, credentialsLoggato);
+		redirectAttributes.addFlashAttribute("successMessage", "Commento eliminato con successo");
 		
 		return "redirect:/partita/" + commento.getPartita().getId();
 	}

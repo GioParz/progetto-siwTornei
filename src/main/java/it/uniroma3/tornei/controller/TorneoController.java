@@ -38,7 +38,7 @@ public class TorneoController {
 	@GetMapping("/torneo/{id}")
 	public String getTorneo(@PathVariable("id") Long id, Model model) {
 		
-		Torneo torneo = this.torneoService.getTorneoWithPartite(id);
+		Torneo torneo = this.torneoService.getTorneoWithPartiteAndSquadre(id);
 		if (torneo == null)
 			return "redirect:/tornei";
 		
